@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+
+  <header>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+  </header>
+
+  <nav>
+  		<span><a title="主頁" href="/">Home</a></span>
+  		<% if(user){ %>
+  		<span><a title="登出" href="/logout">登出</a></span>
+  		<span><a title="上傳" href="/upload">上傳</a></span>
+  		<span><a title="發表" href="/post">發表</a></span>
+  		<% } else { %>
+  		<span><a title="登錄" href="/login">登錄</a></span>
+  		<span><a title="註冊" href="/reg">註冊</a></span>
+  		<% } %>
+  </nav>
+<article>
+<% if (success){ %>
+<div><%= success %></div>
+<% } %>
+
+<% if (error){ %>
+<div><%= error %></div>
+<% } %>
+
+
+
