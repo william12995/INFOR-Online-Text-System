@@ -148,8 +148,9 @@ router.get('/post',function(req, res){
 //router.post('/post', checkLogin);
 router.post('/post',function(req, res){
 	var currentUser = req.session.user;
+	console.log(currentUser);
 	var tags = [req.body.tag1, req.body.tag2, req.body.tag3];
-	var post = new Post(currentUser.name ,req.body.title, tags, req.body.post );
+	var post = new Post(currentUser.name , currentUser.head, req.body.title, tags, req.body.post );
 
 	post.save(function(err){
 		if(err){
@@ -252,6 +253,24 @@ router.get('/tags/:tag', function(req, res){
 	});
 });
 
+router.get('/search', function(req, res){
+
+	Post.search( req.query.keyword, function(err, posts){
+		
+		if (err){
+			req.flash('error', err);
+			return res.redirect('/');
+		}
+
+		res.render('search', {
+			title: 'SEARCH: ' + req.query.keyword,
+			posts:posts,
+	 		user: req.session.user,
+	  		success: req.flash('success').toString(),
+	  		error: req.flash('error').toString()
+		});
+	});
+});
 
 router.get('/u/:name', function(req, res){
 	var page = req.query.p ? parseInt(req.query.p) : 1 ;
@@ -285,6 +304,7 @@ router.get('/u/:name', function(req, res){
 router.get('/u/:name/:day/:title', function(req, res){
 	Post.getOne(req.params.name, req.params.day, req.params.title , function(err, post){
 		if(err){
+			console.log(err);
 			req.flash('error', err);
 			return res.redirect('/');
 		}
@@ -304,8 +324,13 @@ router.post('/u/:name/:day/:title', function(req, res){
 	var time = date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate() + "" + date.getHours() + ":" 
 		+(date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes());
 
+	var md5 = crypto.createHash('md5');
+	var email_MD5 = md5.update(req.body.email.toLowerCase()).digest('hex');
+	var head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
+
 	var comment = {
 		name: req.body.name,
+		head: head,
 		email: req.body.email,
 		website: req.body.website,
 		time: time,
@@ -375,6 +400,37 @@ router.get('/remove/:name/:day/:title', function(req, res){
 	});
 });
 
+//router.get('/reprint/:name/:day/:title', checkLogin);
+router.get('/reprint/:name/:day/:title', function( req, res){
+	Post.edit( req.params.name, req.params.day, req.params.title, function( err, post){
+		if(err){
+			req.flash( 'error', err);
+			return res.render('back');
+		}
+
+		var currentUser = req.session.user;
+		var reprint_from = { name: post.name , day : post.time.day , title: post.title };
+		var reprint_to = { name: currentUser.name , head : currentUser.head };
+
+		// console.log(reprint_from);
+		// console.log(reprint_to);
+		Post.reprint( reprint_from, reprint_to, function( err, post){
+			if(err){
+				req.flash('error', err);
+				return res.redirect('back');
+			}
+
+			req.flash('success', '轉載成功');
+			var url = encodeURI('/u/' + post.name +'/'+ post.time.day +'/'+ post.title);
+
+			res.redirect(url);
+		});
+	});
+});
+
+router.use(function( req, res){
+	res.render("404");
+});
 
 function checkLogin(res, req ,next){
 	if( req.session.user == null){

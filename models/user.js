@@ -1,3 +1,4 @@
+var crypto = require('crypto');
 
 var mongodb = require('./db');
 
@@ -10,11 +11,15 @@ function User(user) {
 module.exports = User;
 
 User.prototype.save = function(callback){
+	var md5 = crypto.createHash('md5');
+	var email_MD5 = md5.update(this.email.toLowerCase()).digest('hex');
+	var head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
 
 	var user = {
 		'name' :	this.name,
 		'password' : this.password,
-		'email' : this.email
+		'email' : this.email,
+		'head': head
 	};
 
 	mongodb.open(function(err, db){

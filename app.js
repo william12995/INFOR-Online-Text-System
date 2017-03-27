@@ -9,7 +9,6 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 
 var index = require('./routes/index');
-var users = require('./routes/users');
 var settings = require('./setting');
 var flash = require('connect-flash');
 var multer = require('multer');
@@ -57,7 +56,7 @@ app.use(session({
 
 
 app.use('/', index);
-app.use('/users', users);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
