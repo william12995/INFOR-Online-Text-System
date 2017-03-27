@@ -1,0 +1,28 @@
+	
+	<br/>
+	<% post.comments.forEach(function(comment, index){  %>
+	<p><a href="<%= comment.website %>"><%= comment.name %></a>
+
+	<span class = "info">回覆於: <%= comment.time %></span></p>
+
+	<p><%- comment.content %></p>
+	<% }) %>
+
+	<% console.log(post); %>
+	<form method="post">
+	<% if( user){ %>
+
+  		姓名: <input type="text" name="name" value="<%= user.name %>" ><br/>
+		信箱: <input type="text" name="email" value="<%= user.email %>" > <br/>
+		網址: <input type="text" name="website" value="/u/<%= user.name %>" ><br/>
+		
+		<% } else { %>
+
+		姓名: <input type="text" name="name"  ><br/>
+		信箱: <input type="text" name="email"  > <br/>
+		網址: <input type="text" name="website" value="http://" ><br/>
+
+  		<% } %>
+  		<textarea name = "content" rows = "5" cols = "80"></textarea><br/>
+		<input type="submit" value="留言">
+	</form>

@@ -1,0 +1,25 @@
+
+<%- include header  %>
+	<form method="post">
+	<% if(! user){ %>
+  		用戶名: <input type="text" name="name"><br/>
+		密碼: <input type="password" name="password"> <br/>
+		<input type="submit" value="登入">
+		<% } else { %>
+		<h4>安安! <%= user.name %></h4>
+  		<% } %>
+		
+	</form>
+	<br/><br/>
+	<% if ( user && (user.name == post.name) ) { %>
+		<span> <a class="edit" href="/edit/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">編輯</a></span>
+		<span> <a class="edit" href="/remove/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">刪除</a></span>	
+	<% } %>
+	<p class = "info">
+		作者: <a href="/u/<%= post.name %>"><%= post.name %></a> |
+		日期: <%= post.time.minute %>
+	</p>
+
+	<p><%- post.post %></p>
+<%- include comment  %>
+<%- include footer  %>
