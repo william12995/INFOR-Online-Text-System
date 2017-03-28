@@ -3,9 +3,15 @@ var router = express.Router();
 
 var crypto = require('crypto');
 var multer = require('multer');
+var session = require('express-session');
+var settings = require('../setting');
+var MongoStore = require('connect-mongo')(session);
 var User = require('../models/user');
 var Post = require('../models/post');
 var Comment = require('../models/comment');
+
+
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	var page = req.query.p ? parseInt(req.query.p) : 1 ;
@@ -50,7 +56,7 @@ router.post('/',function(req, res){
 
 });
 
-//router.get('/reg', checkBeenLogin);
+router.get('/reg', checkBeenLogin);
 router.get('/reg',function(req, res){
  	res.render('reg',{
  		title: '註冊',
@@ -60,7 +66,7 @@ router.get('/reg',function(req, res){
  	});
 });
 
-//router.post('/reg', checkBeenLogin);
+router.post('/reg', checkBeenLogin);
 router.post('/reg',function(req, res){
 	var name = req.body.name;
 	var password = req.body.password;
@@ -102,7 +108,7 @@ router.post('/reg',function(req, res){
 	});
 });
 
-//router.get('/login', checkBeenLogin);
+router.get('/login', checkBeenLogin);
 router.get('/login',function(req, res){
  	res.render('login',{
  		title: '登入',
@@ -112,7 +118,7 @@ router.get('/login',function(req, res){
  	});
 });
 
-//router.post('/login', checkBeenLogin);
+router.post('/login', checkBeenLogin);
 router.post('/login',function(req, res){
 	var md5 = crypto.createHash('md5');
 	var password = md5.update(req.body.password).digest('hex');
@@ -134,7 +140,7 @@ router.post('/login',function(req, res){
 	});
 });
 
-//router.get('/post', checkLogin);
+router.get('/post', checkLogin);
 router.get('/post',function(req, res){
 	console.log("HEY");
  	res.render('post',{
@@ -145,7 +151,7 @@ router.get('/post',function(req, res){
  	});
 });
 
-//router.post('/post', checkLogin);
+router.post('/post', checkLogin);
 router.post('/post',function(req, res){
 	var currentUser = req.session.user;
 	console.log(currentUser);
@@ -163,14 +169,14 @@ router.post('/post',function(req, res){
 	});
 });
 
-//router.get('/logout', checkLogin);
+router.get('/logout', checkLogin);
 router.get('/logout',function(req, res){
 	req.session.user = null ;
 	req.flash('success','登出成功!');
 	res.redirect('/');
 });
 
-//router.get('/upload',checkLogin);
+router.get('/upload',checkLogin);
 router.get('/upload',function(req,res){
 	res.render('upload', {
 		title: '檔案上傳',
@@ -194,7 +200,7 @@ var upload = multer({
 	limits: { fileSize: 1024 * 1024 }
 });
 
-//router.post('/upload',checkLogin);
+router.post('/upload',checkLogin);
 router.post('/upload', upload.array('photos', 12), function(req,res){
 	req.flash('success','檔案上傳成功');
 	res.redirect('/upload');
@@ -348,7 +354,7 @@ router.post('/u/:name/:day/:title', function(req, res){
 	});
 });
 
-//router.get('/edit/:name/:day/:title', checkLogin);
+router.get('/edit/:name/:day/:title', checkLogin);
 router.get('/edit/:name/:day/:title', function(req, res){
 	var currentUser = req.session.user;
 
@@ -369,7 +375,7 @@ router.get('/edit/:name/:day/:title', function(req, res){
 	});
 });
 
-//router.post('/edit/:name/:day/:title', checkLogin);
+router.post('/edit/:name/:day/:title', checkLogin);
 router.post('/edit/:name/:day/:title', function(req, res){
 	var currentUser = req.session.user;
 
@@ -385,7 +391,7 @@ router.post('/edit/:name/:day/:title', function(req, res){
 	});
 });
 
-//router.get('/remove/:name/:day/:title', checkLogin);
+router.get('/remove/:name/:day/:title', checkLogin);
 router.get('/remove/:name/:day/:title', function(req, res){
 	var currentUser = req.session.user;
 
@@ -400,7 +406,7 @@ router.get('/remove/:name/:day/:title', function(req, res){
 	});
 });
 
-//router.get('/reprint/:name/:day/:title', checkLogin);
+router.get('/reprint/:name/:day/:title', checkLogin);
 router.get('/reprint/:name/:day/:title', function( req, res){
 	Post.edit( req.params.name, req.params.day, req.params.title, function( err, post){
 		if(err){
@@ -428,22 +434,39 @@ router.get('/reprint/:name/:day/:title', function( req, res){
 	});
 });
 
+router.use(session({
+	secret : settings.cookieSecret,
+	key : settings.db,
+	resave: true,
+    saveUninitialized: true,
+	cookie : {
+		maxAge : 1000*60*60*24*30 //30天
+	}, 
+	store : new MongoStore({
+		db : settings.db,
+		host : settings.host,
+		port : settings.port,
+		url : 'mongodb://localhost:27017/blog'
+	})
+}));
+
 router.use(function( req, res){
 	res.render("404");
 });
 
-function checkLogin(res, req ,next){
+function checkLogin(req, res ,next){
+	console.log(req.session);
 	if( req.session.user == null){
 		req.flash('error','未登錄!');
-		return redirect('/login');
+		return res.redirect('/login');
 	}
 	next();
 }
 
-function checkBeenLogin(res , req , next){
-	if(req.session.user !== null ){
-		req('error','已登錄!');
-		return redirect('back');
+function checkBeenLogin(req , res , next){
+	if(req.session.user !== null && req.session.user){
+		req.flash('error','已登錄!');
+		return res.redirect('back');
 	}
 	next();
 }

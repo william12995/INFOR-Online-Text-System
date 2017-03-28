@@ -55,6 +55,18 @@ app.use(session({
 	})
 }));
 
+// function authChecker(req, res, next) {
+	
+//     if (req.session.user || req.path==='/login' || req.path === '/reg') {
+//         next();
+//     } else {
+//     	console.log(req.session);
+//     	req.flash('error','尚未登入');
+//         res.redirect("/login");
+//     }
+// }
+
+// app.use(authChecker);
 
 app.use('/', index);
 
