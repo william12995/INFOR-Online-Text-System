@@ -1,0 +1,100 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "pdfreader",
+        "scope": null,
+        "escapedName": "pdfreader",
+        "name": "pdfreader",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "C:\\Users\\william\\Desktop\\INFOR-Online-Text-System"
+    ]
+  ],
+  "_from": "pdfreader@latest",
+  "_id": "pdfreader@0.2.3",
+  "_inCache": true,
+  "_location": "/pdfreader",
+  "_nodeVersion": "6.6.0",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/pdfreader-0.2.3.tgz_1489944638167_0.575236652046442"
+  },
+  "_npmUser": {
+    "name": "adrienjoly",
+    "email": "adrien.joly@gmail.com"
+  },
+  "_npmVersion": "3.10.3",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "pdfreader",
+    "scope": null,
+    "escapedName": "pdfreader",
+    "name": "pdfreader",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/pdfreader/-/pdfreader-0.2.3.tgz",
+  "_shasum": "9c3ad2e3af2db111f896e5992df325b9bb45e798",
+  "_shrinkwrap": null,
+  "_spec": "pdfreader",
+  "_where": "C:\\Users\\william\\Desktop\\INFOR-Online-Text-System",
+  "author": {
+    "name": "Adrien Joly"
+  },
+  "bugs": {
+    "url": "https://github.com/adrienjoly/npm-pdfreader/issues"
+  },
+  "dependencies": {
+    "pdf2json": "^0.7.1"
+  },
+  "description": "Read text and parse tables from PDF files. Supports tabular data with automatic column detection, and rule-based parsing.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "9c3ad2e3af2db111f896e5992df325b9bb45e798",
+    "tarball": "https://registry.npmjs.org/pdfreader/-/pdfreader-0.2.3.tgz"
+  },
+  "gitHead": "4632ffd14159ceb4624756b91cbe1db9ef4b989e",
+  "homepage": "https://github.com/adrienjoly/npm-pdfreader",
+  "keywords": [
+    "pdf",
+    "reader",
+    "parser",
+    "parse",
+    "parsing",
+    "convert",
+    "CLI",
+    "table",
+    "data",
+    "csv",
+    "json",
+    "rules"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "maintainers": [
+    {
+      "name": "adrienjoly",
+      "email": "adrien.joly@gmail.com"
+    }
+  ],
+  "name": "pdfreader",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrienjoly/npm-pdfreader.git"
+  },
+  "scripts": {
+    "test": "node test/test.js"
+  },
+  "version": "0.2.3"
+}

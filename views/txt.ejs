@@ -1,0 +1,13 @@
+
+<%- include header  %>
+	<% var i = page; %>
+	<%= content[i]; %>
+
+	<% if ( i > 0) { %>
+		<span class="prepage" > <a title="上一題" href="/txt/<%= title %>?p=<%= page-1 %>" > 上一題 </a> </span>
+	<% } %>
+	<% if ( i < data_length-1 ) { %>
+		<span class="nextpage" > <a title="下一題" href="/txt/<%= title %>?p=<%= page+1 %>" > 下一題 </a> </span>
+	<% } %>
+
+<%- include footer  %>

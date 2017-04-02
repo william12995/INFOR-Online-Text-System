@@ -8,7 +8,10 @@ var settings = require('../setting');
 var MongoStore = require('connect-mongo')(session);
 var User = require('../models/user');
 var Post = require('../models/post');
+var Txt = require('../models/TXT');
 var Comment = require('../models/comment');
+var Pdf = require('../pdfreader/parse');
+//var zerorpc = require('zerorpc/index');
 
 
 
@@ -154,7 +157,7 @@ router.get('/post',function(req, res){
 router.post('/post', checkLogin);
 router.post('/post',function(req, res){
 	var currentUser = req.session.user;
-	console.log(currentUser);
+	//console.log(currentUser);
 	var tags = [req.body.tag1, req.body.tag2, req.body.tag3];
 	var post = new Post(currentUser.name , currentUser.head, req.body.title, tags, req.body.post );
 
@@ -206,13 +209,74 @@ router.post('/upload', upload.array('photos', 12), function(req,res){
 	res.redirect('/upload');
 });
 
+router.get('/pdfUpload',checkLogin);
+router.get('/pdfUpload',function(req,res){
+	res.render('pdfUpload', {
+		title: 'PDF上傳',
+ 		user: req.session.user,
+  		success: req.flash('success').toString(),
+  		error: req.flash('error').toString()
+	})
+});
+var txt_name;
+router.post('/pdfUpload',checkLogin);
+router.post('/pdfUpload', upload.array('pdf', 12), function(req,res){	
+    var str = req.files[0].filename;
+	
+    var name = str.split(".")[0];
+    txt_name = name;
+    var newPDF = new Pdf(name);
+
+    newPDF.convert(name);
+	
+	//console.log(req.files[0].filename);
+	req.flash('success','PDF上傳成功');
+	res.redirect('/pdfUpload');
+});
+
+router.get('/txt', checkLogin);
+router.get('/txt', function(req, res){
+	
+	
+
+	var newTXT = new Txt(txt_name);
+	newTXT.save(txt_name,function(err , data_length){
+		
+
+		req.flash('success','題目已抓取，請檢查');
+		res.redirect('/txt/'+txt_name);
+			
+
+	});
+	
+
+});
+
+router.get('/txt/:txtname',checkLogin);
+router.get('/txt/:txtname',function(req, res){
+
+	var page = req.query.p ? parseInt(req.query.p) : 0 ;
+
+	Txt.get(req.params.txtname ,function(err , data){
+		res.render('txt', {
+			title: data.name,
+			content: data.post,
+			data_length:data.post.length,
+			page: page,
+	 		user: req.session.user,
+	  		success: req.flash('success').toString(),
+	  		error: req.flash('error').toString()
+		});
+	});
+});
+
 router.get('/archive', function(req ,res){
 	Post.getArchive(function(err, posts){
 		if(err){
 			req.flash('error', err);
 			return res.redirect('/');
 		}
-		console.log(posts);
+		//console.log(posts);
 		res.render('archive', {
 			title: '記錄',
 			posts:posts,
@@ -455,7 +519,7 @@ router.use(function( req, res){
 });
 
 function checkLogin(req, res ,next){
-	console.log(req.session);
+	//console.log(req.session);
 	if( req.session.user == null){
 		req.flash('error','未登錄!');
 		return res.redirect('/login');
