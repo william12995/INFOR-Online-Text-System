@@ -3,6 +3,7 @@ var router = express.Router();
 
 var crypto = require('crypto');
 var multer = require('multer');
+var fs = require('fs');
 var session = require('express-session');
 var settings = require('../setting');
 var MongoStore = require('connect-mongo')(session);
@@ -191,7 +192,23 @@ router.get('/upload',function(req,res){
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, './public/images');
+
+     var destDir = './public/images/' + req.session.user.name;
+        
+        fs.stat(destDir, (err) => {
+            if (err) {
+                
+                fs.mkdir(destDir, (err) => {
+                    if (err) {
+                        cb(err);
+                    } else {
+                        cb(null, destDir);
+                    }
+                });
+            } else {
+                cb(null, destDir);
+            }
+        });
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname );
@@ -209,6 +226,21 @@ router.post('/upload', upload.array('photos', 12), function(req,res){
 	res.redirect('/upload');
 });
 
+
+var PDFstorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/images');
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname );
+  }
+});
+ 
+var PDFupload = multer({ 
+	storage: PDFstorage ,
+	limits: { fileSize: 1024 * 1024 }
+});
+
 router.get('/pdfUpload',checkLogin);
 router.get('/pdfUpload',function(req,res){
 	res.render('pdfUpload', {
@@ -218,9 +250,12 @@ router.get('/pdfUpload',function(req,res){
   		error: req.flash('error').toString()
 	})
 });
+
 var txt_name;
+
+
 router.post('/pdfUpload',checkLogin);
-router.post('/pdfUpload', upload.array('pdf', 12), function(req,res){	
+router.post('/pdfUpload', PDFupload.array('pdf', 12), function(req,res){	
     var str = req.files[0].filename;
 	
     var name = str.split(".")[0];
@@ -236,16 +271,12 @@ router.post('/pdfUpload', upload.array('pdf', 12), function(req,res){
 
 router.get('/txt', checkLogin);
 router.get('/txt', function(req, res){
-	
-	
 
 	var newTXT = new Txt(txt_name);
-	newTXT.save(txt_name,function(err , data_length){
-		
+	newTXT.SaveEnglish(txt_name,function(err , data_length){
 
 		req.flash('success','題目已抓取，請檢查');
 		res.redirect('/txt/'+txt_name);
-			
 
 	});
 	
@@ -267,6 +298,25 @@ router.get('/txt/:txtname',function(req, res){
 	  		success: req.flash('success').toString(),
 	  		error: req.flash('error').toString()
 		});
+	});
+});
+
+
+router.post('/txt/:txtname',checkLogin);
+router.post('/txt/:txtname',function(req, res){
+
+	var page = req.query.p ? parseInt(req.query.p) : 0 ;
+
+	Txt.edit(req.params.txtname, page, req.body.post, function(err , data){
+		var url = encodeURI('/txt/' + req.params.txtname +'?p='+ page);
+		if(err){
+			console.log(err);
+			req.flash('error',err);
+			return res.redirect(url);
+		}
+
+		req.flash('success', '修改成功!');
+		res.redirect(url);
 	});
 });
 

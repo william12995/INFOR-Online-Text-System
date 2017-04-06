@@ -18,7 +18,7 @@ module.exports = TXT;
 
 
 
-TXT.prototype.save = function(filename, callback){
+TXT.prototype.SaveEnglish = function(filename, callback){
 	filename = "./public/images/"+filename +".txt";
 	//console.log(filename);
 	
@@ -100,6 +100,9 @@ TXT.prototype.save = function(filename, callback){
 	 });
 }
 
+
+
+
 TXT.get = function(name ,callback){
 
 	mongodb.open(function(err , db){
@@ -126,3 +129,39 @@ TXT.get = function(name ,callback){
 	});
 };
 
+TXT.edit = function(filename, p, post,callback){
+	
+	mongodb.open(function(err, db){
+		if (err){
+			return callback(err);
+		}
+
+		db.collection('txt' , function(err, collection){
+			if(err){
+				mongodb.close();
+				return callback(err);
+			}
+
+			
+			collection.findOne({
+				name: filename
+			},function(err , data){
+				data.post[p] = post ;
+				
+				var newpost = data.post ;
+
+				collection.update({
+					"name": filename
+				},{$set:{"post" : newpost}
+				},function(err){
+					mongodb.close();
+					if(err){
+						return callback(err);
+					}
+					callback(null);
+				});
+
+			});			
+		});
+	});
+};
