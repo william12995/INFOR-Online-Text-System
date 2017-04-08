@@ -17,15 +17,16 @@ var Pdf = require('../pdfreader/parse');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+
 	var page = req.query.p ? parseInt(req.query.p) : 1 ;
 
 	Post.getTen(null, page,function(err, posts, total){
 		if(err){
 			posts = {};
 		}
-
-		res.render('index', { 
-			title: '主頁',
+		console.log('posts: ', posts);
+		res.render('index', {
+			title: 'Home',
 		  	user: req.session.user,
 		  	posts: posts ,
 		  	page: page,
@@ -35,51 +36,52 @@ router.get('/', function(req, res, next) {
 		  	error: req.flash('error').toString()
   	});
   });
-});
-
-router.post('/',function(req, res){
-	var md5 = crypto.createHash('md5');
-	var password = md5.update(req.body.password).digest('hex');
-
-	User.get(req.body.name , function(err , user){
-		if(!user){
-			req.flash('error','用戶不存在!');
-			return res.redirect('/login');
-		}
-
-		if(user.password != password){
-			req.flash('error','密碼錯誤!');
-			return res.redirect('/login');
-		}
-
-		req.session.user = user ;
-		req.flash('success','登入成功!');
-		res.redirect('/');
-	});
 
 });
 
-router.get('/reg', checkBeenLogin);
-router.get('/reg',function(req, res){
- 	res.render('reg',{
- 		title: '註冊',
+// router.post('/',function(req, res){
+// 	var md5 = crypto.createHash('md5');
+// 	var password = md5.update(req.body.password).digest('hex');
+//
+// 	User.get(req.body.name , function(err , user){
+// 		if(!user){
+// 			req.flash('error','用戶不存在!');
+// 			return res.redirect('/login');
+// 		}
+//
+// 		if(user.password != password){
+// 			req.flash('error','密碼錯誤!');
+// 			return res.redirect('/login');
+// 		}
+//
+// 		req.session.user = user ;
+// 		req.flash('success','登入成功!');
+// 		res.redirect('/');
+// 	});
+//
+// });
+
+router.get('/', checkBeenLogin);
+router.get('/signup',function(req, res){
+ 	res.render('signup',{
+ 		title: 'Register',
  		user: null,
   		success: req.flash('success').toString(),
   		error: req.flash('error').toString()
  	});
 });
 
-router.post('/reg', checkBeenLogin);
-router.post('/reg',function(req, res){
+router.post('/signup', checkBeenLogin);
+router.post('/signup',function(req, res){
 	var name = req.body.name;
 	var password = req.body.password;
 	var password_repeat = req.body['password-repeat'];
 
 	if (password != password_repeat){
 		req.flash('error','密碼不一致!');
-		return res.redirect('/reg');
+		return res.redirect('/signup');
 	}
-	
+
 	var md5 = crypto.createHash('md5');
 	var password = md5.update(req.body.password).digest('hex');
 
@@ -88,21 +90,21 @@ router.post('/reg',function(req, res){
 		password : password,
 		email : req.body.email
 	});
-	
+
 	User.get(newUser.name, function(err, user){
 		if(user){
-			
+
 			req.flash('error','用戶已存在');
-			return res.redirect('/reg');
+			return res.redirect('/signup');
 		}
 
 		newUser.save(function(err , user){
 			if(err){
-				
+
 				req.flash('error',err);
-				return res.redirect('/reg');
+				return res.redirect('/signup');
 			}
-			
+
 			req.session.user = user;
 			req.flash('success', '註冊成功');
 			res.redirect('/');
@@ -116,6 +118,16 @@ router.get('/login',function(req, res){
  	res.render('login',{
  		title: '登入',
  		user: null,
+  		success: req.flash('success').toString(),
+  		error: req.flash('error').toString()
+ 	});
+});
+
+router.get('/profile', checkLogin);
+router.get('/profile',function(req, res){
+ 	res.render('profile',{
+ 		title: 'Profile',
+ 		user: req.session.user,
   		success: req.flash('success').toString(),
   		error: req.flash('error').toString()
  	});
@@ -160,7 +172,6 @@ router.post('/post',function(req, res){
 	//console.log(currentUser);
 	var tags = [req.body.tag1, req.body.tag2, req.body.tag3];
 	var post = new Post(currentUser.name , currentUser.head, req.body.title, tags, req.body.post );
-
 	post.save(function(err){
 		if(err){
 			req.flash('error',err);
@@ -179,15 +190,15 @@ router.get('/logout',function(req, res){
 	res.redirect('/');
 });
 
-router.get('/upload',checkLogin);
-router.get('/upload',function(req,res){
-	res.render('upload', {
-		title: '檔案上傳',
- 		user: req.session.user,
-  		success: req.flash('success').toString(),
-  		error: req.flash('error').toString()
-	})
-});
+// router.get('/upload',checkLogin);
+// router.get('/upload',function(req,res){
+// 	res.render('upload', {
+// 		title: '檔案上傳',
+//  		user: req.session.user,
+//   		success: req.flash('success').toString(),
+//   		error: req.flash('error').toString()
+// 	})
+// });
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -197,8 +208,8 @@ var storage = multer.diskStorage({
     cb(null, file.originalname );
   }
 });
- 
-var upload = multer({ 
+
+var upload = multer({
 	storage: storage ,
 	limits: { fileSize: 1024 * 1024 }
 });
@@ -206,7 +217,7 @@ var upload = multer({
 router.post('/upload',checkLogin);
 router.post('/upload', upload.array('photos', 12), function(req,res){
 	req.flash('success','檔案上傳成功');
-	res.redirect('/upload');
+	res.redirect('/');
 });
 
 router.get('/pdfUpload',checkLogin);
@@ -220,35 +231,30 @@ router.get('/pdfUpload',function(req,res){
 });
 var txt_name;
 router.post('/pdfUpload',checkLogin);
-router.post('/pdfUpload', upload.array('pdf', 12), function(req,res){	
+router.post('/pdfUpload', upload.array('pdf', 12), function(req,res){
     var str = req.files[0].filename;
-	
+
     var name = str.split(".")[0];
     txt_name = name;
     var newPDF = new Pdf(name);
 
     newPDF.convert(name);
-	
+
 	//console.log(req.files[0].filename);
 	req.flash('success','PDF上傳成功');
-	res.redirect('/pdfUpload');
+	res.redirect('/txt');
 });
 
 router.get('/txt', checkLogin);
 router.get('/txt', function(req, res){
-	
-	
 
 	var newTXT = new Txt(txt_name);
 	newTXT.save(txt_name,function(err , data_length){
-		
 
 		req.flash('success','題目已抓取，請檢查');
 		res.redirect('/txt/'+txt_name);
-			
 
 	});
-	
 
 });
 
@@ -270,15 +276,15 @@ router.get('/txt/:txtname',function(req, res){
 	});
 });
 
-router.get('/archive', function(req ,res){
+router.get('/history', function(req ,res){
 	Post.getArchive(function(err, posts){
 		if(err){
 			req.flash('error', err);
 			return res.redirect('/');
 		}
 		//console.log(posts);
-		res.render('archive', {
-			title: '記錄',
+		res.render('history', {
+			title: 'History',
 			posts:posts,
 	 		user: req.session.user,
 	  		success: req.flash('success').toString(),
@@ -287,23 +293,23 @@ router.get('/archive', function(req ,res){
 	});
 });
 
-router.get('/tags', function(req, res){
-
-	Post.getTags(function(err, posts){
-		if (err){
-			req.flash('error', err);
-			return res.redirect('/');
-		}
-
-		res.render('tags', {
-			title: '標籤',
-			posts:posts,
-	 		user: req.session.user,
-	  		success: req.flash('success').toString(),
-	  		error: req.flash('error').toString()
-		});
-	});
-});
+// router.get('/tags', function(req, res){
+//
+// 	Post.getTags(function(err, posts){
+// 		if (err){
+// 			req.flash('error', err);
+// 			return res.redirect('/');
+// 		}
+//
+// 		res.render('tags', {
+// 			title: '標籤',
+// 			posts:posts,
+// 	 		user: req.session.user,
+// 	  		success: req.flash('success').toString(),
+// 	  		error: req.flash('error').toString()
+// 		});
+// 	});
+// });
 
 router.get('/tags/:tag', function(req, res){
 
@@ -326,7 +332,7 @@ router.get('/tags/:tag', function(req, res){
 router.get('/search', function(req, res){
 
 	Post.search( req.query.keyword, function(err, posts){
-		
+
 		if (err){
 			req.flash('error', err);
 			return res.redirect('/');
@@ -391,7 +397,7 @@ router.get('/u/:name/:day/:title', function(req, res){
 
 router.post('/u/:name/:day/:title', function(req, res){
 	var date = new Date;
-	var time = date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate() + "" + date.getHours() + ":" 
+	var time = date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate() + "" + date.getHours() + ":"
 		+(date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes());
 
 	var md5 = crypto.createHash('md5');
@@ -505,7 +511,7 @@ router.use(session({
     saveUninitialized: true,
 	cookie : {
 		maxAge : 1000*60*60*24*30 //30天
-	}, 
+	},
 	store : new MongoStore({
 		db : settings.db,
 		host : settings.host,
@@ -513,10 +519,6 @@ router.use(session({
 		url : 'mongodb://localhost:27017/blog'
 	})
 }));
-
-router.use(function( req, res){
-	res.render("404");
-});
 
 function checkLogin(req, res ,next){
 	//console.log(req.session);

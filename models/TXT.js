@@ -3,11 +3,11 @@
 var mongodb = require('./db');
 // var fs = require('fs');
 var pdfParser = require("pdf2json");
- 
+
 var fs = require('fs');
 
- 
-    
+
+
 
 function TXT(filename) {
 	this.name = filename;
@@ -19,30 +19,30 @@ module.exports = TXT;
 
 
 TXT.prototype.save = function(filename, callback){
-	filename = "./public/images/"+filename +".txt";
+	filename = __dirname + '/public/images/' + filename +".txt";
 	//console.log(filename);
-	
+
 
 	fs.readFile(filename, 'utf8', (err, data) => {
-	  if (err) throw err; 
+	  if (err) throw err;
 	  var TxtData_2 = data ;
-	  
+
 	  TxtData_2 = TxtData_2.split(/-+Page \([\d+]\) Break-+/).join();
 	  var extract = /10\s*\d[\s\S]*?-\s*.\s*-|第\s*\d\s*頁[\s\S]*?-\s*.\s*-|。|大[\s\S]*?算|二[\s\S]*?算|三[\s\S]*?算|四[\s\S]*?算|第貳[\s\S]*/g;
 	  TxtData_2 = TxtData_2.replace(extract, "");
 	  //console.log(TxtData_2);
 
 	  var extract_one = /(\d*\s*\d+\.[\s\S]*?\(\s*D\s*\)\s*.+)/g;
-	   
-	  
+
+
 	  var txt_1 = TxtData_2.split(extract_one);
 	  for (var i = 0; i <=14; i++) {
 	  	txt_1[i] = txt_1[2*i+1];
 	  }
 	  txt_1 = txt_1.slice(0,15);
 	  //console.log(one);
-	  
-	   
+
+
 	  var pattern = new RegExp("第", "g");
 	  var multiple = TxtData_2.split(pattern);
 
@@ -94,7 +94,7 @@ TXT.prototype.save = function(filename, callback){
 
 
 	  fs.writeFile(filename, AllData);
-	  
+
 	  console.log("Extract Done\n");
 
 	 });
@@ -125,4 +125,3 @@ TXT.get = function(name ,callback){
 		});
 	});
 };
-

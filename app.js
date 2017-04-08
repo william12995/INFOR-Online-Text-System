@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 var session = require('express-session');
 //var session = require('cookie-session');
 var MongoStore = require('connect-mongo')(session);
+var hbs = require('express-handlebars');  //view engine
 
 var index = require('./routes/index');
 var settings = require('./setting');
@@ -19,8 +20,25 @@ var errorLog = fs.createWriteStream('error.log',{flags: 'a'});
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views/'));
-app.set('view engine', 'ejs');
+// handlebars
+app.engine('hbs', hbs({
+    extname: 'hbs',
+    defaultLayout: 'main',
+    layoutsDir: __dirname + '/views/layouts/',
+    helpers: {
+        section: function(name, options){
+            if(!this._sections) this._sections = {};
+            this._sections[name] = options.fn(this);
+            return null;
+        }
+    }}));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'hbs');
+
+//ejs
+// app.set('views', path.join(__dirname, 'views/'));
+// app.set('view engine', 'ejs');
+
 app.use(flash());
 
 // uncomment after placing your favicon in /public
@@ -38,6 +56,7 @@ app.use(function(err, req, res, next){
 	next();
 });
 
+app.use(express.static('public'));
 
 app.use(session({
 	secret : settings.cookieSecret,
@@ -46,7 +65,7 @@ app.use(session({
     saveUninitialized: true,
 	cookie : {
 		maxAge : 1000*60*60*24*30 //30天
-	}, 
+	},
 	store : new MongoStore({
 		db : settings.db,
 		host : settings.host,
@@ -56,7 +75,7 @@ app.use(session({
 }));
 
 // function authChecker(req, res, next) {
-	
+
 //     if (req.session.user || req.path==='/login' || req.path === '/reg') {
 //         next();
 //     } else {
@@ -86,10 +105,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error', {error: err});
 });
-
-
-
 
 module.exports = app;
