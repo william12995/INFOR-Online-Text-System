@@ -39,27 +39,27 @@ router.get('/', function(req, res, next) {
 
 });
 
-// router.post('/',function(req, res){
-// 	var md5 = crypto.createHash('md5');
-// 	var password = md5.update(req.body.password).digest('hex');
-//
-// 	User.get(req.body.name , function(err , user){
-// 		if(!user){
-// 			req.flash('error','用戶不存在!');
-// 			return res.redirect('/login');
-// 		}
-//
-// 		if(user.password != password){
-// 			req.flash('error','密碼錯誤!');
-// 			return res.redirect('/login');
-// 		}
-//
-// 		req.session.user = user ;
-// 		req.flash('success','登入成功!');
-// 		res.redirect('/');
-// 	});
-//
-// });
+router.post('/',function(req, res){
+	var md5 = crypto.createHash('md5');
+	var password = md5.update(req.body.password).digest('hex');
+
+	User.get(req.body.name , function(err , user){
+		if(!user){
+			req.flash('error','用戶不存在!');
+			return res.redirect('/login');
+		}
+
+		if(user.password != password){
+			req.flash('error','密碼錯誤!');
+			return res.redirect('/login');
+		}
+
+		req.session.user = user ;
+		req.flash('success','登入成功!');
+		res.redirect('/');
+	});
+
+});
 
 router.get('/', checkBeenLogin);
 router.get('/signup',function(req, res){
