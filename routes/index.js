@@ -339,7 +339,7 @@ router.get('/search', function(req, res){
 		}
 
 		res.render('search', {
-			title: 'SEARCH: ' + req.query.keyword,
+			title: req.query.keyword,
 			posts:posts,
 	 		user: req.session.user,
 	  		success: req.flash('success').toString(),

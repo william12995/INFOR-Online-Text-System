@@ -131,6 +131,10 @@ body, html{
   padding: 0 0 120px;
 }
 
+#searchbar {
+    width: 85%;
+}
+
 @media (max-width: 767px) {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     color: #ecf0f1;
