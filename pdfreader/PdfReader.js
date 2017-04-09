@@ -53,7 +53,7 @@ PdfReader.prototype.parseFileItems = function(pdfFilePath, itemHandler){
     forEachItem(pdfData, pdfFilePath ,itemHandler);
 
     var name = pdfFilePath.split(".")[1];
-    console.log(pdfParser+"YOU");
+    
     fs.writeFile("."+ name + ".txt", pdfParser.getRawTextContent());
     console.log('It saved');
        

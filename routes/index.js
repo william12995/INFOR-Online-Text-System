@@ -237,8 +237,7 @@ var PDFstorage = multer.diskStorage({
 });
  
 var PDFupload = multer({ 
-	storage: PDFstorage ,
-	limits: { fileSize: 1024 * 1024 }
+	storage: PDFstorage
 });
 
 router.get('/pdfUpload',checkLogin);
@@ -273,7 +272,7 @@ router.get('/txt', checkLogin);
 router.get('/txt', function(req, res){
 
 	var newTXT = new Txt(txt_name);
-	newTXT.SaveEnglish(txt_name,function(err , data_length){
+	newTXT.SaveScience(txt_name,function(err){
 
 		req.flash('success','題目已抓取，請檢查');
 		res.redirect('/txt/'+txt_name);
