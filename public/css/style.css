@@ -3,6 +3,10 @@ body{
 }
 
 /* Navbar */
+.navbar-collapse {
+    border-top: 0px;
+}
+
 .navbar{
   margin-bottom:0;
   border-radius:0;
@@ -127,8 +131,8 @@ body, html{
 #wrap {
   min-height: 100%;
   height: auto;
-  margin: 0 auto -120px;
-  padding: 0 0 120px;
+  margin: 0 auto -5%;
+  padding: 0 0 5%;
 }
 
 #searchbar {
