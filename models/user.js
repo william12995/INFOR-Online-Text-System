@@ -34,12 +34,12 @@ User.prototype.save = function(callback){
 	        'isVerified' : this.loacl.isVerified
 		},
 		facebook:{
-            id      : String,
-            token   : String,
-            name    : String,
-            email   : String,
-            gender  : String,
-            photo : String,
+            'id'      : String,
+            'token'   : String,
+            'name'    : String,
+            'email'   : String,
+            'gender'  : String,
+            'photo' : String,
         }
 		
 	};
