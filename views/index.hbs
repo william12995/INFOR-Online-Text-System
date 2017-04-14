@@ -22,9 +22,12 @@
 
 <section id="breadcrumb">
   <div class="container">
-    <ol class="breadcrumb">
+      {{#if success}}
+          <div class="alert alert-danger">{{success}}</div>
+      {{/if}}
+    <!-- <ol class="breadcrumb">
       <li class="active">blog</li>
-    </ol>
+    </ol> -->
   </div>
 </section>
 
@@ -94,7 +97,7 @@
                 </div>
                 <div class="form-group">
                   <label>Page Body</label>
-                  <textarea name="post" class="form-control" placeholder="Write something..." rows = "20" cols = "100"></textarea>
+                  <textarea name="editor1" class="form-control" placeholder="Page Body"></textarea>
                 </div>
                 <div class="form-group">
                   <label>Meta Tags</label>

@@ -59,6 +59,7 @@ passport.use('local-signup', new LocalStrategy({
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
         mongodb.open(function(err, db){
+            console.log('db open');
             if(err){
                 return callback(err);
             }
@@ -69,24 +70,26 @@ passport.use('local-signup', new LocalStrategy({
                     console.log(err);
                     return ;
                 }
-                 collection.findOne({ 
-                    'email' :  req.body.email 
+                 collection.findOne({
+                    'email' :  req.body.email
                 }, function(err, user) {
             // if there are any errors, return the error
             if (err){
+                console.log('jizz');
                 mongodb.close();
                 return done(err);
             }
             // check to see if theres already a user with that email
             if (user) {
+                console.log('user');
                 mongodb.close();
-                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                return done(null, false, req.flash('error', 'That email is already taken.'));
             } else {
 
                 // if there is no user with that email
                 // create the user
                 var generateHash = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
-                
+
                 var newUser = new User({
                     local:{
                         name : username ,
@@ -104,7 +107,7 @@ passport.use('local-signup', new LocalStrategy({
                         gender  : null,
                         photo : null,
                     }
-                    
+
                 });
 
                 let link = 'http://' + req.get('host') + '/verify?id=' + newUser.verifyId;
@@ -124,23 +127,23 @@ passport.use('local-signup', new LocalStrategy({
                     //console.log('Mail sent: ' + newUser.email);
                 });
                 mongodb.close();
-                
+
                 // save the user
                 newUser.save(function(err) {
                     if (err){
                         throw err;
                     }
-                    
+
                     return done(null, newUser);
                 });
 
             }
 
-                });  
+                });
 
             })
         })
-         
+
 
         });
 
@@ -177,13 +180,13 @@ passport.use('local-signup', new LocalStrategy({
                     // if no user is found, return the message
                     if (!user){
                         mongodb.close();
-                        return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+                        return done(null, false, req.flash('error', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
                     }
 
                     // if the user is found but the password is wrong
                     if (! bcrypt.compareSync(password, user.password)){
                         mongodb.close();
-                        return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+                        return done(null, false, req.flash('error', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
                     }
                     req.session.user = user;
                     // all is well, return successful user
@@ -192,7 +195,7 @@ passport.use('local-signup', new LocalStrategy({
                 });
             })
         })
-        
+
 
     }));
 
@@ -202,7 +205,7 @@ passport.use('local-signup', new LocalStrategy({
         clientID            : credentials.facebookAuth.ID,
         clientSecret        : credentials.facebookAuth.Secret,
         callbackURL         : credentials.facebookAuth.callbackURL,
-        // passReqToCallback   : true, 
+        // passReqToCallback   : true,
         profileFields       : ['id', 'name', 'gender', 'email', 'photos'],
         passReqToCallback : true
     },
@@ -211,9 +214,9 @@ passport.use('local-signup', new LocalStrategy({
     function(req, token, refreshToken, profile, done) {
 
         // console.log('call facebook-login');
-        // console.log('token: ', token);
-        // console.log('refreshToken: ', refreshToken);
-        // console.log('profile: ', profile);
+        console.log('token: ', token);
+        console.log('refreshToken: ', refreshToken);
+        console.log('profile: ', profile);
         // asynchronous
         process.nextTick(function() {
 
@@ -267,7 +270,7 @@ passport.use('local-signup', new LocalStrategy({
                         if (err){
                             throw err;
                         }
-                        
+
                         //console.log('facebook:'+ JSON.stringify(user.ops[0]));
                         //console.log(req.session);
                         req.session.user = user.ops[0];
@@ -279,7 +282,7 @@ passport.use('local-signup', new LocalStrategy({
             });
                 });
             })
-            
+
         });
 
     }));
