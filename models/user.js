@@ -94,7 +94,7 @@ User.verify = function(id,callback){
 				if(err){
 					return callback(err)
 				}
-				console.log(done.result.ok);
+				//console.log(done.result.ok);
 				if(done.result.ok == 1){
 					collection.findOne({
 						"verifyId": id
@@ -103,7 +103,7 @@ User.verify = function(id,callback){
 						if(err){
 							return callback(err)
 						}
-						console.log(user);
+						//console.log(user);
 						callback(null, user);
 					});
 				}

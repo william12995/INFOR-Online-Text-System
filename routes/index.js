@@ -23,8 +23,7 @@ router.get('/', function(req, res, next) {
 	// 	name: req.user.username ,
 	// 	head: "http://www.gravatar.com/avatar/" + req.user._json.gravatar_id + "?s=48"
 	// };
-	console.log(req.user+"QFFFQ");
-	console.log(JSON.stringify(req.session.user)+"QRRRQ");
+	
 	Post.getTen(null, page,function(err, posts, total){
 		if(err){
 			posts = {};
@@ -168,11 +167,12 @@ router.post('/signup', passport.authenticate('local-signup', {
     }));
 
 router.post('/login', checkBeenLogin);
-router.post('/login', passport.authenticate('local-login', {
+router.post('/login', passport.authenticate('local-login',{
         successRedirect : '/', // redirect to the secure profile section
         failureRedirect : '/login', // redirect back to the signup page if there is an error
         failureFlash : true, // allow flash messages
         session: false
+
     }));
 
 
@@ -180,12 +180,12 @@ router.get('/verify', function (req, res) {
 
         User.verify(req.query.id, function(err , user){
         	console.log('verified');
-        	//console.log(user);
+        	console.log(user);
         	req.session.user = user ;
-			req.flash('success','登入成功! ');
+        	console.log(JSON.stringify(req.session.user)+'pppppppp');
+			req.flash('success','驗證成功! ');
 			res.redirect('/');
         })
-
     })
 
 router.get('/post', checkLogin);

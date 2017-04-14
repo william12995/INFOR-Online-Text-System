@@ -73,10 +73,13 @@ passport.use('local-signup', new LocalStrategy({
                     'email' :  req.body.email 
                 }, function(err, user) {
             // if there are any errors, return the error
-            if (err)
+            if (err){
+                mongodb.close();
                 return done(err);
+            }
             // check to see if theres already a user with that email
             if (user) {
+                mongodb.close();
                 return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
             } else {
 
@@ -152,19 +155,22 @@ passport.use('local-signup', new LocalStrategy({
                 collection.findOne({ 'name' : username }, function(err, user) {
             // if there are any errors, return the error before anything else
                     if (err){
+                        mongodb.close();
                         return done(err);
                     }
 
                     // if no user is found, return the message
                     if (!user){
+                        mongodb.close();
                         return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
                     }
 
                     // if the user is found but the password is wrong
                     if (! bcrypt.compareSync(password, user.password)){
+                        mongodb.close();
                         return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
                     }
-
+                    req.session.user = user;
                     // all is well, return successful user
                     mongodb.close();
                     return done(null, user);
