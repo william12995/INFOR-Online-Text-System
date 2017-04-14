@@ -182,11 +182,22 @@ router.get('/verify', function (req, res) {
         	console.log('verified');
         	console.log(user);
         	req.session.user = user ;
-        	console.log(JSON.stringify(req.session.user)+'pppppppp');
+        	
 			req.flash('success','驗證成功! ');
 			res.redirect('/');
         })
     })
+
+
+// route for facebook authentication and login
+router.get('/auth/facebook', passport.authenticate('facebook-login', { scope : 'email' }));
+
+// handle the callback after facebook has authenticated the user
+router.get('/auth/facebook/callback', passport.authenticate('facebook-login', 
+    {
+        successRedirect : '/',
+        failureRedirect : '/login'
+    }));
 
 router.get('/post', checkLogin);
 router.get('/post',function(req, res){

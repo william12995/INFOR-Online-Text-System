@@ -3,27 +3,45 @@ var crypto = require('crypto');
 var mongodb = require('./db');
 
 function User(user) {
-	this.name = user.name;
-	this.password = user.password;
-	this.email = user.email;
-	this.verifyId = user.verifyId;
-	this.isVerified = user.isVerified;
+	this.name = user.local.name;
+	this.password = user.local.password;
+	this.email = user.local.email;
+	this.verifyId = user.local.verifyId;
+	this.isVerified = user.local.isVerified;
+
+	this.fb_name = user.facebook.name;
+	this.fb_id = user.facebook.id;
+	this.fb_token = user.facebook.token;
+	this.fb_email = user.facebook.email;
+	this.fb_gender = user.facebook.gender;
+	this.fb_photo = user.facebook.photo;
 };
 
 module.exports = User;
 
 User.prototype.save = function(callback){
 	var md5 = crypto.createHash('md5');
-	var email_MD5 = md5.update(this.email.toLowerCase()).digest('hex');
+	var email_MD5 = md5.update(this.local.email.toLowerCase()).digest('hex');
 	var head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
 
 	var user = {
-		'name' :	this.name,
-		'password' : this.password,
-		'email' : this.email,
-		'head': head,
-		'verifyId': this.verifyId,
-        'isVerified' : this.isVerified,
+		local:{
+			'name' :	this.loacl.name,
+			'password' : this.loacl.password,
+			'email' : this.loacl.email,
+			'head': head,
+			'verifyId': this.loacl.verifyId,
+	        'isVerified' : this.loacl.isVerified
+		},
+		facebook:{
+            id      : String,
+            token   : String,
+            name    : String,
+            email   : String,
+            gender  : String,
+            photo : String,
+        }
+		
 	};
 
 	mongodb.open(function(err, db){
@@ -106,7 +124,7 @@ User.verify = function(id,callback){
 						//console.log(user);
 						callback(null, user);
 					});
-				}
+				};
 			});
 		});
 	});
@@ -114,5 +132,5 @@ User.verify = function(id,callback){
 
 // checking if password is valid
 User.prototype.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.password);
+    return bcrypt.compareSync(password, this.local.password);
 };
