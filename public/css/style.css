@@ -131,8 +131,8 @@ body, html{
 #wrap {
   min-height: 100%;
   height: auto;
-  margin: 0 auto -5%;
-  padding: 0 0 5%;
+  margin: 0 auto -120px;
+  padding: 0 0 120px;
 }
 
 #searchbar {
