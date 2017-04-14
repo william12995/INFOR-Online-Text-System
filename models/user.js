@@ -20,44 +20,52 @@ function User(user) {
 module.exports = User;
 
 User.prototype.save = function(callback){
-	var md5 = crypto.createHash('md5');
-	var email_MD5 = md5.update(this.local.email.toLowerCase()).digest('hex');
-	var head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
+	
+	
+	if(this.name != null){
+		var md5 = crypto.createHash('md5');
+		var email_MD5 = md5.update(this.email.toLowerCase()).digest('hex');
+		var head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
 
-	var user = {
-		local:{
-			'name' :	this.loacl.name,
-			'password' : this.loacl.password,
-			'email' : this.loacl.email,
-			'head': head,
-			'verifyId': this.loacl.verifyId,
-	        'isVerified' : this.loacl.isVerified
-		},
-		facebook:{
-            'id'      : String,
-            'token'   : String,
-            'name'    : String,
-            'email'   : String,
-            'gender'  : String,
-            'photo' : String,
-        }
-		
+		var user = {
+			
+				'name' :	this.name,
+				'password' : this.password,
+				'email' : this.email,
+				'head': head,
+				'verifyId': this.verifyId,
+		        'isVerified' : this.isVerified
+			
+		}
+	}else if(this.fb_name != null){
+		var user = {
+	            'id'      : this.fb_id,
+	            'token'   : this.fb_token,
+	            'name'    : this.fb_name,
+	            'email'   : this.fb_email,
+	            'gender'  : this.fb_gender,
+	            'photo' : this.fb_photo
+	        
+		};
+		//console.log(JSON.stringify(user) +"UUuuuser");
 	};
 
 	mongodb.open(function(err, db){
 		if(err){
 			return callback(err);
 		}
+		//console.log("user save mongodb open");
 		db.collection('user',function(err , collection){
 			if(err){
 				mongodb.close();
 				return callback(err);
 			}
-
+			//console.log("user save db collection open")
 			collection.insert(user, {
 				safe : true
 			},function(err , user){
 				mongodb.close();
+				//console.log("user save insert user success");
 				if (err){
 					return callback(err);
 				}
@@ -132,5 +140,5 @@ User.verify = function(id,callback){
 
 // checking if password is valid
 User.prototype.validPassword = function(password) {
-    return bcrypt.compareSync(password, this.local.password);
+    return bcrypt.compareSync(password, this.password);
 };

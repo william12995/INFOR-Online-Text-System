@@ -75,47 +75,6 @@ router.get('/signup',function(req, res){
  	});
 });
 
-// router.post('/signup', checkBeenLogin);
-// router.post('/signup',function(req, res){
-// 	var name = req.body.name;
-// 	var password = req.body.password;
-// 	var password_repeat = req.body['password-repeat'];
-
-// 	if (password != password_repeat){
-// 		req.flash('error','密碼不一致!');
-// 		return res.redirect('/signup');
-// 	}
-
-// 	var md5 = crypto.createHash('md5');
-// 	var password = md5.update(req.body.password).digest('hex');
-
-	// var newUser = new User({
-	// 	name : req.body.name,
-	// 	password : password,
-	// 	email : req.body.email
-	// });
-
-// 	User.get(newUser.name, function(err, user){
-// 		if(user){
-
-// 			req.flash('error','用戶已存在');
-// 			return res.redirect('/signup');
-// 		}
-
-// 		newUser.save(function(err , user){
-// 			if(err){
-
-// 				req.flash('error',err);
-// 				return res.redirect('/signup');
-// 			}
-
-// 			req.session.user = user;
-// 			req.flash('success', '註冊成功');
-// 			res.redirect('/');
-
-// 		});
-// 	});
-// });
 
 router.get('/login', checkBeenLogin);
 router.get('/login',function(req, res){
@@ -137,27 +96,7 @@ router.get('/profile',function(req, res){
  	});
 });
 
-// router.post('/login', checkBeenLogin);
-// router.post('/login',function(req, res){
-// 	var md5 = crypto.createHash('md5');
-// 	var password = md5.update(req.body.password).digest('hex');
 
-// 	User.get(req.body.name , function(err , user){
-// 		if(!user){
-// 			req.flash('error','用戶不存在!');
-// 			return res.redirect('/login');
-// 		}
-
-// 		if(user.password != password){
-// 			req.flash('error','密碼錯誤!');
-// 			return res.redirect('/login');
-// 		}
-
-// 		req.session.user = user ;
-// 		req.flash('success','登入成功! ');
-// 		res.redirect('/');
-// 	});
-// });
 router.post('/signup', checkBeenLogin);
 router.post('/signup', passport.authenticate('local-signup', {
         successRedirect : '/', // redirect to the secure profile section
@@ -179,8 +118,8 @@ router.post('/login', passport.authenticate('local-login',{
 router.get('/verify', function (req, res) {
 
         User.verify(req.query.id, function(err , user){
-        	console.log('verified');
-        	console.log(user);
+        	//console.log('verified');
+        	//console.log(user);
         	req.session.user = user ;
         	
 			req.flash('success','驗證成功! ');
@@ -196,12 +135,13 @@ router.get('/auth/facebook', passport.authenticate('facebook-login', { scope : '
 router.get('/auth/facebook/callback', passport.authenticate('facebook-login', 
     {
         successRedirect : '/',
-        failureRedirect : '/login'
+        failureRedirect : '/login',
+        session: false
     }));
 
 router.get('/post', checkLogin);
 router.get('/post',function(req, res){
-	console.log("HEY");
+	//console.log("HEY");
  	res.render('post',{
  		title: '發表',
  		user: req.session.user,

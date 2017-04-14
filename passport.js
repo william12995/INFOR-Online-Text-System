@@ -97,17 +97,17 @@ passport.use('local-signup', new LocalStrategy({
                     },
 
                     facebook:{
-                        id      : String,
-                        token   : String,
-                        name    : String,
-                        email   : String,
-                        gender  : String,
-                        photo : String,
+                        id      : null,
+                        token   : null,
+                        name    : null,
+                        email   : null,
+                        gender  : null,
+                        photo : null,
                     }
                     
                 });
 
-                let link = 'http://' + req.get('host') + '/verify?id=' + newUser.local.verifyId;
+                let link = 'http://' + req.get('host') + '/verify?id=' + newUser.verifyId;
                 let mailOptions = {
                     from: 'INFOR-Online-test <do-not-reply@infor.org>',
                     to: newUser.email,
@@ -115,19 +115,22 @@ passport.use('local-signup', new LocalStrategy({
                     html: 'Click this link to verify your email account.<br><a href="'+link+'">Click here to verify</a>'
                 }
 
-                console.log(mailOptions);
+                //console.log(mailOptions);
 
                 smtpTransport.sendMail(mailOptions, function(err, res) {
                     if(err){
                         return console.error('Cannot send email: ' + err);
                     }
-                    console.log('Mail sent: ' + newUser.local.email);
+                    //console.log('Mail sent: ' + newUser.email);
                 });
                 mongodb.close();
+                
                 // save the user
                 newUser.save(function(err) {
-                    if (err)
+                    if (err){
                         throw err;
+                    }
+                    
                     return done(null, newUser);
                 });
 
@@ -201,21 +204,27 @@ passport.use('local-signup', new LocalStrategy({
         callbackURL         : credentials.facebookAuth.callbackURL,
         // passReqToCallback   : true, 
         profileFields       : ['id', 'name', 'gender', 'email', 'photos'],
-
+        passReqToCallback : true
     },
 
     // facebook will send back the token and profile
-    function(token, refreshToken, profile, done) {
+    function(req, token, refreshToken, profile, done) {
 
         // console.log('call facebook-login');
-        console.log('token: ', token);
-        console.log('refreshToken: ', refreshToken);
-        console.log('profile: ', profile);
+        // console.log('token: ', token);
+        // console.log('refreshToken: ', refreshToken);
+        // console.log('profile: ', profile);
         // asynchronous
         process.nextTick(function() {
 
             // find the user in the database based on their facebook id
-            User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
+            mongodb.open(function(err ,db){
+                if(err){
+                    return callback(err);
+                }
+
+                db.collection('user',function(err, collection){
+                    collection.findOne({ 'id' : profile.id }, function(err, user) {
 
                 // if there is an error, stop everything and return that
                 // ie an error connecting to the database
@@ -227,16 +236,19 @@ passport.use('local-signup', new LocalStrategy({
                 // if the user is found, then log them in
                 if (user) {
                     mongodb.close();
+                    //console.log("req: "+req);
+                    req.session.user = user;
                     return done(null, user); // user found, return that user
                 } else {
                     // if there is no user found with that facebook id, create them
+                    //profile.emails[0].value = profile.emails == null ? profile.emails[0].value : null ;
                     var newUser = new User({
                         local:{
-                            name : String,
-                            email : String,
-                            password : String,
-                            isVerified : String,
-                            verifyId : String,
+                            name : null,
+                            email : null,
+                            password : null,
+                            isVerified : null,
+                            verifyId : null,
                         },
 
                         facebook:{
@@ -248,27 +260,26 @@ passport.use('local-signup', new LocalStrategy({
                             photo : profile.photos[0].value,
                         }
                     });
-
-                    // set all of the facebook information in our user model
-                    // newUser.facebook.id    = profile.id; // set the users facebook id                   
-                    // newUser.facebook.token = token; // we will save the token that facebook provides to the user                    
-                    // newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
-                    // newUser.facebook.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-                    // newUser.facebook.gender = profile.gender;
-                    // newUser.facebook.photo = profile.photos[0].value;
-
+                    mongodb.close();
+                    //console.log("not yet save")
                     // save our user to the database
-                    newUser.save(function(err) {
+                    newUser.save(function(err, user) {
                         if (err){
                             throw err;
                         }
-                        mongodb.close();
+                        
+                        //console.log('facebook:'+ JSON.stringify(user.ops[0]));
+                        //console.log(req.session);
+                        req.session.user = user.ops[0];
                         // if successful, return the new user
-                        return done(null, newUser);
+                        return done(null, user);
                     });
                 }
 
             });
+                });
+            })
+            
         });
 
     }));
