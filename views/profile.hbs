@@ -1,34 +1,32 @@
 {{#section 'nav'}}
-    <div id="navbar" class="collapse navbar-collapse">
-      <ul class="nav navbar-nav">
-        <li><a href="/history">History</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        {{#if user}}
-            <li><a href="/profile">Welcome, {{user.name}}</a></li>
-            <li><a href="/logout">logout</a></li>
-        {{else}}
-            <li><a href="/login">login</a></li>
-        {{/if}}
-      </ul>
-    </div>
+<div id="navbar" class="collapse navbar-collapse">
+   <ul class="nav navbar-nav">
+      <li><a href="/history">History</a></li>
+   </ul>
+   <ul class="nav navbar-nav navbar-right">
+      {{#if user}}
+      <li><a href="/profile">Welcome, {{user.name}}</a></li>
+      <li><a href="/logout">logout</a></li>
+      {{else}}
+      <li><a href="/login">login</a></li>
+      {{/if}}
+   </ul>
+</div>
 {{/section}}
-
 {{#section 'head'}}
-    <div class="col-md-10">
-      <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user.name}} <small> | profile</small></h1>
-    </div>
+<div class="col-md-10">
+   <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user.name}} <small> | profile</small></h1>
+</div>
 {{/section}}
-
 <div class="row">
-    <div class="col-md-4 col-md-offset-4">
-        <div class="well">
-            <h3><span class="glyphicon glyphicon-user"></span> Local</h3>
-            <p>
-                <strong>name</strong>: {{user.name}}<br>
-                <strong>email</strong>: {{user.email}}<br>
-                <strong>password</strong>: {{user.password}}
-            </p>
-        </div>
-    </div>
+   <div class="col-md-4 col-md-offset-4">
+      <div class="well">
+         <h3><span class="glyphicon glyphicon-user"></span> Local</h3>
+         <p>
+            <strong>name</strong>: {{user.name}}<br>
+            <strong>email</strong>: {{user.email}}<br>
+            <strong>password</strong>: {{user.password}}
+         </p>
+      </div>
+   </div>
 </div>
