@@ -6,6 +6,8 @@ function User(user) {
 	this.name = user.name;
 	this.password = user.password;
 	this.email = user.email;
+	this.verifyId = user.verifyId;
+	this.isVerified = user.isVerified;
 };
 
 module.exports = User;
@@ -19,7 +21,9 @@ User.prototype.save = function(callback){
 		'name' :	this.name,
 		'password' : this.password,
 		'email' : this.email,
-		'head': head
+		'head': head,
+		'verifyId': this.verifyId,
+        'isVerified' : this.isVerified,
 	};
 
 	mongodb.open(function(err, db){
@@ -69,4 +73,46 @@ User.get = function(name ,callback){
 			});
 		});
 	});
+};
+
+User.verify = function(id,callback){
+	mongodb.open(function(err , db){
+		if (err){
+			return callback(err);
+		}
+		db.collection('user',function(err , collection){
+			if (err){
+				mongodb.close();
+				return callback(err);
+			}
+
+			collection.update({
+				"verifyId": id
+			},{
+				$set:{isVerified: true}
+			},function(err , done){
+				if(err){
+					return callback(err)
+				}
+				console.log(done.result.ok);
+				if(done.result.ok == 1){
+					collection.findOne({
+						"verifyId": id
+					},function(err , user){
+						mongodb.close();
+						if(err){
+							return callback(err)
+						}
+						console.log(user);
+						callback(null, user);
+					});
+				}
+			});
+		});
+	});
+}
+
+// checking if password is valid
+User.prototype.validPassword = function(password) {
+    return bcrypt.compareSync(password, this.password);
 };

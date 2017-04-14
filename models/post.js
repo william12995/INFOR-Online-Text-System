@@ -19,7 +19,7 @@ Post.prototype.save = function(callback){
 		'year': date.getFullYear(),
 		'month': date.getFullYear()+ "-" + (date.getMonth() + 1),
 		'day': date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate(),
-		'minute': date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate() + "" + date.getHours() + ":" 
+		'minute': date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate() + "" + date.getHours() + ":"
 		+(date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes())
 			}
 	var post = {
@@ -111,9 +111,9 @@ Post.getOne = function(name, day, title, callback){
 			collection.findOne({
 				"name": name,
 				"time.day": day,
-				"title": title 
+				"title": title
 			},function(err, doc){
-				
+
 				if(err){
 					mongodb.close();
 					return callback(err);
@@ -122,7 +122,7 @@ Post.getOne = function(name, day, title, callback){
 					collection.update({
 						"name": name,
 						"time.day": day,
-						"title": title 
+						"title": title
 					},{
 						$inc: {"pv": 1}
 					},function(err){
@@ -136,8 +136,8 @@ Post.getOne = function(name, day, title, callback){
 					doc.comments.forEach(function(comment){
 						comment.content =  markdown.toHTML(comment.content);
 					});
-					callback(null,doc);	
-				}			
+					callback(null,doc);
+				}
 			});
 		});
 	});
@@ -207,13 +207,13 @@ Post.remove = function(name, day, title, callback) {
     if (err) {
       return callback(err);
     }
-    
+
     db.collection('posts', function (err, collection) {
       if (err) {
         mongodb.close();
         return callback(err);
       }
-      
+
       collection.findOne({
         "name": name,
         "time.day": day,
@@ -223,13 +223,13 @@ Post.remove = function(name, day, title, callback) {
           mongodb.close();
           return callback(err);
         }
-        
+
         var reprint_from = "";
         if (doc.reprint_info.reprint_from) {
           reprint_from = doc.reprint_info.reprint_from;
         }
         if (reprint_from != "") {
-          
+
           collection.update({
             "name": reprint_from.name,
             "time.day": reprint_from.day,
@@ -249,7 +249,7 @@ Post.remove = function(name, day, title, callback) {
           });
         }
 
-        
+
         collection.remove({
           "name": name,
           "time.day": day,
@@ -296,6 +296,32 @@ Post.getArchive = function(callback){
 		});
 	});
 };
+
+// Post.getTags = function(){
+//
+// 	mongodb.open(function(err, db){
+// 		if (err){
+// 			mongodb.close();
+// 			return [];
+// 		}
+//
+// 		db.collection('posts' , function(err, collection){
+// 			if(err){
+// 				mongodb.close();
+// 				return [];
+// 			}
+//
+// 			collection.distinct("tags",function(err, docs){
+// 				mongodb.close();
+// 				if(err){
+// 					return [];
+// 				}
+// 				console.log('docs: ', docs);
+// 				return docs;
+// 			});
+// 		});
+// 	});
+// };
 
 Post.getTags = function(callback){
 	mongodb.open(function(err, db){
@@ -356,7 +382,7 @@ Post.search = function( keyword, callback){
 		if (err){
 			return callback(err);
 		}
-		
+
 		db.collection('posts' , function(err, collection){
 			if(err){
 				mongodb.close();
@@ -400,7 +426,7 @@ Post.reprint = function( reprint_from, reprint_to, callback){
 				"time.day": reprint_from.day,
 				"title": reprint_from.title
 			},function(err, doc){
-				
+
 				if(err){
 					mongodb.close();
 					return callback(err);
@@ -412,7 +438,7 @@ Post.reprint = function( reprint_from, reprint_to, callback){
 					'year': date.getFullYear(),
 					'month': date.getFullYear()+ "-" + (date.getMonth() + 1),
 					'day': date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate(),
-					'minute': date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate() + "" + date.getHours() + ":" 
+					'minute': date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate() + "" + date.getHours() + ":"
 					+(date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes())
 						}
 
@@ -444,7 +470,7 @@ Post.reprint = function( reprint_from, reprint_to, callback){
 					}
 				});
 
-				
+
 				collection.insert( doc, {
 					safe: true
 				},function( err, post){

@@ -1,0 +1,94 @@
+{{#section 'nav'}}
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="/history">History</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {{#if user}}
+            <li><a href="/profile">Welcome, {{user.name}}</a></li>
+            <li><a href="/logout">logout</a></li>
+        {{else}}
+            <li><a href="/login">login</a></li>
+        {{/if}}
+      </ul>
+    </div>
+{{/section}}
+
+{{#section 'head'}}
+    <div class="col-md-10">
+      <h1>   </h1><br>
+    </div>
+{{/section}}
+
+<div class="col-lg-8">
+
+    <h1>{{post.title}}</h1>
+
+    <p class="lead">
+        by <a href="#">{{post.name}}</a>
+    </p>
+
+    <hr>
+
+    <p><span class="glyphicon glyphicon-time"></span> Posted on {{post.time.date}}</p>
+
+    <hr>
+
+    <!-- <img class="img-responsive" src="http://placehold.it/900x300" alt=""> -->
+
+    <hr>
+
+    <h3 class="lead">{{{post.post}}}</h3>
+
+    <hr>
+
+    <!-- Comments Form -->
+    <div class="well">
+        <h4>Leave a Comment:</h4>
+        <form role="form" method="post">
+            <div class="form-group">
+                <textarea class="form-control" name="content" rows="3"></textarea>
+                {{#if user}}
+                    <div class="form-group">
+                      <label>Username</label>
+                      <input type="text" class="form-control" name="name" value="{{user.name}}">
+                    </div>
+                    <div class="form-group">
+                      <label>email</label>
+                      <input type="text" class="form-control" name="email" value="{{user.email}}">
+                    </div>
+                {{else}}
+                    <div class="form-group">
+                      <label>Username</label>
+                      <input type="text" class="form-control" name="name" placeholder="your name">
+                    </div>
+                    <div class="form-group">
+                      <label>email</label>
+                      <input type="text" class="form-control" name="email" placeholder="your email">
+                    </div>
+                {{/if}}
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <!-- Posted Comments -->
+
+    <!-- Comment -->
+    {{#each post.comments}}
+        <div class="media">
+            <a class="pull-left" href="#">
+                <img class="media-object" src="http://placehold.it/64x64" alt="">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading">{{name}}
+                    <small>{{time}}</small>
+                </h4>
+                <p>{{{content}}}</p>
+            </div>
+        </div>
+    {{/each}}
+
+</div>

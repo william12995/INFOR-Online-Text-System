@@ -1,0 +1,33 @@
+{{#section 'nav'}}
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav">
+        <li><a href="/history">History</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        {{#if user}}
+            <li><a href="/profile">Welcome, {{user.name}}</a></li>
+            <li><a href="/logout">logout</a></li>
+        {{else}}
+            <li><a href="/login">login</a></li>
+        {{/if}}
+      </ul>
+    </div>
+{{/section}}
+
+{{#section 'head'}}
+    <div class="col-md-10">
+      <h1><span class="glyphicon glyphicon-time" aria-hidden="true"></span> History <small></small></h1>
+    </div>
+{{/section}}
+
+<div class="col-md-4 col-md-offset-4">
+    {{#each posts}}
+        <div class="well">
+            <p>
+                <strong>Date</strong>: {{time.day}}<br>
+                <strong>Title</strong>: {{title}}<br>
+                <strong>Author</strong>: {{name}}
+            </p>
+        </div>
+    {{/each}}
+</div>
