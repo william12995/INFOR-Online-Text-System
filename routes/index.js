@@ -19,11 +19,7 @@ var Pdf = require('../pdfreader/parse');
 /* GET home page. */
 router.get('/', function(req, res, next) {
 	var page = req.query.p ? parseInt(req.query.p) : 1 ;
-	// req.session.user = {
-	// 	name: req.user.username ,
-	// 	head: "http://www.gravatar.com/avatar/" + req.user._json.gravatar_id + "?s=48"
-	// };
-	
+
 	Post.getTen(null, page,function(err, posts, total){
 		if(err){
 			posts = {};
@@ -43,27 +39,7 @@ router.get('/', function(req, res, next) {
 
 });
 
-router.post('/',function(req, res){
-	var md5 = crypto.createHash('md5');
-	var password = md5.update(req.body.password).digest('hex');
 
-	User.get(req.body.name , function(err , user){
-		if(!user){
-			req.flash('error','用戶不存在!');
-			return res.redirect('/login');
-		}
-
-		if(user.password != password){
-			req.flash('error','密碼錯誤!');
-			return res.redirect('/login');
-		}
-
-		req.session.user = user ;
-		req.flash('success','登入成功!');
-		res.redirect('/');
-	});
-
-});
 
 router.get('/signup', checkBeenLogin);
 router.get('/signup',function(req, res){
@@ -121,7 +97,7 @@ router.get('/verify', function (req, res) {
         	//console.log('verified');
         	//console.log(user);
         	req.session.user = user ;
-        	
+
 			req.flash('success','驗證成功! ');
 			res.redirect('/');
         })
@@ -132,7 +108,7 @@ router.get('/verify', function (req, res) {
 router.get('/auth/facebook', passport.authenticate('facebook-login', { scope : 'email' }));
 
 // handle the callback after facebook has authenticated the user
-router.get('/auth/facebook/callback', passport.authenticate('facebook-login', 
+router.get('/auth/facebook/callback', passport.authenticate('facebook-login',
     {
         successRedirect : '/',
         failureRedirect : '/login',
@@ -155,7 +131,7 @@ router.post('/post',function(req, res){
 	var currentUser = req.session.user;
 	//console.log(currentUser);
 	var tags = [req.body.tag1, req.body.tag2, req.body.tag3];
-	var post = new Post(currentUser.name , currentUser.head, req.body.title, tags, req.body.post );
+	var post = new Post(currentUser.name , currentUser.head, req.body.title, tags, req.body.editor1 );
 	post.save(function(err){
 		if(err){
 			req.flash('error',err);
@@ -188,10 +164,10 @@ var storage = multer.diskStorage({
   destination: function (req, file, cb) {
 
      var destDir = './public/images/' + req.session.user.name;
-        
+
         fs.stat(destDir, (err) => {
             if (err) {
-                
+
                 fs.mkdir(destDir, (err) => {
                     if (err) {
                         cb(err);
@@ -229,8 +205,8 @@ var PDFstorage = multer.diskStorage({
     cb(null, file.originalname );
   }
 });
- 
-var PDFupload = multer({ 
+
+var PDFupload = multer({
 	storage: PDFstorage
 });
 
@@ -249,7 +225,7 @@ var txt_name;
 
 router.post('/pdfUpload',checkLogin);
 
-router.post('/pdfUpload', PDFupload.array('pdf', 12), function(req,res){	
+router.post('/pdfUpload', PDFupload.array('pdf', 12), function(req,res){
 
     var str = req.files[0].filename;
 
@@ -547,21 +523,6 @@ router.get('/reprint/:name/:day/:title', function( req, res){
 	});
 });
 
-// router.use(session({
-// 	secret : settings.cookieSecret,
-// 	key : settings.db,
-// 	resave: true,
-//     saveUninitialized: true,
-// 	cookie : {
-// 		maxAge : 1000*60*60*24*30 //30天
-// 	},
-// 	store : new MongoStore({
-// 		db : settings.db,
-// 		host : settings.host,
-// 		port : settings.port,
-// 		url : 'mongodb://localhost:27017/blog'
-// 	})
-// }));
 
 function checkLogin(req, res ,next){
 	//console.log(req.session);
