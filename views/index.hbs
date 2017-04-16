@@ -67,6 +67,18 @@
                   {{/each}}
                </div>
                {{/each}}
+
+               <div>
+                {{#unless  isFirstPage }}
+
+               		<span class="prepage" > <a title="上一頁" href="?p={{pre_page page }}" > 上一頁 </a> </span>
+               	{{/unless}}
+
+                {{#unless  isLastPage}}
+               		<span class="nextpage" > <a title="下一頁" href="?p={{next_page page }}" > 下一頁 </a> </span>
+               	{{/unless}}
+               </div>
+
             </div>
          </div>
       </div>

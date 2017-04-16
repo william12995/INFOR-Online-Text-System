@@ -7,6 +7,7 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var nodemailer = require('nodemailer');
 var randomstring = require('randomstring');
 var bcrypt   = require('bcrypt-nodejs');
+var crypto = require('crypto');
 
 // load up the user model
 var User = require('./models/user');
@@ -58,57 +59,30 @@ passport.use('local-signup', new LocalStrategy({
 
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-        mongodb.open(function(err, db){
-            console.log('db open');
-            if(err){
-                return callback(err);
-            }
-
-            db.collection('user',function(err , collection){
-                if(err){
-                    mongodb.close();
-                    console.log(err);
-                    return ;
-                }
-                 collection.findOne({
-                    'email' :  req.body.email
-                }, function(err, user) {
+        User.findOne({ 'local.name' :  username }, function(err, user) {
             // if there are any errors, return the error
-            if (err){
-                console.log('jizz');
-                mongodb.close();
+            if (err)
                 return done(err);
-            }
+
             // check to see if theres already a user with that email
             if (user) {
-                console.log('user');
-                mongodb.close();
-                return done(null, false, req.flash('error', 'That email is already taken.'));
+                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
             } else {
 
                 // if there is no user with that email
                 // create the user
-                var generateHash = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+                var newUser = new User();
 
-                var newUser = new User({
-                    local:{
-                        name : username ,
-                        email : req.body.email,
-                        password : generateHash,
-                        isVerified : false,
-                        verifyId : randomstring.generate(15)
-                    },
-
-                    facebook:{
-                        id      : null,
-                        token   : null,
-                        name    : null,
-                        email   : null,
-                        gender  : null,
-                        photo : null,
-                    }
-
-                });
+                var md5 = crypto.createHash('md5');
+                var email_MD5 = md5.update(req.body.email.toLowerCase()).digest('hex');
+                var head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
+                // set the user's local credentials
+                newUser.name = username;
+                newUser.email    = req.body.email;
+                newUser.password = bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+                newUser.head = head;
+                newUser.isVerified = false;
+                newUser.verifyId = randomstring.generate(15);
 
                 let link = 'http://' + req.get('host') + '/verify?id=' + newUser.verifyId;
                 let mailOptions = {
@@ -124,26 +98,19 @@ passport.use('local-signup', new LocalStrategy({
                     if(err){
                         return console.error('Cannot send email: ' + err);
                     }
-                    //console.log('Mail sent: ' + newUser.email);
+                    console.log('Mail sent: ' + newUser.email);
                 });
-                mongodb.close();
 
                 // save the user
                 newUser.save(function(err) {
-                    if (err){
+                    if (err)
                         throw err;
-                    }
-
                     return done(null, newUser);
                 });
 
             }
 
-                });
-
-            })
-        })
-
+        });
 
         });
 
@@ -159,42 +126,27 @@ passport.use('local-signup', new LocalStrategy({
 
         // find a user whose email is the same as the forms email
         // we are checking to see if the user trying to login already exists
-        mongodb.open(function(err, db){
-            if(err){
-                return callback(err);
-            }
-
-            db.collection('user',function(err, collection){
-                if(err){
-                    mongodb.close();
-                    return callback(err);
-                }
-
-                collection.findOne({ 'name' : username }, function(err, user) {
+        User.findOne({ 'name' :  username }, function(err, user) {
             // if there are any errors, return the error before anything else
-                    if (err){
-                        mongodb.close();
-                        return done(err);
-                    }
+            if (err){
+                return done(err);
+            }
+            // if no user is found, return the message
+            if (!user){
+                return done(null, false, req.flash('loginMessage', 'No user found.'));
+            }
+            // req.flash is the way to set flashdata using connect-flash
 
-                    // if no user is found, return the message
-                    if (!user){
-                        mongodb.close();
-                        return done(null, false, req.flash('error', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
-                    }
+            // if the user is found but the password is wrong
+            if ( ! ( bcrypt.compareSync(password, user.password) ) ){
+                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+            }
+               // create the loginMessage and save it to session as flashdata
+            req.session.user = user;
+            // all is well, return successful user
 
-                    // if the user is found but the password is wrong
-                    if (! bcrypt.compareSync(password, user.password)){
-                        mongodb.close();
-                        return done(null, false, req.flash('error', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
-                    }
-                    req.session.user = user;
-                    // all is well, return successful user
-                    mongodb.close();
-                    return done(null, user);
-                });
-            })
-        })
+            return done(null, user);
+        });
 
 
     }));
@@ -214,74 +166,50 @@ passport.use('local-signup', new LocalStrategy({
     function(req, token, refreshToken, profile, done) {
 
         // console.log('call facebook-login');
-        console.log('token: ', token);
-        console.log('refreshToken: ', refreshToken);
-        console.log('profile: ', profile);
+        // console.log('token: ', token);
+        // console.log('refreshToken: ', refreshToken);
+        // console.log('profile: ', profile);
         // asynchronous
         process.nextTick(function() {
 
             // find the user in the database based on their facebook id
-            mongodb.open(function(err ,db){
-                if(err){
-                    return callback(err);
-                }
-
-                db.collection('user',function(err, collection){
-                    collection.findOne({ 'id' : profile.id }, function(err, user) {
+            User.findOne({
+               'name' : profile.name.givenName + ' ' + profile.name.familyName
+             }, function(err, user) {
 
                 // if there is an error, stop everything and return that
                 // ie an error connecting to the database
-                if (err){
-                    mongodb.close();
+                if (err)
                     return done(err);
-                }
 
                 // if the user is found, then log them in
                 if (user) {
-                    mongodb.close();
-                    //console.log("req: "+req);
                     req.session.user = user;
                     return done(null, user); // user found, return that user
                 } else {
                     // if there is no user found with that facebook id, create them
-                    //profile.emails[0].value = profile.emails == null ? profile.emails[0].value : null ;
-                    var newUser = new User({
-                        local:{
-                            name : null,
-                            email : null,
-                            password : null,
-                            isVerified : null,
-                            verifyId : null,
-                        },
+                    var newUser = new User();
 
-                        facebook:{
-                            id      : profile.id,
-                            token   : token,
-                            name    : profile.name.givenName + ' ' + profile.name.familyName,
-                            email   : profile.emails[0].value,
-                            gender  : profile.gender,
-                            photo : profile.photos[0].value,
-                        }
-                    });
-                    mongodb.close();
-                    //console.log("not yet save")
+                    // set all of the facebook information in our user model
+                    // set the users facebook id
+                    // we will save the token that facebook provides to the user
+                    newUser.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
+                    newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
+
+                    newUser.head = profile.photos[0].value;
+
                     // save our user to the database
-                    newUser.save(function(err, user) {
-                        if (err){
+                    newUser.save(function(err) {
+                        if (err)
                             throw err;
-                        }
+                        User.findOne({'name': newUser.name},function(err, user){
 
-                        //console.log('facebook:'+ JSON.stringify(user.ops[0]));
-                        //console.log(req.session);
-                        req.session.user = user.ops[0];
-                        // if successful, return the new user
-                        return done(null, user);
+                            req.session.user = user;
+                            return done(null, newUser);
+                        });
                     });
                 }
-
             });
-                });
-            })
 
         });
 

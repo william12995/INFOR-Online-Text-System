@@ -20,6 +20,10 @@ var errorLog = fs.createWriteStream('error.log',{flags: 'a'});
 
 var app = express();
 
+var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost/blog');
+
 var passport = require('passport');
 require('./passport')(passport);
 

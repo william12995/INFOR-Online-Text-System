@@ -22,8 +22,10 @@ router.get('/', function(req, res, next) {
 
 	Post.getTen(null, page,function(err, posts, total){
 		if(err){
+			console.log(err);
 			posts = {};
 		}
+		console.log("posts: "+JSON.stringify(posts));
 		//console.log('posts: ', posts);
 		res.render('index', {
 			title: 'Home',
@@ -33,7 +35,15 @@ router.get('/', function(req, res, next) {
 		  	isFirstPage: (page-1) == 0 ,
 		  	isLastPage: ( (page-1)*10 + posts.length ) == total ,
 		  	success: req.flash('success').toString(),
-		  	error: req.flash('error').toString()
+		  	error: req.flash('error').toString(),
+				helpers: {
+		        next_page: function(page){
+		          return page+1;
+		        },
+						pre_page: function(page){
+							return page-1
+						}
+		    }
   	});
   });
 
@@ -93,15 +103,27 @@ router.post('/login', passport.authenticate('local-login',{
 
 router.get('/verify', function (req, res) {
 
-        User.verify(req.query.id, function(err , user){
-        	//console.log('verified');
-        	//console.log(user);
-        	req.session.user = user ;
+  User.update({ 'verifyId' : req.query.id }, { 'isVerified' : true }, function(err){
 
-			req.flash('success','驗證成功! ');
-			res.redirect('/');
-        })
-    })
+      if(err){
+
+          console.log('Something went wrong: ' + err);
+          res.redirect('/');
+      }
+      else{
+				User.findOne({ 'verifyId' :  req.query.id }, function(err, user) {
+						// if there are any errors, return the error before anything else
+						if (err){
+							console.log(err);
+						}
+
+						req.session.user = user;
+						console.log('verified');
+						res.redirect('/');
+				});
+      }
+  });
+})
 
 
 // route for facebook authentication and login

@@ -1,6 +1,6 @@
-1.Limit Size Of Upload Image 
+1.Limit Size Of Upload Image
 2.Before Redirect Checking Login(Checked)
-3.Comment not work (Mongodb update push array problem)  
+3.Comment not work (Mongodb update push array problem)
 4.if Reprint Link not work (Original page is deleted) , how to redirect to 404 or other ejs ?
 5.Socket.io accomplish
 6. Image page (Respectively)
@@ -8,3 +8,4 @@
 8. PDFreader(checked)
 9. KindEditor
 10. Comment Writer Name
+11. Post page (mongoose)
