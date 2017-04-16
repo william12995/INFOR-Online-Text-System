@@ -105,6 +105,7 @@ passport.use('local-signup', new LocalStrategy({
                 newUser.save(function(err) {
                     if (err)
                         throw err;
+                    req.session.user = user;
                     return done(null, newUser);
                 });
 
@@ -158,7 +159,7 @@ passport.use('local-signup', new LocalStrategy({
         clientSecret        : credentials.facebookAuth.Secret,
         callbackURL         : credentials.facebookAuth.callbackURL,
         // passReqToCallback   : true,
-        profileFields       : ['id', 'name', 'gender', 'email', 'picture.type(large)', 'link', 'about_me'],
+        profileFields       : ['id', 'name', 'gender', 'email', 'picture.type(large)', 'link'],
         passReqToCallback : true
     },
 
