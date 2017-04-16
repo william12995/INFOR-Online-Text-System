@@ -15,18 +15,28 @@
 {{/section}}
 {{#section 'head'}}
 <div class="col-md-10">
-   <h1><span class="glyphicon glyphicon-user" aria-hidden="true"></span> {{user.name}} <small> | profile</small></h1>
+   <h1>profile</h1>
 </div>
 {{/section}}
-<div class="row">
-   <div class="col-md-4 col-md-offset-4">
-      <div class="well">
-         <h3><span class="glyphicon glyphicon-user"></span> Local</h3>
-         <p>
-            <strong>name</strong>: {{user.name}}<br>
-            <strong>email</strong>: {{user.email}}<br>
-            <strong>password</strong>: {{user.password}}
-         </p>
-      </div>
-   </div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-6">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <img src="{{user.head}}" alt="" class="img-rounded img-responsive" />
+                    </div>
+                    <div class="col-sm-6 col-md-8">
+                        <h4>{{user.name}}</h4>
+                        <!-- <small><cite title="San Francisco, USA">San Francisco, USA <i class="glyphicon glyphicon-map-marker">
+                        </i></cite></small> -->
+                        <p>
+                            <span class="glyphicon glyphicon-envelope"></span> {{user.email}}
+                            <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

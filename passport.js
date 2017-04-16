@@ -66,7 +66,7 @@ passport.use('local-signup', new LocalStrategy({
 
             // check to see if theres already a user with that email
             if (user) {
-                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                return done(null, false, req.flash('error', 'That email is already taken.'));
             } else {
 
                 // if there is no user with that email
@@ -133,13 +133,13 @@ passport.use('local-signup', new LocalStrategy({
             }
             // if no user is found, return the message
             if (!user){
-                return done(null, false, req.flash('loginMessage', 'No user found.'));
+                return done(null, false, req.flash('error', 'No user found.'));
             }
             // req.flash is the way to set flashdata using connect-flash
 
             // if the user is found but the password is wrong
             if ( ! ( bcrypt.compareSync(password, user.password) ) ){
-                return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));
+                return done(null, false, req.flash('error', 'Oops! Wrong password.'));
             }
                // create the loginMessage and save it to session as flashdata
             req.session.user = user;
@@ -158,7 +158,7 @@ passport.use('local-signup', new LocalStrategy({
         clientSecret        : credentials.facebookAuth.Secret,
         callbackURL         : credentials.facebookAuth.callbackURL,
         // passReqToCallback   : true,
-        profileFields       : ['id', 'name', 'gender', 'email', 'photos'],
+        profileFields       : ['id', 'name', 'gender', 'email', 'picture.type(large)', 'link', 'about_me'],
         passReqToCallback : true
     },
 
@@ -168,7 +168,7 @@ passport.use('local-signup', new LocalStrategy({
         // console.log('call facebook-login');
         // console.log('token: ', token);
         // console.log('refreshToken: ', refreshToken);
-        // console.log('profile: ', profile);
+        console.log('profile: ', profile);
         // asynchronous
         process.nextTick(function() {
 

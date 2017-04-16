@@ -13,17 +13,21 @@
    </ul>
 </div>
 {{/section}}
+
 {{#section 'head'}}
 <div class="col-md-10">
    <h1>   </h1>
    <br>
 </div>
 {{/section}}
+
 <div class="col-lg-8">
    <h1>{{post.title}}</h1>
-   <p class="lead">
-      by <a href="#">{{post.name}}</a>
-   </p>
+   <div class="container">
+       <p class="lead">
+          by <a href="#">{{post.name}}</a>
+       </p>
+   </div>
    <hr>
    <p><span class="glyphicon glyphicon-time"></span> Posted on {{post.time.date}}</p>
    <hr>

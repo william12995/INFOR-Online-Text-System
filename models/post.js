@@ -62,7 +62,7 @@ Post.prototype.save = function(callback){
 	};
 
 	var newPost = new postModel(post);
-	console.log(newPost);
+	// console.log(newPost);
 	newPost.save(function(err){
 
 		if(err){
@@ -90,7 +90,7 @@ Post.getTen = function(name, page, callback){
 					if(err){
 						return callback(err);
 					}
-					console.log(docs +"321");
+					// console.log(docs +"321");
 					callback(null, docs, total);
 				});
 			});
@@ -227,7 +227,7 @@ Post.getArchive = function(callback){
 				if(err){
 					return callback(err);
 				}
-				console.log(docs);
+				// console.log(docs);
 				callback(null, docs);
 			});
 
