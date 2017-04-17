@@ -62,8 +62,10 @@
                   <p class="grey">{{time.date}} — {{name}}</p>
                   {{{post}}}
                   <span class="grey">Tags:</span>
+
                   {{#each tags}}
-                  <span><a href="/tags/{{.}}">{{.}}</a></span>
+                  {{this}}
+                  <span><a href="/tags/{{this}}">{{this}}</a></span>
                   {{/each}}
                   <br>
                   <span class="grey">瀏覽次數: {{pv}}</span>
@@ -121,7 +123,7 @@
 <div class="modal fade" id="uploadimage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
-         <form method="post" action="/upload">
+         <form method="post" action="/upload" enctype = 'multipart/form-data'>
             <div class="modal-header">
                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                <h4 class="modal-title" id="myModalLabel">Upload images</h4>

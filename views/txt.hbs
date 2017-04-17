@@ -1,0 +1,28 @@
+{{#section 'head'}}
+<div class="col-md-12">
+   <h1 class="text-center"><span class="glyphicon glyphicon-log-in"></span> Login</h1>
+</div>
+{{/section}}
+
+<section id="main">
+   <div class="container">
+      <div class="row">
+         <div class="col-md-4 col-md-offset-4">
+
+           <form method="post">
+             <textarea name = "post" rows = "20" cols = "100"> {{ content[page] }} </textarea><br/>
+             <input type="submit" value="儲存修改">
+           </form>
+
+           <div>
+             {{{{ pre_txt  }}}}
+               <span class="prepage" > <a title="上一題" href="/txt/{{ title }}?p={{pre_page page}}" > 上一題 </a> </span>
+             {{{{/pre_txt}}}}
+             {{{{ next_txt page data_length }}}}
+               <span class="nextpage" > <a title="下一題" href="/txt/{{ title }}?p={{next_page page}}" > 下一題 </a> </span>
+             {{{{/next_txt}}}}
+           </div>
+         </div>
+      </div>
+   </div>
+</section>
