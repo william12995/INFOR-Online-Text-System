@@ -8,7 +8,7 @@ var postSchema = new mongoose.Schema({
 			name   : String,
       title  : String,
       post   : String,
-      tags   : String,
+      tags   : Array,
     	head   : String,
 			time   : {},
 			reprint_info: {

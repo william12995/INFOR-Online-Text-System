@@ -26,7 +26,7 @@ router.get('/', function(req, res, next) {
 			posts = {};
 		}
 		// console.log("posts: "+JSON.stringify(posts));
-		//console.log('posts: ', posts);
+		console.log('posts: ', posts);
 		res.render('index', {
 			title: 'Home',
 		  	user: req.session.user,
@@ -153,6 +153,7 @@ router.post('/post',function(req, res){
 	var currentUser = req.session.user;
 	//console.log(currentUser);
 	var tags = [req.body.tag1, req.body.tag2, req.body.tag3];
+	console.log(tags);
 	var post = new Post(currentUser.name , currentUser.head, req.body.title, tags, req.body.editor1 );
 	post.save(function(err){
 		if(err){
