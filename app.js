@@ -5,10 +5,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+// var expressLayouts = require('express-e6js-layouts');
 
 //var session = require('cookie-session');
 var MongoStore = require('connect-mongo')(session);
-var hbs = require('express-handlebars');  //view engine
+// var hbs = require('express-handlebars');  //view engine
 
 var index = require('./routes/index');
 var settings = require('./setting');
@@ -29,23 +30,23 @@ require('./passport')(passport);
 
 // view engine setup
 // handlebars
-app.engine('hbs', hbs({
-    extname: 'hbs',
-    defaultLayout: 'main',
-    layoutsDir: __dirname + '/views/layouts/',
-    helpers: {
-        section: function(name, options){
-            if(!this._sections) this._sections = {};
-            this._sections[name] = options.fn(this);
-            return null;
-        }
-    }}));
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+// app.engine('hbs', hbs({
+//     extname: 'hbs',
+//     defaultLayout: 'main',
+//     layoutsDir: __dirname + '/views/layouts/',
+//     helpers: {
+//         section: function(name, options){
+//             if(!this._sections) this._sections = {};
+//             this._sections[name] = options.fn(this);
+//             return null;
+//         }
+//     }}));
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'hbs');
 
 //ejs
-// app.set('views', path.join(__dirname, 'views/'));
-// app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views/'));
+app.set('view engine', 'ejs');
 
 app.use(flash());
 
@@ -100,10 +101,11 @@ app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+	res.locals.user = req.session.user;
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error', {error: err});
+  res.render('error', {title:'error', error: err.stack, head: {head: err.status, sub: err.message}});
 });
 
 module.exports = app;

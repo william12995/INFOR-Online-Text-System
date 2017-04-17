@@ -32,6 +32,7 @@ router.get('/', function(req, res, next) {
 		  	user: req.session.user,
 		  	posts: posts ,
 		  	page: page,
+				head: {head: 'Blog', sub: 'write your post'},
 		  	isFirstPage: (page-1) == 0 ,
 		  	isLastPage: ( (page-1)*10 + posts.length ) == total ,
 		  	success: req.flash('success').toString(),
