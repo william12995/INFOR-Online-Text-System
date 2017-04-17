@@ -173,15 +173,6 @@ router.get('/logout',function(req, res){
 	res.redirect('/');
 });
 
-// router.get('/upload',checkLogin);
-// router.get('/upload',function(req,res){
-// 	res.render('upload', {
-// 		title: '檔案上傳',
-//  		user: req.session.user,
-//   		success: req.flash('success').toString(),
-//   		error: req.flash('error').toString()
-// 	})
-// });
 
 var storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -199,6 +190,7 @@ var storage = multer.diskStorage({
                     }
                 });
             } else {
+
                 cb(null, destDir);
             }
         });
@@ -215,6 +207,7 @@ var upload = multer({
 
 router.post('/upload',checkLogin);
 router.post('/upload', upload.array('photos', 12), function(req,res){
+
 	req.flash('success','檔案上傳成功');
 	res.redirect('/');
 });
@@ -260,7 +253,7 @@ router.post('/pdfUpload', PDFupload.array('pdf', 12), function(req,res){
 
 	//console.log(req.files[0].filename);
 	req.flash('success','PDF上傳成功');
-	res.redirect('/txt');
+	res.redirect('/');
 });
 
 router.get('/txt', checkLogin);
@@ -268,7 +261,7 @@ router.get('/txt', function(req, res){
 
 	var newTXT = new Txt(txt_name);
 
-	newTXT.SaveScience(txt_name,function(err){
+	newTXT.SaveEnglish(txt_name,function(err){
 
 
 		req.flash('success','題目已抓取，請檢查');
@@ -290,8 +283,22 @@ router.get('/txt/:txtname',function(req, res){
 			data_length:data.post.length,
 			page: page,
 	 		user: req.session.user,
-	  		success: req.flash('success').toString(),
-	  		error: req.flash('error').toString()
+  		success: req.flash('success').toString(),
+	  	error: req.flash('error').toString(),
+			helpers: {
+					pre_txt: function(page,options){
+						if (page > 0) 	return options.fn();
+					},
+					next_txt: function(page,length,options){
+						if (page < length-1) return options.fn();
+					},
+					next_page: function(page){
+						return page+1;
+					},
+					pre_page: function(page){
+						return page-1
+					}
+			}
 		});
 	});
 });
