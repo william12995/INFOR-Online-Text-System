@@ -1,4 +1,17 @@
 <%- include header %>
+<section id="breadcrumb">
+   <div class="container">
+      <% if(success){ %>
+      <div class="alert alert-success"><%= success %></div>
+      <% } %>
+      <% if(error){ %>
+      <div class="alert alert-danger"><%= error %></div>
+      <% } %>
+      <!-- <ol class="breadcrumb">
+         <li class="active">blog</li>
+         </ol> -->
+   </div>
+</section>
 <section id="main">
    <div class="container">
    <div class="row">
@@ -31,16 +44,16 @@
                <div class="well">
                   <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
                   <p class="grey"><%= post.time.date %> — <%= post.name %></p>
-                  <%- post.post %>
+                  <h4><p><%- post.post %></p></h4>
                   <span class="grey">Tags:</span>
 
                   <% post.tags.forEach(function(tag, index){ %>
                     <% if(tag){  %>
-                      <span><a href="/tags/{{this}}"><%= tag %></a></span>
+                      <span><a href="/tags/<%= tag %>"><%= tag %></a></span>
                     <% } %>
                   <% }) %>
-                  <br>
-                  <span class="grey">瀏覽次數: <%= post.pv %></span>
+
+                  <p><span class="grey">瀏覽次數: <%= post.pv %></span></p>
                </div>
                <% })  %>
 
@@ -134,6 +147,7 @@
       </div>
    </div>
 </div>
+<% if(user){ %>
 <div class="modal fade" id="profile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -161,4 +175,5 @@
       </div>
    </div>
 </div>
+<% } %>
 <%- include footer %>

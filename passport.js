@@ -105,7 +105,7 @@ passport.use('local-signup', new LocalStrategy({
                 newUser.save(function(err) {
                     if (err)
                         throw err;
-                    req.session.user = user;
+                    req.session.user = newUser;
                     return done(null, newUser);
                 });
 
@@ -142,7 +142,7 @@ passport.use('local-signup', new LocalStrategy({
             if ( ! ( bcrypt.compareSync(password, user.password) ) ){
                 return done(null, false, req.flash('error', 'Oops! Wrong password.'));
             }
-               // create the loginMessage and save it to session as flashdata
+            // create the loginMessage and save it to session as flashdata
             req.session.user = user;
             // all is well, return successful user
 
@@ -196,7 +196,7 @@ passport.use('local-signup', new LocalStrategy({
                     // we will save the token that facebook provides to the user
                     newUser.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
                     newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-
+                    newUser.isVerified = true;
                     newUser.head = profile.photos[0].value;
 
                     // save our user to the database

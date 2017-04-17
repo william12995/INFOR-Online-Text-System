@@ -5,16 +5,13 @@
 
       <% if(lastYear != post.time.year) { %>
       <p>
-         <strong><h5><%= post.time.year %></h5></strong>
+         <h3><%= post.time.year %></h3>
       </p>
       <% lastYear = post.time.year } %>
       <div class="well">
-      <p>
-         <strong>Date<time>: <%= post.time.date %> </time></strong><br>
-         <strong>Title: <a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"> <%= post.title %> </a></strong><br>
-         <strong>Author: <%= post.name %></strong>
-      </p>
-   </div>
+         <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
+         <p class="grey"><%= post.time.date %> — <%= post.name %></p>
+      </div>
    <% }) %>
 </div>
 <%- include footer %>

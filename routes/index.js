@@ -18,6 +18,20 @@ var Pdf = require('../pdfreader/parse');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+	console.log(req.session.user);
+	if(req.session.user){
+		if(!req.session.user.isVerified){
+			// res.render('unverified', {
+			// 	title: 'Email unverified',
+			// 	user: req.session.user,
+			// 	head: {head: 'Error', sub: 'Please verify your email to continue', class: null},
+			// 	success: req.flash('success').toString(),
+			// 	error: req.flash('error').toString(),
+			// });
+			req.flash('error',"email haven't been verified");
+			console.log('not verified');
+		}
+	}
 	var page = req.query.p ? parseInt(req.query.p) : 1 ;
 
 	Post.getTen(null, page,function(err, posts, total){
@@ -29,17 +43,16 @@ router.get('/', function(req, res, next) {
 		//console.log('posts: ', posts);
 		res.render('index', {
 			title: 'Home',
-		  	user: req.session.user,
-		  	posts: posts ,
-		  	page: page,
+			user: req.session.user,
+			posts: posts ,
+			page: page,
 			head: {head: 'Blog', sub: 'write your post', class: 'glyphicon glyphicon-file'},
-		  	isFirstPage: (page-1) == 0 ,
-		  	isLastPage: ( (page-1)*10 + posts.length ) == total ,
-		  	success: req.flash('success').toString(),
-		  	error: req.flash('error').toString(),
-  	});
+			isFirstPage: (page-1) == 0 ,
+			isLastPage: ( (page-1)*10 + posts.length ) == total ,
+			success: req.flash('success').toString(),
+			error: req.flash('error').toString(),
+	});
   });
-
 });
 
 
@@ -114,6 +127,7 @@ router.get('/verify', function (req, res) {
 
 						req.session.user = user;
 						console.log('verified');
+						req.flash('success','email verified successfully!');
 						res.redirect('/');
 				});
       }
@@ -148,7 +162,7 @@ router.post('/post',function(req, res){
 	var currentUser = req.session.user;
 	//console.log(currentUser);
 	var tags = [req.body.tag1, req.body.tag2, req.body.tag3];
-	console.log(tags);
+	// console.log(tags);
 	var post = new Post(currentUser.name , currentUser.head, req.body.title, tags, req.body.editor1 );
 	post.save(function(err){
 		if(err){
