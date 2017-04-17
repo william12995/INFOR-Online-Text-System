@@ -262,7 +262,7 @@ router.get('/txt', function(req, res){
 
 	var newTXT = new Txt(txt_name);
 
-	newTXT.SaveEnglish(txt_name,function(err){
+	newTXT.EnglishAnswer(txt_name,function(err){
 
 
 		req.flash('success','題目已抓取，請檢查');
