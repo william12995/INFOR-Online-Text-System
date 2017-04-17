@@ -182,8 +182,6 @@ TXT.prototype.SaveScience = function(filename, callback){
 
 
 
-
-
 	    //console.log(TxtData_2);
 
 	    fs.writeFile(filename, TxtData_2);
@@ -277,3 +275,65 @@ TXT.edit = function(filename, p, post,callback){
 
 			});
 };
+
+TXT.prototype.EnglishAnswer = function(filename, callback){
+	filename = "./public/images/"+filename +".txt";
+	//console.log(filename);
+
+
+	fs.readFile(filename, 'utf8', (err, data) => {
+	  if (err) throw err;
+
+	  var TxtData_2 = data ;
+
+		var extract = /10+[\s\S]*?案|題號 答案|-+Page\s*\([\d]\)\s*Break-+/g;
+	  var extract_2 = /([A-Z])/g;
+	  TxtData_2 = TxtData_2.replace(extract, "");
+
+		let m;
+		var AllData = [];
+		var one = [] ;
+		var two = [];
+		var three = [];
+		while ((m = extract_2.exec(TxtData_2)) !== null) {
+		    // This is necessary to avoid infinite loops with zero-width matches
+		    if (m.index === extract_2.lastIndex) {
+		        extract_2.lastIndex++;
+		    }
+				AllData.push(m[0]);
+		}
+	  //console.log(TxtData_2);
+
+		for (var i = 0; i < 48; i++) {
+			if ( i % 3 == 0 ) one.push(AllData[i]);
+			if ( i % 3 == 1 ) two.push(AllData[i]);
+			if ( i % 3 == 2 ) three.push(AllData[i]);
+		}
+
+		for (var i = 48; i < 56; i++) {
+			if ( i % 2 == 0 ) one.push(AllData[i]);
+			if ( i % 2 == 1 ) two.push(AllData[i]);
+		}
+		AllData = one.concat(two,three);
+		//console.log("AllData: "+AllData);
+
+		var content = {
+		 name: this.name,
+		 post: AllData
+	 };
+
+ 		var newTxt = new txtModel(content);
+
+		newTxt.save(function(err){
+			if(err){
+			 return callback(err);
+			}
+			callback(null, AllData.length);
+		});
+
+	  fs.writeFile(filename, TxtData_2);
+
+	  console.log("Extract Done\n");
+
+	 });
+}
