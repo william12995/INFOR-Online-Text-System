@@ -1,2 +1,8 @@
-# INFOR-Online-Text-System
-INFOR 學測線上測驗系統
+# INFOR-Online-Test-System
+INFOR 線上學業測驗系統
+
+## Usage
+
+```
+$ npm start
+```
