@@ -1,17 +1,12 @@
-{{#section 'head'}}
-<div class="col-md-12">
-   <h1 class="text-center"><span class="glyphicon glyphicon-log-in"></span> Login</h1>
-</div>
-{{/section}}
-
+<%- include header %>
 <section id="main">
    <div class="container">
       <div class="row">
          <div class="col-md-4 col-md-offset-4">
             <form id="login" class="well" method="post">
-               {{#if error}}
-               <div class="alert alert-danger">{{error}}</div>
-               {{/if}}
+               <% if(error){ %>
+               <div class="alert alert-danger"><%= error %></div>
+               <% } %>
                <div class="form-group">
                   <label>Username</label>
                   <input type="text" class="form-control" placeholder="username" name="name">
@@ -29,3 +24,4 @@
       </div>
    </div>
 </section>
+<%- include footer %>

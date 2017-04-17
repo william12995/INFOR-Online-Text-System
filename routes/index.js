@@ -32,19 +32,11 @@ router.get('/', function(req, res, next) {
 		  	user: req.session.user,
 		  	posts: posts ,
 		  	page: page,
-				head: {head: 'Blog', sub: 'write your post'},
+			head: {head: 'Blog', sub: 'write your post', class: 'glyphicon glyphicon-file'},
 		  	isFirstPage: (page-1) == 0 ,
 		  	isLastPage: ( (page-1)*10 + posts.length ) == total ,
 		  	success: req.flash('success').toString(),
 		  	error: req.flash('error').toString(),
-				helpers: {
-		        next_page: function(page){
-		          return page+1;
-		        },
-						pre_page: function(page){
-							return page-1
-						}
-		    }
   	});
   });
 
@@ -56,6 +48,7 @@ router.get('/signup', checkBeenLogin);
 router.get('/signup',function(req, res){
  	res.render('signup',{
  		title: 'Register',
+		head: {head: 'Signup', sub: null, class: null},
  		user: null,
   		success: req.flash('success').toString(),
   		error: req.flash('error').toString()
@@ -68,20 +61,21 @@ router.get('/login',function(req, res){
  	res.render('login',{
  		title: '登入',
  		user: null,
+		head: {head: 'Login', sub: null, class: 'glyphicon glyphicon-log-in'},
   		success: req.flash('success').toString(),
   		error: req.flash('error').toString()
  	});
 });
 
-router.get('/profile', checkLogin);
-router.get('/profile',function(req, res){
- 	res.render('profile',{
- 		title: 'Profile',
- 		user: req.session.user,
-  		success: req.flash('success').toString(),
-  		error: req.flash('error').toString()
- 	});
-});
+// router.get('/profile', checkLogin);
+// router.get('/profile',function(req, res){
+//  	res.render('profile',{
+//  		title: 'Profile',
+//  		user: req.session.user,
+//   		success: req.flash('success').toString(),
+//   		error: req.flash('error').toString()
+//  	});
+// });
 
 
 router.post('/signup', checkBeenLogin);
@@ -336,6 +330,7 @@ router.get('/history', function(req ,res){
 		res.render('history', {
 			title: 'History',
 			posts:posts,
+			head: {head: 'History', sub: 'activity log', class: 'glyphicon glyphicon-time'},
 	 		user: req.session.user,
 	  		success: req.flash('success').toString(),
 	  		error: req.flash('error').toString()
@@ -392,6 +387,7 @@ router.get('/search', function(req, res){
 			title: req.query.keyword,
 			posts:posts,
 	 		user: req.session.user,
+			head: {head: 'Results match', sub: req.query.keyword, class: 'glyphicon glyphicon-search'},
 	  		success: req.flash('success').toString(),
 	  		error: req.flash('error').toString()
 		});
@@ -438,6 +434,7 @@ router.get('/u/:name/:day/:title', function(req, res){
 		res.render('article', {
 			title: req.params.title,
 			post: post,
+			head: {head: '<h1></h1><br>', sub: null, class: null},
 			user:req.session.user,
 			success: req.flash('success').toString(),
 		  	error: req.flash('error').toString()

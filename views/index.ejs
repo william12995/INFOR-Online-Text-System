@@ -45,14 +45,14 @@
                <% })  %>
 
                <div>
-                {{#unless  isFirstPage }}
+                <% if(!isFirstPage){ %>
 
-               		<span class="prepage" > <a title="上一頁" href="?p={{pre_page page }}" > 上一頁 </a> </span>
-               	{{/unless}}
+               		<span class="prepage" > <a title="上一頁" href="?p=<%= page-1 %>" > 上一頁 </a> </span>
+               	<% } %>
 
-                {{#unless  isLastPage}}
-               		<span class="nextpage" > <a title="下一頁" href="?p={{next_page page }}" > 下一頁 </a> </span>
-               	{{/unless}}
+                <% if(!isLastPage){ %>
+               		<span class="nextpage" > <a title="下一頁" href="?p=<%= page+1 %>" > 下一頁 </a> </span>
+               	<% } %>
                </div>
 
             </div>
@@ -145,14 +145,14 @@
                 <div class="well well-sm">
                     <div class="row">
                         <div class="col-sm-6 col-md-4">
-                            <img src="{{user.head}}" alt="" class="img-rounded img-responsive" />
+                            <img src="<%= user.head %>" alt="" class="img-rounded img-responsive" />
                         </div>
                         <div class="col-sm-6 col-md-8">
-                            <h4>{{user.name}}</h4>
+                            <h4><%= user.name %></h4>
                             <!-- <small><cite title="San Francisco, USA">San Francisco, USA <i class="glyphicon glyphicon-map-marker">
                             </i></cite></small> -->
                             <p>
-                                <span class="glyphicon glyphicon-envelope"></span> {{user.email}}
+                                <span class="glyphicon glyphicon-envelope"></span> <%= user.email %>
                                 <br />
                         </div>
                     </div>

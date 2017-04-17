@@ -105,7 +105,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error', {title:'error', error: err.stack, head: {head: err.status, sub: err.message}});
+  res.render('error', {title:'error', error: err.stack, head: {head: err.status, sub: err.message, class: null}});
 });
 
 module.exports = app;
