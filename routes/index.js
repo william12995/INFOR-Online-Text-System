@@ -21,13 +21,6 @@ router.get('/', function(req, res, next) {
 	console.log(req.session.user);
 	if(req.session.user){
 		if(!req.session.user.isVerified){
-			// res.render('unverified', {
-			// 	title: 'Email unverified',
-			// 	user: req.session.user,
-			// 	head: {head: 'Error', sub: 'Please verify your email to continue', class: null},
-			// 	success: req.flash('success').toString(),
-			// 	error: req.flash('error').toString(),
-			// });
 			req.flash('error',"email haven't been verified");
 			console.log('not verified');
 		}
@@ -498,6 +491,7 @@ router.get('/edit/:name/:day/:title', function(req, res){
 		res.render('edit', {
 			title: '編輯',
 			post: post,
+			head: {head: 'Edit', sub: 'edit your post', class: null},
 			user:req.session.user,
 			success: req.flash('success').toString(),
 		  	error: req.flash('error').toString()

@@ -1,0 +1,24 @@
+<%- include header  %>
+<form method="post">
+   <div class="modal-body">
+	  <div class="form-group">
+		 <label>Page Title</label>
+		 <input type="text" name="title" class="form-control" placeholder="Untitled" value="<%= post.title %>" disabled = "disabled">
+	  </div>
+	  <div class="form-group">
+		 <label>Page Body</label>
+		 <textarea type="text" name="editor1" class="form-control" placeholder="Page Body" rows = "20" cols = "100"><%- post.post %></textarea>
+	  </div>
+	  <div class="form-group">
+		 <label>Meta Tags</label>
+		 <input type="text" name="tag1" class="form-control" placeholder="empty" value= "<%= post.tags[0] %>" disabled= "disabled">
+		 <input type="text" name="tag2" class="form-control" placeholder="empty" value= "<%= post.tags[1] %>" disabled= "disabled">
+		 <input type="text" name="tag3" class="form-control" placeholder="empty" value= "<%= post.tags[2] %>" disabled= "disabled">
+	  </div>
+   </div>
+   <div class="modal-footer">
+	  <a type="button" class="btn btn-default" href="/">Cancel</a>
+	  <button type="submit" class="btn btn-primary">Save</button>
+   </div>
+</form>
+<%- include footer  %>

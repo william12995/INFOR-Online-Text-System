@@ -129,7 +129,7 @@ Post.getOne = function(name, day, title, callback){
 
 Post.edit = function(name, day, title, callback){
 
-			collection.findOne({
+			postModel.findOne({
 				"name": name,
 				"time.day": day,
 				"title": title

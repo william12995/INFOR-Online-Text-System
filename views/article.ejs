@@ -1,16 +1,13 @@
 <%- include header %>
 <div class="col-lg-8">
-   <h1><%= post.title %></h1>
-   <div class="container">
-       <p class="lead">
-           by <a href="#"><%= post.name %></a>
-       </p>
-   </div>
-   <hr>
+   <div><h1><%= post.title %></h1><p class="lead">by <a href="#"><%= post.name %></a></div>
+   </p>
    <p><span class="glyphicon glyphicon-time"></span> Posted on <%= post.time.date %></p>
-   <hr>
-   <!-- <img class="img-responsive" src="http://placehold.it/900x300" alt=""> -->
-   <hr>
+   <% if ( user && (user.name == post.name) ) { %>
+       <span> <a class="edit" href="/edit/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">編輯</a></span>
+       <span> <a class="edit" href="/remove/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">刪除</a></span>
+   <% } %>
+   <hr><hr>
    <h3 class="lead"><%- post.post %></h3>
    <hr>
    <!-- local comments Form -->
