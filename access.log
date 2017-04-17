@@ -5550,3 +5550,17 @@
 ::1 - - [17/Apr/2017:16:20:00 +0000] "GET /txt/js/bootstrap.min.js HTTP/1.1" 404 5333
 ::1 - - [17/Apr/2017:16:20:00 +0000] "GET /fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 -
 ::1 - - [17/Apr/2017:16:20:00 +0000] "GET /txt/js/bootstrap.min.js HTTP/1.1" 404 5333
+::1 - - [17/Apr/2017:16:30:47 +0000] "GET / HTTP/1.1" 304 -
+::1 - - [17/Apr/2017:16:30:47 +0000] "GET /css/bootstrap.min.css HTTP/1.1" 304 -
+::1 - - [17/Apr/2017:16:30:47 +0000] "GET /css/style.css HTTP/1.1" 304 -
+::1 - - [17/Apr/2017:16:30:48 +0000] "GET /js/bootstrap.min.js HTTP/1.1" 304 -
+::1 - - [17/Apr/2017:16:30:48 +0000] "GET /%7B%7Buser.head%7D%7D HTTP/1.1" 404 5333
+::1 - - [17/Apr/2017:16:30:48 +0000] "GET /%7B%7Buser.head%7D%7D HTTP/1.1" 404 5333
+::1 - - [17/Apr/2017:16:30:48 +0000] "GET /fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 -
+::1 - - [17/Apr/2017:16:30:52 +0000] "GET / HTTP/1.1" 304 -
+::1 - - [17/Apr/2017:16:30:52 +0000] "GET /css/bootstrap.min.css HTTP/1.1" 304 -
+::1 - - [17/Apr/2017:16:30:52 +0000] "GET /css/style.css HTTP/1.1" 304 -
+::1 - - [17/Apr/2017:16:30:52 +0000] "GET /js/bootstrap.min.js HTTP/1.1" 304 -
+::1 - - [17/Apr/2017:16:30:52 +0000] "GET /%7B%7Buser.head%7D%7D HTTP/1.1" 404 5333
+::1 - - [17/Apr/2017:16:30:52 +0000] "GET /%7B%7Buser.head%7D%7D HTTP/1.1" 404 5333
+::1 - - [17/Apr/2017:16:30:52 +0000] "GET /fonts/glyphicons-halflings-regular.woff2 HTTP/1.1" 304 -

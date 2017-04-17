@@ -26,7 +26,7 @@ router.get('/', function(req, res, next) {
 			posts = {};
 		}
 		// console.log("posts: "+JSON.stringify(posts));
-		console.log('posts: ', posts);
+		//console.log('posts: ', posts);
 		res.render('index', {
 			title: 'Home',
 		  	user: req.session.user,
