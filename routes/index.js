@@ -25,7 +25,7 @@ router.get('/', function(req, res, next) {
 			console.log(err);
 			posts = {};
 		}
-		console.log("posts: "+JSON.stringify(posts));
+		// console.log("posts: "+JSON.stringify(posts));
 		//console.log('posts: ', posts);
 		res.render('index', {
 			title: 'Home',
