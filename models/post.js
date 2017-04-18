@@ -17,11 +17,7 @@ var postSchema = new mongoose.Schema({
 					 "day": String,
 					 "title": String,
 				 },
-				reprint_to :{
-						"name": String,
-						"day": String,
-						"title": String,
-				}
+				reprint_to :{ type : Array , "default" : [] }
 			},
 			pv     : Number,
 },{
@@ -58,18 +54,7 @@ Post.prototype.save = function(callback){
 		tags: this.tags,
 		post: this.post,
 		time: time,
-		reprint_info: {
-			reprint_from :{
-				 "name": null,
-				 "day": null,
-				 "title": null,
-			 },
-			reprint_to :[{
-					"name": null,
-					"day": null,
-					"title": null,
-			}]
-		},
+		reprint_info: {},
 		pv: 0
 	};
 
@@ -335,7 +320,7 @@ Post.reprint = function( reprint_from, reprint_to, callback){
 					'minute': date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate() + "" + date.getHours() + ":"
 					+(date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes())
 						}
-						
+
 				postModel.update({
 					"name": reprint_from.name,
 					"time.day": reprint_from.day,

@@ -10,12 +10,13 @@
 
    <% var flag = 1 ; %>
  	<% if ( user && (user.name != post.name) ) { %>
-    <% console.log(post.reprint_info) %>
+
  		<% if ( ( post.reprint_info.reprint_from.name != null ) && ( user.name == post.reprint_info.reprint_from.name ) ){ %>
  			<% flag = 0 ; %>
  		<% } %>
 
- 		<% if( (post.reprint_info.reprint_to.name != null) ){ %>
+ 		<% if( (post.reprint_info.reprint_to != null) ){ %>
+
  			<% post.reprint_info.reprint_to.forEach( function(reprint_to, index) { %>
  				<% if (user.name == reprint_to.name){ %>
  					<% flag = 0 ; %>
