@@ -18,7 +18,7 @@ var Pdf = require('../pdfreader/parse');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	console.log(req.session.user);
+	//console.log(req.session.user);
 	if(req.session.user){
 		if(!req.session.user.isVerified){
 			req.flash('error',"email haven't been verified");
@@ -504,7 +504,7 @@ router.post('/edit/:name/:day/:title', checkLogin);
 router.post('/edit/:name/:day/:title', function(req, res){
 	var currentUser = req.session.user;
 
-	Post.update(currentUser.name, req.params.day, req.params.title, req.body.post, function(err){
+	Post.update(currentUser.name, req.params.day, req.params.title, req.body.editor1, function(err){
 		var url = encodeURI('/u/' + req.params.name +'/'+ req.params.day +'/'+ req.params.title);
 		if(err){
 			req.flash('error',err);

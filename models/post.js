@@ -57,7 +57,18 @@ Post.prototype.save = function(callback){
 		tags: this.tags,
 		post: this.post,
 		time: time,
-		reprint_info: {},
+		reprint_info: {
+			reprint_from :{
+				 "name": null,
+				 "day": null,
+				 "title": null,
+			 },
+			reprint_to :{
+					"name": null,
+					"day": null,
+					"title": null,
+			}
+		},
 		pv: 0
 	};
 
@@ -145,7 +156,7 @@ Post.edit = function(name, day, title, callback){
 
 
 Post.update = function(name, day, title, post, callback){
-
+			console.log(post);
 			postModel.update({
 				"name": name,
 				"time.day": day,
@@ -154,8 +165,10 @@ Post.update = function(name, day, title, post, callback){
 				$set:{post: post}
 			},function(err){
 				if(err){
+					console.log(err);
 					return callback(err);
 				}
+				console.log("update save");
 				callback(null);
 			});
 };
@@ -170,12 +183,13 @@ Post.remove = function(name, day, title, callback) {
         "title": title
       }, function (err, doc) {
         if (err) {
+					console.log(err);
           return callback(err);
         }
-
+				console.log("doc" + doc);
         var reprint_from = "";
-        if (doc.reprint_info.reprint_from) {
-          reprint_from = doc.reprint_info.reprint_from;
+        if (doc.reprint_info.reprint_from != null) {
+						reprint_from = doc.reprint_info.reprint_from;
         }
         if (reprint_from != "") {
 
@@ -192,6 +206,7 @@ Post.remove = function(name, day, title, callback) {
             }}
           }, function (err) {
             if (err) {
+							console.log("pull error: " + err);
               return callback(err);
             }
           });
@@ -202,15 +217,17 @@ Post.remove = function(name, day, title, callback) {
           "name": name,
           "time.day": day,
           "title": title
-        }, {
-          w: 1
-        }, function (err) {
+        }, function (err,result) {
           if (err) {
+						console.log("remove err: " + err);
             return callback(err);
           }
+					//console.log(result);
+					console.log("remove ok");
           callback(null);
         });
-      });
+
+      })
 
 
 };
