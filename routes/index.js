@@ -156,7 +156,7 @@ router.post('/post',function(req, res){
 	//console.log(currentUser);
 	var tags = [req.body.tag1, req.body.tag2, req.body.tag3];
 	// console.log(tags);
-	var post = new Post(currentUser.name , currentUser.head, req.body.title, tags, req.body.editor1 );
+	var post = new Post(currentUser.name , currentUser.head, req.body.title, tags, req.body.editor1 ,{});
 	post.save(function(err){
 		if(err){
 			req.flash('error',err);
@@ -547,18 +547,26 @@ router.get('/reprint/:name/:day/:title', function( req, res){
 		// console.log(reprint_to);
 		Post.reprint( reprint_from, reprint_to, function( err, post){
 			if(err){
+				console.log(err);
 				req.flash('error', err);
 				return res.redirect('back');
 			}
 
-			req.flash('success', '轉載成功');
-			var url = encodeURI('/u/' + post.name +'/'+ post.time.day +'/'+ post.title);
+			var reprint_post = new Post(post.name , post.head, post.title, post.tags, post.post, post.reprint_info );
+			reprint_post.ReprintSave(function(err){
+				if(err){
+					req.flash('error',err);
+					return res.redirect('/');
+				}
 
-			res.redirect(url);
+			req.flash('success', '轉載成功');
+			//var url = encodeURI('/u/' + post.name +'/'+ post.time.day +'/'+ post.title);
+
+			res.redirect('/');
 		});
 	});
 });
-
+});
 
 function checkLogin(req, res ,next){
 	//console.log(req.session);

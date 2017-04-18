@@ -31,12 +31,13 @@ var postSchema = new mongoose.Schema({
 
 var postModel = mongoose.model('Post', postSchema);
 
-function Post(name, head, title, tags, post) {
+function Post(name, head, title, tags, post, info) {
 	this.name = name;
 	this.title = title;
 	this.post = post;
 	this.tags = tags;
 	this.head = head;
+	this.reprint_info = info;
 }
 
 Post.prototype.save = function(callback){
@@ -63,11 +64,11 @@ Post.prototype.save = function(callback){
 				 "day": null,
 				 "title": null,
 			 },
-			reprint_to :{
+			reprint_to :[{
 					"name": null,
 					"day": null,
 					"title": null,
-			}
+			}]
 		},
 		pv: 0
 	};
@@ -314,6 +315,16 @@ Post.reprint = function( reprint_from, reprint_to, callback){
 				if(err){
 					return callback(err);
 				}
+
+				delete doc._id;
+
+				doc.name = reprint_to.name;
+				doc.head = reprint_to.head;
+
+				doc.title = (doc.title.search(/[轉載]/) > -1 ) ? doc.title : "[轉載]" + doc.title ;
+				doc.reprint_info = {"reprint_from" : reprint_from};
+				doc.pv = 0 ;
+
 				var date = new Date();
 
 				var time = {
@@ -324,16 +335,7 @@ Post.reprint = function( reprint_from, reprint_to, callback){
 					'minute': date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate() + "" + date.getHours() + ":"
 					+(date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes())
 						}
-
-				delete doc._id;
-
-				doc.name = reprint_to.name;
-				doc.head = reprint_to.head;
-				doc.time = time;
-				doc.title = (doc.title.search(/[轉載]/) > -1 ) ? doc.title : "[轉載]" + doc.title ;
-				doc.reprint_info = {"reprint_from" : reprint_from};
-				doc.pv = 0 ;
-
+						
 				postModel.update({
 					"name": reprint_from.name,
 					"time.day": reprint_from.day,
@@ -347,20 +349,49 @@ Post.reprint = function( reprint_from, reprint_to, callback){
 						}}
 				},function(err){
 					if(err){
+						console.log("reprint update err");
 						return callback(err);
 					}
 				});
-				var newPost = new postModel(doc);
-
-				newPost.save(function( err, post){
-					if(err){
-						return callback(err);
-					}
-					//console.log(post);
-					callback(null, post.ops[0]);
-				});
+				callback(null, doc);
 			});
+};
 
+
+Post.prototype.ReprintSave = function(callback){
+	var date = new Date();
+
+	var time = {
+		'date': date,
+		'year': date.getFullYear(),
+		'month': date.getFullYear()+ "-" + (date.getMonth() + 1),
+		'day': date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate(),
+		'minute': date.getFullYear()+ "-" + (date.getMonth() + 1) + "-" + date.getDate() + "" + date.getHours() + ":"
+		+(date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes())
+			}
+	var post = {
+		name: this.name,
+		head: this.head,
+		title: this.title,
+		tags: this.tags,
+		post: this.post,
+		time: time,
+		reprint_info: this.reprint_info,
+		pv: 0
+	};
+
+	var newPost = new postModel(post);
+	// console.log(newPost);
+	newPost.save(function(err){
+
+		if(err){
+			console.log(err);
+			return callback(err);
+
+		}
+		console.log("SAVE POST");
+		callback(null);
+	});
 
 };
 

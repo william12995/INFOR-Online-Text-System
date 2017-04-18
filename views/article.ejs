@@ -7,6 +7,29 @@
        <span> <a class="edit" href="/edit/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">編輯</a></span>
        <span> <a class="edit" href="/remove/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">刪除</a></span>
    <% } %>
+
+   <% var flag = 1 ; %>
+ 	<% if ( user && (user.name != post.name) ) { %>
+    <% console.log(post.reprint_info) %>
+ 		<% if ( ( post.reprint_info.reprint_from.name != null ) && ( user.name == post.reprint_info.reprint_from.name ) ){ %>
+ 			<% flag = 0 ; %>
+ 		<% } %>
+
+ 		<% if( (post.reprint_info.reprint_to.name != null) ){ %>
+ 			<% post.reprint_info.reprint_to.forEach( function(reprint_to, index) { %>
+ 				<% if (user.name == reprint_to.name){ %>
+ 					<% flag = 0 ; %>
+ 				<% } %>
+ 			<% }) %>
+ 		<% } %>
+ 	<% }else{ %>
+ 		<% flag = 0 ; %>
+ 	<% } %>
+
+ 	<% if(flag){ %>
+ 		<span> <a class="edit" href="/reprint/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">轉載</a></span>
+ 	<% } %>
+
    <hr><hr>
    <h3 class="lead"><%- post.post %></h3>
    <hr>
