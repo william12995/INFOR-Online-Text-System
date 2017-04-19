@@ -2764,8 +2764,11 @@ fieldset[disabled] .navbar .btn-link:focus {
   color: rgba(255,255,255, 0.84);
 }
 .alert.alert-success {
-  background-color: #4caf50;
-  color: rgba(255,255,255, 0.84);
+    color:#3c763d;
+    background-color:#dff0d8;
+    border-color:#d6e9c6;
+  /*background-color: #4caf50;
+  color: rgba(255,255,255, 0.84);*/
 }
 .alert.alert-success a,
 .alert.alert-success .alert-link {
@@ -2788,8 +2791,11 @@ fieldset[disabled] .navbar .btn-link:focus {
   color: rgba(255,255,255, 0.84);
 }
 .alert.alert-danger {
-  background-color: #f44336;
-  color: rgba(255,255,255, 0.84);
+    color:#a94442;
+    background-color:#f2dede;
+    border-color:#ebccd1;
+  /*background-color: #f44336;
+  color: rgba(255,255,255, 0.84);*/
 }
 .alert.alert-danger a,
 .alert.alert-danger .alert-link {

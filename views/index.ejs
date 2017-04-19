@@ -2,10 +2,20 @@
 <section id="breadcrumb">
    <div class="container">
       <% if(success){ %>
-      <div class="alert alert-success"><%= success %></div>
+      <div class="alert alert-dismissible alert-success">
+         <button type="button" class="close" data-dismiss="alert">×</button>
+         <%= success %>
+         <!-- <a href="javascript:void(0)" class="alert-link">this important alert message</a>. -->
+      </div>
+      <!-- <div class="alert alert-success"><%= success %></div> -->
       <% } %>
       <% if(error){ %>
-      <div class="alert alert-danger"><%= error %></div>
+      <div class="alert alert-dismissible alert-danger">
+         <button type="button" class="close" data-dismiss="alert">×</button>
+         <%= error %>
+         <!-- <a href="javascript:void(0)" class="alert-link">this important alert message</a>. -->
+      </div>
+      <!-- <div class="alert alert-danger"><%= error %></div> -->
       <% } %>
       <!-- <ol class="breadcrumb">
          <li class="active">blog</li>
@@ -15,62 +25,48 @@
 <section id="main">
    <div class="container">
    <div class="row">
-      <div class="col-md-3">
-         <!-- search bar -->
-         <div class="well">
-            <h4>Blog Search</h4>
+      <!-- <div class="col-sm-6 col-sm-offset-3">
+         <form action="/search" method="GET" id="searchbar">
             <div class="input-group">
-               <form action="/search" method="GET" id="searchbar">
-                  <span class="input-group-btn">
-                  <input type="text" name="keyword" placeholder="Search..." class="form-control">
-                  <button type="submit" class="btn btn-default" value="search"><span class="glyphicon glyphicon-search"></span></button>
-                  <span>
-               </form>
-            </div>
-         </div>
-         <div class="list-group">
-            <a data-toggle="modal" data-target="#post" class="list-group-item"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Post</a>
-            <a data-toggle="modal" data-target="#uploadimage" class="list-group-item"><span class="glyphicon glyphicon-open" aria-hidden="true"></span>Upload images</a>
-            <a data-toggle="modal" data-target="#uploadpdf" class="list-group-item"><span class="glyphicon glyphicon-open" aria-hidden="true"></span>Add PDF</a>
-         </div>
-      </div>
-      <div class="col-md-9">
-         <div class="panel panel-default">
-            <div class="panel-heading main-color-bg">
-               <h3 class="panel-title">Posts</h3>
-            </div>
-            <div class="panel-body">
+               <input type="text" name="keyword" class="form-control empty"  placeholder="Search" >
+               <span class="input-group-btn">
+               </span>
+               <button type="submit" class="btn btn-default" >
+                   <span class="glyphicon glyphicon-search"></span>
+               </button>
+           </div>
+         </form>
+      </div> -->
+      <!-- <div class="list-group">
+         <a data-toggle="modal" data-target="#post" class="list-group-item"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>Post</a>
+         <a data-toggle="modal" data-target="#uploadimage" class="list-group-item"><span class="glyphicon glyphicon-open" aria-hidden="true"></span>Upload images</a>
+         <a data-toggle="modal" data-target="#uploadpdf" class="list-group-item"><span class="glyphicon glyphicon-open" aria-hidden="true"></span>Add PDF</a>
+         </div> -->
+      <div class="col-md-11">
                <% posts.forEach(function(post, index){  %>
                <div class="well">
                   <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
                   <p class="grey"><%= post.time.date %> — <%= post.name %></p>
-                  <h4><p><%- post.post %></p></h4>
+                  <h4>
+                     <p><%- post.post %></p>
+                  </h4>
                   <span class="grey">Tags:</span>
-
                   <% post.tags.forEach(function(tag, index){ %>
-                    <% if(tag){  %>
-                      <span><a href="/tags/<%= tag %>"><%= tag %></a></span>
-                    <% } %>
+                  <% if(tag){  %>
+                  <span><a href="/tags/<%= tag %>"><%= tag %></a></span>
+                  <% } %>
                   <% }) %>
-
                   <p><span class="grey">瀏覽次數: <%= post.pv %></span></p>
                </div>
                <% })  %>
-
                <div>
-                <% if(!isFirstPage){ %>
+                  <% if(!isFirstPage){ %>
+                  <span class="prepage" > <a title="上一頁" href="?p=<%= page-1 %>" > 上一頁 </a> </span>
+                  <% } %>
+                  <% if(!isLastPage){ %>
+                  <span class="nextpage" > <a title="下一頁" href="?p=<%= page+1 %>" > 下一頁 </a> </span>
+                  <% } %>
 
-               		<span class="prepage" > <a title="上一頁" href="?p=<%= page-1 %>" > 上一頁 </a> </span>
-               	<% } %>
-
-                <% if(!isLastPage){ %>
-               		<span class="nextpage" > <a title="下一頁" href="?p=<%= page+1 %>" > 下一頁 </a> </span>
-               	<% } %>
-               </div>
-
-            </div>
-         </div>
-      </div>
    </div>
 </section>
 <div class="modal fade" id="post" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -140,15 +136,14 @@
                   <input type="file" name="pdf" class="form-control">
                </div>
                <div class="form-group">
-                 <label>答案: </label>
+                  <label>答案: </label>
                   <input type="file" name="pdf" class="form-control">
                </div>
                <div class="form-group">
-                 <label>科目: </label><br>
+                  <label>科目: </label><br>
                   <input type="radio" name="english" value="english"> English<br>
                   <input type="radio" name="chinese" value="chinese"> Chinese<br>
                </div>
-
             </div>
             <div class="modal-footer">
                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -162,27 +157,25 @@
 <div class="modal fade" id="profile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
-            <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-               <h4 class="modal-title" id="myModalLabel">Profile</h4>
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Profile</h4>
+         </div>
+         <div class="modal-body">
+            <div class="row">
+               <div class="col-sm-6 col-md-4">
+                  <img src="<%= user.head %>" alt="" class="img-responsive">
+               </div>
+               <div class="col-sm-6 col-md-8">
+                  <h4><%= user.name %></h4>
+                  <!-- <small><cite title="San Francisco, USA">San Francisco, USA <i class="glyphicon glyphicon-map-marker">
+                     </i></cite></small> -->
+                  <p>
+                     <span class="glyphicon glyphicon-envelope"></span> <%= user.email %>
+                     <br />
+               </div>
             </div>
-            <div class="modal-body">
-                <div class="well well-sm">
-                    <div class="row">
-                        <div class="col-sm-6 col-md-4">
-                            <img src="<%= user.head %>" alt="" class="img-rounded img-responsive" />
-                        </div>
-                        <div class="col-sm-6 col-md-8">
-                            <h4><%= user.name %></h4>
-                            <!-- <small><cite title="San Francisco, USA">San Francisco, USA <i class="glyphicon glyphicon-map-marker">
-                            </i></cite></small> -->
-                            <p>
-                                <span class="glyphicon glyphicon-envelope"></span> <%= user.email %>
-                                <br />
-                        </div>
-                    </div>
-                </div>
-            </div>
+         </div>
       </div>
    </div>
 </div>
