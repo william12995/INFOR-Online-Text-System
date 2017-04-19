@@ -9,17 +9,21 @@ var mongoose = require('mongoose');
 
 var txtSchema = new mongoose.Schema({
   name: String,
-  post: String,
+  post: Array,
+  ans: Array
 }, {
   collection: 'txt'
 });
 
 var txtModel = mongoose.model('Txt', txtSchema);
 
-function TXT(filename) {
+function TXT(filename, ansname) {
   this.name = filename;
+  this.ans = ansname;
+  this.post = [];
 }
 ;
+
 
 module.exports = TXT;
 
@@ -74,24 +78,14 @@ TXT.prototype.SaveEnglish = function(filename, callback) {
 
     var AllData = txt_1.concat(txt_16, txt_20, txt_26, txt_30, txt_41, txt_45, txt_49, txt_53);
 
-    var content = {
-      name: this.name,
-      post: AllData
-    };
-
-    var newTxt = new txtModel(content);
-
-    newTxt.save(function(err) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, AllData.length);
-    });
+    //this.post = AllData;
+    console.log("this.name: " + this.name);
+    EnglishAnswer(this.name, this.ans, AllData);
 
     fs.writeFile(filename, AllData);
-
     console.log("Extract Done\n");
 
+    callback(null);
   });
 }
 
@@ -130,7 +124,7 @@ TXT.prototype.SaveChinese = function(filename, callback) {
       if (err) {
         return callback(err);
       }
-      callback(null, AllData.length);
+      callback(null);
     });
 
     fs.writeFile(filename, TxtData_2);
@@ -251,6 +245,7 @@ TXT.get = function(name, callback) {
     name: name
   }, function(err, data) {
     if (err) {
+      console.log(err);
       return callback(err)
     }
     callback(null, data);
@@ -260,20 +255,20 @@ TXT.get = function(name, callback) {
 };
 
 
-TXT.edit = function(filename, p, post, callback) {
+TXT.edit = function(filename, p, post, ans, callback) {
 
   txtModel.findOne({
     name: filename
   }, function(err, data) {
     data.post[p] = post ;
-
     var newpost = data.post;
 
     txtModel.update({
       "name": filename
     }, {
       $set: {
-        "post": newpost
+        "post": newpost,
+        "ans": ans
       }
     }, function(err) {
       if (err) {
@@ -285,8 +280,8 @@ TXT.edit = function(filename, p, post, callback) {
   });
 };
 
-TXT.prototype.EnglishAnswer = function(filename, callback) {
-  filename = "./public/images/" + filename + ".txt";
+var EnglishAnswer = function(txtname, ansname, postData) {
+  var filename = "./public/images/" + ansname + ".txt";
   //console.log(filename);
 
 
@@ -328,22 +323,25 @@ TXT.prototype.EnglishAnswer = function(filename, callback) {
     //console.log("AllData: "+AllData);
 
     var content = {
-      name: this.name,
-      post: AllData
+      name: txtname,
+      post: postData,
+      ans: AllData
     };
 
+    console.log(content);
     var newTxt = new txtModel(content);
 
     newTxt.save(function(err) {
       if (err) {
-        return callback(err);
+        console.log(err);
+        return;
       }
-      callback(null, AllData.length);
     });
 
     fs.writeFile(filename, TxtData_2);
 
-    console.log("Extract Done\n");
+    console.log("Extract answer Done\n");
+    return;
 
   });
 }
