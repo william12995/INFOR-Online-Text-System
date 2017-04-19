@@ -260,20 +260,34 @@ router.get('/pdfUpload', function(req, res) {
 });
 
 var txt_name;
+var ans_name;
 
+var english_flag,
+  chinese_flag;
 
 router.post('/pdfUpload', checkLogin);
 
 router.post('/pdfUpload', PDFupload.array('pdf', 12), function(req, res) {
 
-  var str = req.files[0].filename;
+  var str_1 = req.files[0].filename;
+  var str_2 = req.files[1].filename;
 
-  var name = str.split(".")[0];
-  txt_name = name;
-  var newPDF = new Pdf(name);
+  var name_1 = str_1.split(".")[0];
+  var name_2 = str_2.split(".")[0];
 
-  newPDF.convert(name);
+  txt_name = name_1;
+  ans_name = name_2;
 
+  var newPDF = new Pdf(name_1);
+  var newPDF_2 = new Pdf(name_2);
+
+  newPDF.convert(name_1);
+  newPDF_2.convert(name_2);
+
+  if (req.body.english)
+    english_flag = true;
+  if (req.body.chinese)
+    chinese_flag = true;
   //console.log(req.files[0].filename);
   req.flash('success', 'PDF上傳成功');
   res.redirect('/');
@@ -282,16 +296,20 @@ router.post('/pdfUpload', PDFupload.array('pdf', 12), function(req, res) {
 router.get('/txt', checkLogin);
 router.get('/txt', function(req, res) {
 
-  var newTXT = new Txt(txt_name);
-
-  newTXT.EnglishAnswer(txt_name, function(err) {
-
-
-    req.flash('success', '題目已抓取，請檢查');
-    res.redirect('/txt/' + txt_name);
-
-  });
-
+  if (english_flag) {
+    var newTXT = new Txt(txt_name, ans_name);
+    newTXT.SaveEnglish(txt_name, function(err) {
+      req.flash('success', '題目已抓取，請檢查');
+      res.redirect('/txt/' + txt_name);
+    })
+  }
+  if (chinese_flag) {
+    var newTXT = new Txt(txt_name, ans_name);
+    newTXT.SaveChinese(txt_name, function(err) {
+      req.flash('success', '題目已抓取，請檢查');
+      res.redirect('/txt/' + txt_name);
+    })
+  }
 });
 
 router.get('/txt/:txtname', checkLogin);
@@ -301,27 +319,19 @@ router.get('/txt/:txtname', function(req, res) {
 
   Txt.get(req.params.txtname, function(err, data) {
     res.render('txt', {
-      title: data.name,
+      title: req.params.txtname,
       content: data.post,
+      Answers: data.ans,
       data_length: data.post.length,
       page: page,
       user: req.session.user,
       success: req.flash('success').toString(),
       error: req.flash('error').toString(),
-      helpers: {
-        pre_txt: function(page, options) {
-          if (page > 0) return options.fn();
-        },
-        next_txt: function(page, length, options) {
-          if (page < length - 1) return options.fn();
-        },
-        next_page: function(page) {
-          return page + 1;
-        },
-        pre_page: function(page) {
-          return page - 1
-        }
-      }
+      head: {
+        head: 'Blog',
+        sub: 'write your post',
+        class: 'glyphicon glyphicon-file'
+      },
     });
   });
 });
@@ -333,7 +343,7 @@ router.post('/txt/:txtname', function(req, res) {
 
   var page = req.query.p ? parseInt(req.query.p) : 0;
 
-  Txt.edit(req.params.txtname, page, req.body.post, function(err, data) {
+  Txt.edit(req.params.txtname, page, req.body.post, req.body.ans, function(err, data) {
     var url = encodeURI('/txt/' + req.params.txtname + '?p=' + page);
     if (err) {
       console.log(err);

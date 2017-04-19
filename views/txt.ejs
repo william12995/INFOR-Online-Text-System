@@ -1,0 +1,45 @@
+<%- include header %>
+<section id="main">
+   <div class="container">
+      <div class="row">
+
+        <div class="col-md-4">
+           <!-- search bar -->
+           <div class="well">
+              <h4>題目答案: </h4>
+              <div class="input-group">
+                <form method="post">
+                  <% Answers.forEach(function(ans, index){ %>
+                    <% if(index < 9){ %>
+                     <%= '0'+(index+1) %>.<textarea name = "ans" rows = "1" cols = "1"><%= ans %></textarea>
+                     <% }else{ %>
+                       <%= index+1 %>.<textarea name = "ans" rows = "1" cols = "1"><%= ans %></textarea>
+                       <% } %>
+                 <% })  %>
+                 <br>
+                  <!-- <input type="submit" value="儲存修改">
+                </form> -->
+              </div>
+           </div>
+        </div>
+
+         <div class="col-md-3">
+           <% var i = page; %>
+           <!-- <form method="post"> -->
+             <textarea name = "post" rows = "20" cols = "100"> <%= content[i] %> </textarea><br/>
+             <input type="submit" value="儲存修改">
+           </form>
+
+           <div>
+             <% if ( i > 0) { %>
+               <span class="prepage" > <a title="上一題" href="/txt/<%= title %>?p=<%= page-1 %>" > 上一題 </a> </span>
+             <% } %>
+             <% if ( i < data_length-1 ) { %>
+               <span class="nextpage" > <a title="下一題" href="/txt/<%= title %>?p=<%= page+1 %>" > 下一題 </a> </span>
+             <% } %>
+           </div>
+         </div>
+      </div>
+   </div>
+</section>
+<%- include footer %>
