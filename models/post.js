@@ -98,10 +98,10 @@ Post.getTen = function(name, page, callback) {
 };
 
 Post.getLength = () => {
-    postModel.count({}, (err, count) => {
-        // console.log('docs: ', count);
-        return count;
-    });
+  postModel.count({}, (err, count) => {
+    // console.log('docs: ', count);
+    return count;
+  });
 }
 
 Post.getOne = function(name, day, title, callback) {
@@ -256,6 +256,7 @@ Post.getTags = function(callback) {
 
   postModel.distinct("tags", function(err, docs) {
     if (err) {
+      console.log(err);
       return callback(err);
     }
     callback(null, docs);
@@ -287,7 +288,14 @@ Post.search = function(keyword, callback) {
 
   var pattern = new RegExp(keyword, "i");
   postModel.find({
-    "title": pattern
+    $or: [
+      {
+        "tags": pattern,
+      },
+      {
+        "title": pattern,
+      }
+    ]
   }, {
     "name": 1,
     "time": 1,
@@ -300,6 +308,8 @@ Post.search = function(keyword, callback) {
     }
     callback(null, docs);
   });
+
+
 
 };
 
