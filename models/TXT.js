@@ -196,30 +196,24 @@ TXT.prototype.SaveSocial = function(filename, callback) {
     var extract = /10\s*\d+\s*年[\s\S]*?-\s*.*\s*-\s|第[\s+\d+\s+]*?頁|二\s*、[\s\S]*?算。|第\s*壹[\s\S]*?算\s*。|第\s*貳[\s\S]*|-+Page \([\d]*\) Break-+|大學入\s*[\s\S]*?-\s*.\s*-|單選[\s\S]*?算\s*。/g;
     TxtData_2 = TxtData_2.replace(extract, "");
 
-    var extract_2 = /([\d*\s*\d*\s*-\s*\d\s*\d*\d*\s*\d+\s*\.\s\S]*?\(\s*D\s*\)\s*[\s\S]*?\D+)/g;
+    var extract_2 = /(\d+-\d+為題組[\s\S]*?\(\s*D\s*\)[\s\S]*?\(\s*D\s*\)\D+)|(\d*\s*\d*\s*\.[\s\S]*?\(\s*D\s*\)\s*[\s\S]*?\D+\s+)/g;
+
     let m;
-
-    while ((m = regex.exec(str)) !== null) {
+    var AllData = [];
+    while ((m = extract_2.exec(TxtData_2)) !== null) {
       // This is necessary to avoid infinite loops with zero-width matches
-      if (m.index === regex.lastIndex) {
-        regex.lastIndex++;
+      if (m.index === extract_2.lastIndex) {
+        extract_2.lastIndex++;
       }
-
-      // The result can be accessed through the `m`-variable.
-      m.forEach((match, groupIndex) => {
-        console.log(`Found match, group ${groupIndex}: ${match}`);
-      });
+      AllData.push(m[0]);
     }
 
+    SocialAnswer(this.name, this.ans, AllData);
 
-    //console.log(TxtData_2);
-
-
-
-    fs.writeFile(filename, TxtData_2);
+    fs.writeFile(filename, AllData);
 
     console.log("Extract Done\n");
-
+    callback(null);
   });
 }
 
@@ -248,6 +242,33 @@ TXT.edit = function(filename, p, post, ans, callback) {
     data.post[p] = post ;
     var newpost = data.post;
 
+    txtModel.update({
+      "name": filename
+    }, {
+      $set: {
+        "post": newpost,
+        "ans": ans
+      }
+    }, function(err) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null);
+    });
+
+  });
+};
+
+TXT.remove = function(filename, p, callback) {
+
+  txtModel.findOne({
+    name: filename
+  }, function(err, data) {
+    console.log("p: " + p);
+    data.post.splice(p, 1);
+    var newpost = data.post;
+    console.log(newpost);
+    var ans = data.ans
     txtModel.update({
       "name": filename
     }, {
@@ -415,6 +436,7 @@ var SocialAnswer = function(txtname, ansname, postData) {
     var one = [];
     var two = [];
     var three = [];
+    var four = [];
     while ((m = extract_2.exec(TxtData_2)) !== null) {
       // This is necessary to avoid infinite loops with zero-width matches
       if (m.index === extract_2.lastIndex) {
@@ -425,16 +447,18 @@ var SocialAnswer = function(txtname, ansname, postData) {
     //console.log(TxtData_2);
 
     for (var i = 0; i < 48; i++) {
+      if (i % 4 == 0) one.push(AllData[i]);
+      if (i % 4 == 1) two.push(AllData[i]);
+      if (i % 4 == 2) three.push(AllData[i]);
+      if (i % 4 == 3) four.push(AllData[i]);
+    }
+
+    for (var i = 48; i < 72; i++) {
       if (i % 3 == 0) one.push(AllData[i]);
       if (i % 3 == 1) two.push(AllData[i]);
       if (i % 3 == 2) three.push(AllData[i]);
     }
-
-    for (var i = 48; i < 56; i++) {
-      if (i % 2 == 0) one.push(AllData[i]);
-      if (i % 2 == 1) two.push(AllData[i]);
-    }
-    AllData = one.concat(two, three);
+    AllData = one.concat(two, three, four);
     //console.log("AllData: "+AllData);
 
     var content = {

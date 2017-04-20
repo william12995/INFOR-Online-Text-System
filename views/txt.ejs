@@ -1,4 +1,27 @@
 <%- include header %>
+<section id="breadcrumb">
+   <div class="container">
+      <% if(success){ %>
+      <div class="alert alert-dismissible alert-success">
+         <button type="button" class="close" data-dismiss="alert">×</button>
+         <%= success %>
+         <!-- <a href="javascript:void(0)" class="alert-link">this important alert message</a>. -->
+      </div>
+      <!-- <div class="alert alert-success"><%= success %></div> -->
+      <% } %>
+      <% if(error){ %>
+      <div class="alert alert-dismissible alert-danger">
+         <button type="button" class="close" data-dismiss="alert">×</button>
+         <%= error %>
+         <!-- <a href="javascript:void(0)" class="alert-link">this important alert message</a>. -->
+      </div>
+      <!-- <div class="alert alert-danger"><%= error %></div> -->
+      <% } %>
+      <!-- <ol class="breadcrumb">
+         <li class="active">blog</li>
+         </ol> -->
+   </div>
+</section>
 <section id="main">
    <div class="container">
       <div class="row">
@@ -24,10 +47,14 @@
 
          <div class="col-md-3">
            <% var i = page; %>
-           
+
              <textarea name = "post" rows = "20" cols = "100"> <%= content[i] %> </textarea><br/>
+             <span><a title="刪除" href="/txt/remove/<%= title %>?p=<%= page %>" > 刪除 </a></span>
              <input type="submit" value="儲存修改">
            </form>
+           <!-- <form action="remove/<%= title %>?p=<%= page %>" method="get">
+             <input type="submit" value="刪除">
+           </form> -->
 
            <div>
              <% if ( i > 0) { %>
