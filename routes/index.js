@@ -456,7 +456,7 @@ router.get('/search', function(req, res) {
       req.flash('error', err);
       return res.redirect('/');
     }
-
+    console.log("Search:" + posts);
     res.render('search', {
       title: req.query.keyword,
       posts: posts,

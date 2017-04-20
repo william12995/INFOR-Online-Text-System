@@ -296,21 +296,16 @@ Post.search = function(keyword, callback) {
         "title": pattern,
       }
     ]
-  }, {
-    "name": 1,
-    "time": 1,
-    "title": 1
   }).sort({
     time: -1
   }).exec(function(err, docs) {
     if (err) {
+      console.log(err);
       return callback(err);
     }
+    console.log("Search:" + docs);
     callback(null, docs);
   });
-
-
-
 };
 
 Post.reprint = function(reprint_from, reprint_to, callback) {
