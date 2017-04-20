@@ -4,7 +4,7 @@
         <div class="row">
             <div class="col-md-9 ">
                 <% var lastYear = 0; %>
-                <% if(posts.post){ %>
+                <% if(posts[0]){ %>
                     <% posts.forEach(function(post, index){  %>
                     <% if(lastYear != post.time.year) { %>
                     <p>
