@@ -1,212 +1,215 @@
 <%- include header %>
 <div class="container">
-   <div class="col-md-6 col-md-offset-3">
-      <% if(success){ %>
-      <div class="alert alert-dismissible alert-success">
-         <button type="button" class="close" data-dismiss="alert">×</button>
-         <%= success %>
-         <!-- <a href="javascript:void(0)" class="alert-link">this important alert message</a>. -->
-      </div>
-      <!-- <div class="alert alert-success"><%= success %></div> -->
-      <% } %>
-      <% if(error){ %>
-      <div class="alert alert-dismissible alert-danger">
-         <button type="button" class="close" data-dismiss="alert">×</button>
-         <%= error %>
-         <!-- <a href="javascript:void(0)" class="alert-link">this important alert message</a>. -->
-      </div>
-      <!-- <div class="alert alert-danger"><%= error %></div> -->
-      <% } %>
-      <!-- <ol class="breadcrumb">
-         <li class="active">blog</li>
-         </ol> -->
-   </div>
+    <div class="col-md-6 col-md-offset-3">
+        <% if(success){ %>
+        <div class="alert alert-dismissible alert-success">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <%= success %>
+            <!-- <a href="javascript:void(0)" class="alert-link">this important alert message</a>. -->
+        </div>
+        <!-- <div class="alert alert-success"><%= success %></div> -->
+        <% } %>
+        <% if(error){ %>
+        <div class="alert alert-dismissible alert-danger">
+            <button type="button" class="close" data-dismiss="alert">×</button>
+            <%= error %>
+            <!-- <a href="javascript:void(0)" class="alert-link">this important alert message</a>. -->
+        </div>
+        <!-- <div class="alert alert-danger"><%= error %></div> -->
+        <% } %>
+        <!-- <ol class="breadcrumb">
+            <li class="active">blog</li>
+            </ol> -->
+    </div>
 </div>
 <section id="main">
-   <div class="container">
-   <div class="row">
-   <!-- <div class="col-md-6 col-md-offset-3">
-      <div class="well well-sm">
-            <form action="/search" method="GET" id="searchbar" >
-                   <input type="text" name="keyword" class="form-control"  placeholder="Search">
-            </form>
-      </div>
-      </div> -->
-   <div class="col-md-6 col-md-offset-3">
-      <div class="btn-group btn-group-justified btn-group-raised">
-         <a data-toggle="modal" data-target="#post" class="btn ">發文</a>
-         <a data-toggle="modal" data-target="#uploadpdf" class="btn ">新增題目</a>
-      </div>
-   </div>
-   <div class="col-md-6 col-md-offset-3" style="margin-top:10px">
-   <% posts.forEach(function(post, index){  %>
-   <div class="well">
-      <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
-      <p class="grey"><%= post.time.date %> — <%= post.name %></p>
-      <h4>
-         <p><%- post.post %></p>
-      </h4>
-      <span class="grey">Tags:</span>
-      <% post.tags.forEach(function(tag, index){ %>
-      <% if(tag){  %>
-      <span><a href="/tags/<%= tag %>"><%= tag %></a></span>
-      <% } %>
-      <% }) %>
-      <p><span class="grey">瀏覽次數: <%= post.pv %></span></p>
-   </div>
-   <% })  %>
-   <div class="col-md-9 col-md-offset-3">
-      <ul class="pagination pagination-lg">
-         <% if(!isFirstPage){ %>
-         <li><a href="?p=<%= page-1 %>">«</a></li>
-         <% } %>
-         <% for(var i = 1; i <= total; i++){ %>
-         <% if(page == i){ %>
-         <li class="active"><a href="?p=<%= i %>"><%= i %></a></li>
-         <% }else{ %>
-         <li><a href="?p=<%= i %>"><%= i %></a></li>
-         <% } %>
-         <% } %>
-         <% if(!isLastPage){ %>
-         <li><a href="?p=<%= page+1 %>">»</a></li>
-         <% } %>
-      </ul>
-   </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="well">
+                    <form action="/search" method="GET" id="searchbar" >
+                           <input type="text" name="keyword" class="form-control"  placeholder="Search">
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-6 col-md-offset-3">
+                <div class="btn-group btn-group-justified btn-group-raised">
+                    <a data-toggle="modal" data-target="#post" class="btn" id="custom-btn">發文</a>
+                    <a data-toggle="modal" data-target="#uploadpdf" class="btn" id="custom-btn">新增題目</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-md-offset-3" style="margin-top:10px">
+                <% posts.forEach(function(post, index){  %>
+                <div class="well">
+                    <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
+                    <p class="grey"><%= post.time.date %> — <%= post.name %></p>
+                    <h4>
+                        <p><%- post.post %></p>
+                    </h4>
+                    <span class="grey">Tags:</span>
+                    <% post.tags.forEach(function(tag, index){ %>
+                    <% if(tag){  %>
+                    <span><a href="/tags/<%= tag %>"><%= tag %></a></span>
+                    <% } %>
+                    <% }) %>
+                    <p><span class="grey">瀏覽次數: <%= post.pv %></span></p>
+                </div>
+                <% })  %>
+                <div class="col-md-9 col-md-offset-3">
+                    <ul class="pagination pagination-lg">
+                        <% if(!isFirstPage){ %>
+                        <li><a href="?p=<%= page-1 %>">«</a></li>
+                        <% } %>
+                        <% for(var i = 1; i <= total; i++){ %>
+                        <% if(page == i){ %>
+                        <li class="active"><a href="?p=<%= i %>"><%= i %></a></li>
+                        <% }else{ %>
+                        <li><a href="?p=<%= i %>"><%= i %></a></li>
+                        <% } %>
+                        <% } %>
+                        <% if(!isLastPage){ %>
+                        <li><a href="?p=<%= page+1 %>">»</a></li>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <div class="modal fade" id="post" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <form method="post" action="/post">
-            <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-               <h4 class="modal-title" id="myModalLabel">Write post</h4>
-            </div>
-            <div class="modal-body">
-               <div class="form-group label-floating">
-                  <label class="control-label">Title</label>
-                  <input type="text" name="title" class="form-control">
-               </div>
-               <div class="form-group">
-                  <textarea type="text" name="editor1" class="form-control" placeholder="Page Body" rows = "20" cols = "100"></textarea>
-               </div>
-               <div class="form-group">
-                  <label>Tags</label>
-                  <input type="text" name="tags" class="form-control" placeholder="Use # to add tags">
-               </div>
-            </div>
-            <div class="modal-footer">
-               <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-               <button type="submit" class="btn btn-primary">Post</button>
-            </div>
-         </form>
-      </div>
-   </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" action="/post">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Write post</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Title</label>
+                        <input type="text" name="title" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <textarea type="text" name="editor1" class="form-control" placeholder="Page Body" rows = "20" cols = "100"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Tags</label>
+                        <input type="text" name="tags" class="form-control" placeholder="Use # to add tags">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Post</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <!-- <div class="modal fade" id="uploadimage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <form method="post" action="/upload" enctype = 'multipart/form-data'>
-            <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-               <h4 class="modal-title" id="myModalLabel">Upload images</h4>
-            </div>
-            <div class="modal-body">
-               <div class="form-group">
-                  <input type="file" name="photos" class="form-control">
-               </div>
-            </div>
-            <div class="modal-footer">
-               <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-               <button type="submit" class="btn btn-primary">Upload</button>
-            </div>
-         </form>
-      </div>
-   </div>
-   </div> -->
+    <div class="modal-dialog" role="document">
+       <div class="modal-content">
+          <form method="post" action="/upload" enctype = 'multipart/form-data'>
+             <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Upload images</h4>
+             </div>
+             <div class="modal-body">
+                <div class="form-group">
+                   <input type="file" name="photos" class="form-control">
+                </div>
+             </div>
+             <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Upload</button>
+             </div>
+          </form>
+       </div>
+    </div>
+    </div> -->
 <div class="modal fade" id="uploadpdf" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <form method="post" action='/pdfUpload' enctype = 'multipart/form-data'>
-            <div class="modal-header">
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-               <h4 class="modal-title" id="myModalLabel">新增題目</h4>
-            </div>
-            <div class="modal-body">
-               <div class="form-group">
-                  <label>上傳題目PDF檔案</label>
-                  <input type="file" name="pdf" class="form-control">
-               </div>
-               <div class="form-group">
-                  <label>上傳答案PDF檔案</label>
-                  <input type="file" name="pdf" class="form-control">
-               </div>
-               <div class="form-group">
-                  <label>選擇科目</label><br>
-                  <div class="radio radio-primary">
-                     <label>
-                     <input type="radio" name="subject" value="chinese" id="radio1">
-                     國文
-                     </label>
-                  </div>
-                  <div class="radio radio-primary">
-                     <label>
-                     <input type="radio" name="subject" value="english" id="radio2">
-                     英文
-                     </label>
-                  </div>
-                  <div class="radio radio-primary">
-                     <label>
-                     <input type="radio" name="subject" value="math" id="radio3">
-                     數學
-                     </label>
-                  </div>
-                  <div class="radio radio-primary">
-                     <label>
-                     <input type="radio" name="subject" value="social">
-                     社會
-                     </label>
-                  </div>
-                  <div class="radio radio-primary">
-                     <label>
-                     <input type="radio" name="subject" value="science">
-                     自然
-                     </label>
-                  </div>
-               </div>
-            </div>
-            <div class="modal-footer">
-               <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-               <button type="submit" class="btn btn-primary">Upload</button>
-            </div>
-         </form>
-      </div>
-   </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form method="post" action='/pdfUpload' enctype = 'multipart/form-data'>
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">新增題目</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>上傳題目PDF檔案</label>
+                        <input type="file" name="pdf" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>上傳答案PDF檔案</label>
+                        <input type="file" name="pdf" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>選擇科目</label><br>
+                        <div class="radio radio-primary">
+                            <label>
+                            <input type="radio" name="subject" value="chinese" id="radio1">
+                            國文
+                            </label>
+                        </div>
+                        <div class="radio radio-primary">
+                            <label>
+                            <input type="radio" name="subject" value="english" id="radio2">
+                            英文
+                            </label>
+                        </div>
+                        <div class="radio radio-primary">
+                            <label>
+                            <input type="radio" name="subject" value="math" id="radio3">
+                            數學
+                            </label>
+                        </div>
+                        <div class="radio radio-primary">
+                            <label>
+                            <input type="radio" name="subject" value="social">
+                            社會
+                            </label>
+                        </div>
+                        <div class="radio radio-primary">
+                            <label>
+                            <input type="radio" name="subject" value="science">
+                            自然
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <% if(user){ %>
 <div class="modal fade" id="profile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-   <div class="modal-dialog" role="document">
-      <div class="modal-content">
-         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title" id="myModalLabel">Profile</h4>
-         </div>
-         <div class="modal-body">
-            <div class="row">
-               <div class="col-sm-6 col-md-4">
-                  <img src="<%= user.head %>" alt="" class="img-responsive">
-               </div>
-               <div class="col-sm-6 col-md-8">
-                  <h4><%= user.name %></h4>
-                  <!-- <small><cite title="San Francisco, USA">San Francisco, USA <i class="glyphicon glyphicon-map-marker">
-                     </i></cite></small> -->
-                  <p>
-                     <span class="glyphicon glyphicon-envelope"></span> <%= user.email %>
-                     <br />
-               </div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Profile</h4>
             </div>
-         </div>
-      </div>
-   </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <img src="<%= user.head %>" alt="" class="img-responsive">
+                    </div>
+                    <div class="col-sm-6 col-md-8">
+                        <h4><%= user.name %></h4>
+                        <!-- <small><cite title="San Francisco, USA">San Francisco, USA <i class="glyphicon glyphicon-map-marker">
+                            </i></cite></small> -->
+                        <p>
+                            <span class="glyphicon glyphicon-envelope"></span> <%= user.email %>
+                            <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <% } %>
 <%- include footer %>

@@ -42,7 +42,7 @@ router.get('/', function(req, res, next) {
       page: page,
       total: total,
       isFirstPage: (page - 1) == 0,
-      isLastPage: (page == 1) ? ((page - 1) * 10 + posts.length) == total : true,
+      isLastPage: page == total,
       success: req.flash('success').toString(),
       error: req.flash('error').toString(),
     });
@@ -58,6 +58,13 @@ router.get('/signup', function(req, res) {
     user: null,
     success: req.flash('success').toString(),
     error: req.flash('error').toString()
+  });
+});
+
+router.get('/form', function(req, res) {
+  res.render('form', {
+    title: 'Form test',
+    user: null,
   });
 });
 
