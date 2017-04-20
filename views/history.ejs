@@ -1,17 +1,23 @@
 <%- include header %>
-<div class="col-md-9 ">
-      <% var lastYear = 0; %>
-      <% posts.forEach(function(post, index){  %>
+<section id="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-9 ">
+                  <% var lastYear = 0; %>
+                  <% posts.forEach(function(post, index){  %>
 
-      <% if(lastYear != post.time.year) { %>
-      <p>
-         <h3><%= post.time.year %></h3>
-      </p>
-      <% lastYear = post.time.year } %>
-      <div class="well">
-         <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
-         <p class="grey"><%= post.time.date %> — <%= post.name %></p>
-      </div>
-   <% }) %>
-</div>
+                  <% if(lastYear != post.time.year) { %>
+                  <p>
+                     <h3><%= post.time.year %></h3>
+                  </p>
+                  <% lastYear = post.time.year } %>
+                  <div class="well">
+                     <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
+                     <p class="grey"><%= post.time.date %> — <%= post.name %></p>
+                  </div>
+               <% }) %>
+            </div>
+        </div>
+    </div>
+</section>
 <%- include footer %>

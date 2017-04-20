@@ -21,8 +21,8 @@ router.get('/', function(req, res, next) {
   //console.log(req.session.user);
   if (req.session.user) {
     if (!req.session.user.isVerified) {
-      req.flash('error', "email haven't been verified");
-      console.log('not verified');
+      req.flash('error', "請認證email");
+    //   console.log('not verified');
     }
   }
   var page = req.query.p ? parseInt(req.query.p) : 1;
@@ -32,6 +32,7 @@ router.get('/', function(req, res, next) {
       console.log(err);
       posts = {};
     }
+    total = parseInt(total / 10) + 1;
     // console.log("posts: "+JSON.stringify(posts));
     //console.log('posts: ', posts);
     res.render('index', {
@@ -39,13 +40,9 @@ router.get('/', function(req, res, next) {
       user: req.session.user,
       posts: posts,
       page: page,
-      head: {
-        head: 'Blog',
-        sub: 'write your post',
-        class: 'glyphicon glyphicon-file'
-      },
+      total: total,
       isFirstPage: (page - 1) == 0,
-      isLastPage: ((page - 1) * 10 + posts.length) == total,
+      isLastPage: (page == 1) ? ((page - 1) * 10 + posts.length) == total : true,
       success: req.flash('success').toString(),
       error: req.flash('error').toString(),
     });
@@ -58,11 +55,6 @@ router.get('/signup', checkBeenLogin);
 router.get('/signup', function(req, res) {
   res.render('signup', {
     title: 'Register',
-    head: {
-      head: 'Signup',
-      sub: null,
-      class: null
-    },
     user: null,
     success: req.flash('success').toString(),
     error: req.flash('error').toString()
@@ -75,11 +67,6 @@ router.get('/login', function(req, res) {
   res.render('login', {
     title: '登入',
     user: null,
-    head: {
-      head: 'Login',
-      sub: null,
-      class: 'glyphicon glyphicon-log-in'
-    },
     success: req.flash('success').toString(),
     error: req.flash('error').toString()
   });
@@ -137,7 +124,7 @@ router.get('/verify', function(req, res) {
 
         req.session.user = user;
         console.log('verified');
-        req.flash('success', 'email verified successfully!');
+        req.flash('email 認證成功');
         res.redirect('/');
       });
     }
@@ -173,8 +160,10 @@ router.post('/post', checkLogin);
 router.post('/post', function(req, res) {
   var currentUser = req.session.user;
   //console.log(currentUser);
-  var tags = [req.body.tag1, req.body.tag2, req.body.tag3];
-  // console.log(tags);
+  var tags = (req.body.tags + '#end').split(/\s*#/);
+  tags.splice(0, 1);
+  tags.splice(tags.length - 1, 1);
+  console.log(tags);
   var post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.editor1, {});
   post.save(function(err) {
     if (err) {
@@ -287,15 +276,15 @@ router.post('/pdfUpload', PDFupload.array('pdf', 12), function(req, res) {
   newPDF.convert(name_1);
   newPDF_2.convert(name_2);
 
-  if (req.body.english)
+  if (req.body.subject == 'english')
     english_flag = true;
-  if (req.body.chinese)
+  if (req.body.subject == 'chinese')
     chinese_flag = true;
-  if (req.body.social)
+  if (req.body.subject == 'social')
     social_flag = true;
-  if (req.body.math)
+  if (req.body.subject == 'math')
     math_flag = true;
-  if (req.body.science)
+  if (req.body.subject == 'science')
     science_flag = true;
   //console.log(req.files[0].filename);
   req.flash('success', 'PDF上傳成功');
@@ -357,11 +346,6 @@ router.get('/txt/:txtname', function(req, res) {
       user: req.session.user,
       success: req.flash('success').toString(),
       error: req.flash('error').toString(),
-      head: {
-        head: 'Blog',
-        sub: 'write your post',
-        class: 'glyphicon glyphicon-file'
-      },
     });
   });
 });
@@ -414,11 +398,6 @@ router.get('/history', function(req, res) {
     res.render('history', {
       title: 'History',
       posts: posts,
-      head: {
-        head: 'History',
-        sub: 'activity log',
-        class: 'glyphicon glyphicon-time'
-      },
       user: req.session.user,
       success: req.flash('success').toString(),
       error: req.flash('error').toString()
@@ -475,11 +454,6 @@ router.get('/search', function(req, res) {
       title: req.query.keyword,
       posts: posts,
       user: req.session.user,
-      head: {
-        head: 'Results match',
-        sub: req.query.keyword,
-        class: 'glyphicon glyphicon-search'
-      },
       success: req.flash('success').toString(),
       error: req.flash('error').toString()
     });
@@ -526,11 +500,6 @@ router.get('/u/:name/:day/:title', function(req, res) {
     res.render('article', {
       title: req.params.title,
       post: post,
-      head: {
-        head: '<h1></h1><br>',
-        sub: null,
-        class: null
-      },
       user: req.session.user,
       success: req.flash('success').toString(),
       error: req.flash('error').toString()
@@ -580,11 +549,6 @@ router.get('/edit/:name/:day/:title', function(req, res) {
     res.render('edit', {
       title: '編輯',
       post: post,
-      head: {
-        head: 'Edit',
-        sub: 'edit your post',
-        class: null
-      },
       user: req.session.user,
       success: req.flash('success').toString(),
       error: req.flash('error').toString()

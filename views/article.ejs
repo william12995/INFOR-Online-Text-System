@@ -1,85 +1,95 @@
 <%- include header %>
-<div class="col-lg-8">
-   <div><h1><%= post.title %></h1><p class="lead">by <a href="#"><%= post.name %></a></div>
-   </p>
-   <p><span class="glyphicon glyphicon-time"></span> Posted on <%= post.time.date %></p>
-   <% if ( user && (user.name == post.name) ) { %>
-       <span> <a class="edit" href="/edit/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">編輯</a></span>
-       <span> <a class="edit" href="/remove/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">刪除</a></span>
-   <% } %>
-
-   <% var flag = 1 ; %>
- 	<% if ( user && (user.name != post.name) ) { %>
-
- 		<% if ( ( post.reprint_info.reprint_from.name != null ) && ( user.name == post.reprint_info.reprint_from.name ) ){ %>
- 			<% flag = 0 ; %>
- 		<% } %>
-
- 		<% if( (post.reprint_info.reprint_to != null) ){ %>
-
- 			<% post.reprint_info.reprint_to.forEach( function(reprint_to, index) { %>
- 				<% if (user.name == reprint_to.name){ %>
- 					<% flag = 0 ; %>
- 				<% } %>
- 			<% }) %>
- 		<% } %>
- 	<% }else{ %>
- 		<% flag = 0 ; %>
- 	<% } %>
-
- 	<% if(flag){ %>
- 		<span> <a class="edit" href="/reprint/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">轉載</a></span>
- 	<% } %>
-
-   <hr><hr>
-   <h3 class="lead"><%- post.post %></h3>
-   <hr>
-   <!-- local comments Form -->
-   <!-- <div class="well">
-      <h4>Leave a Comment:</h4>
-      <form role="form" method="post">
-         <div class="form-group">
-            <textarea class="form-control" name="content" rows="3"></textarea>
-            {{#if user}}
-            <div class="form-group">
-               <label>Username</label>
-               <input type="text" class="form-control" name="name" value="{{user.name}}">
+<section id="main">
+   <div class="container">
+      <div class="row">
+         <div class="col-md-6 col-md-offset-3">
+            <div>
+               <h1><%= post.title %></h1>
+               <p class="lead">by <a href="#"><%= post.name %></a></p>
             </div>
-            <div class="form-group">
-               <label>email</label>
-               <input type="text" class="form-control" name="email" value="{{user.email}}">
+            <hr>
+            <div class="well">
+                <% if ( user && (user.name == post.name) ) { %>
+                <span> <a class="edit" href="/edit/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">編輯</a></span>
+                <span> <a class="edit" href="/remove/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">刪除</a></span>
+                <% } %>
+                <% var flag = 1 ; %>
+                <% if ( user && (user.name != post.name) ) { %>
+                    <% if ( ( post.reprint_info.reprint_from.name != null ) && ( user.name == post.reprint_info.reprint_from.name ) ){ %>
+                        <% flag = 0 ; %>
+                    <% } %>
+                    <% if( (post.reprint_info.reprint_to != null) ){ %>
+                        <% post.reprint_info.reprint_to.forEach( function(reprint_to, index) { %>
+                            <% if (user.name == reprint_to.name){ %>
+                                    <% flag = 0 ; %>
+                            <% } %>
+                        <% }) %>
+                    <% } %>
+                <% }else{ %>
+                    <% flag = 0 ; %>
+                <% } %>
+                <% if(flag){ %>
+                    <span> <a class="edit" href="/reprint/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">轉載</a></span>
+                <% } %>
+                <hr><p><%- post.post %></p>
+                <hr><span>tags：</span>
+                <% post.tags.forEach(function(tag, index){ %>
+                <% if(tag){  %>
+                <span><a href="/tags/<%= tag %>"><%= tag %></a></span>
+                <% } %>
+                <% }) %>
             </div>
-            {{else}}
-            <div class="form-group">
-               <label>Username</label>
-               <input type="text" class="form-control" name="name" placeholder="your name">
-            </div>
-            <div class="form-group">
-               <label>email</label>
-               <input type="text" class="form-control" name="email" placeholder="your email">
-            </div>
-            {{/if}}
+            <!-- <p><span class="glyphicon glyphicon-time"></span> Posted on <%= post.time.date %></p> -->
          </div>
-         <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
       </div>
-      <hr> -->
-   <!-- Posted Comments -->
-   <!-- {{#each post.comments}}
-      <div class="media">
-          <a class="pull-left" href="#">
-              <img class="media-object" src="http://placehold.it/64x64" alt="">
-          </a>
-          <div class="media-body">
-              <h4 class="media-heading">{{name}}
-                  <small>{{time}}</small>
-              </h4>
-              <p>{{{content}}}</p>
-          </div>
+   </div>
+</section>
+<!-- local comments Form -->
+<!-- <div class="well">
+   <h4>Leave a Comment:</h4>
+   <form role="form" method="post">
+      <div class="form-group">
+         <textarea class="form-control" name="content" rows="3"></textarea>
+         {{#if user}}
+         <div class="form-group">
+            <label>Username</label>
+            <input type="text" class="form-control" name="name" value="{{user.name}}">
+         </div>
+         <div class="form-group">
+            <label>email</label>
+            <input type="text" class="form-control" name="email" value="{{user.email}}">
+         </div>
+         {{else}}
+         <div class="form-group">
+            <label>Username</label>
+            <input type="text" class="form-control" name="name" placeholder="your name">
+         </div>
+         <div class="form-group">
+            <label>email</label>
+            <input type="text" class="form-control" name="email" placeholder="your email">
+         </div>
+         {{/if}}
       </div>
-      {{/each}} -->
-   <!-- disqus comments part -->
-   <div id="disqus_thread"></div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+   </form>
+   </div>
+   <hr> -->
+<!-- Posted Comments -->
+<!-- {{#each post.comments}}
+   <div class="media">
+       <a class="pull-left" href="#">
+           <img class="media-object" src="http://placehold.it/64x64" alt="">
+       </a>
+       <div class="media-body">
+           <h4 class="media-heading">{{name}}
+               <small>{{time}}</small>
+           </h4>
+           <p>{{{content}}}</p>
+       </div>
+   </div>
+   {{/each}} -->
+<!-- disqus comments part -->
+<!-- <div id="disqus_thread"></div>
    <script>
       /**
       *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
@@ -98,5 +108,5 @@
       })();
    </script>
    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
+   </div> -->
 <%- include footer %>
