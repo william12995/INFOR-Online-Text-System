@@ -1,5 +1,5 @@
 <%- include header %>
-<div class="col-lg-8">
+<div class="col-md-8 col-md-offset-3">
    <div><h1><%= post.title %></h1><p class="lead">by <a href="#"><%= post.name %></a></div>
    </p>
    <p><span class="glyphicon glyphicon-time"></span> Posted on <%= post.time.date %></p>
@@ -31,9 +31,12 @@
  		<span> <a class="edit" href="/reprint/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">轉載</a></span>
  	<% } %>
 
-   <hr><hr>
-   <h3 class="lead"><%- post.post %></h3>
-   <hr>
+  </div>
+
+  <div class="well">
+    <%- post.post %>
+  </div>
+
    <!-- local comments Form -->
    <!-- <div class="well">
       <h4>Leave a Comment:</h4>
@@ -79,7 +82,7 @@
       </div>
       {{/each}} -->
    <!-- disqus comments part -->
-   <div id="disqus_thread"></div>
+   <!-- <div id="disqus_thread"></div>
    <script>
       /**
       *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
@@ -98,5 +101,5 @@
       })();
    </script>
    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
+</div> -->
 <%- include footer %>
