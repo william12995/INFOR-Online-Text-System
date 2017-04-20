@@ -104,32 +104,27 @@ TXT.prototype.SaveChinese = function(filename, callback) {
     var extract = /10\s*\d+\s*年[\s\S]*?-\s*.\s*-|第[\s+\d+\s+]*?頁|二\s*、[\s\S]*?算。|第\s*壹[\s\S]*?算\s*。|第\s*貳[\s\S]*|-+Page \([\d+]\) Break-+|大學入\s*[\s\S]*?-\s*.\s*-/g;
     TxtData_2 = TxtData_2.replace(extract, "");
 
-    var extract_2 = /([\d*\s*\d*\s*-\s*\d\s*\d*\d*\s*\d+\s*\.\s\S]*?\(\s*D\s*\)\s*[\s\S]*?\D+)/g;
-    TxtData_2 = TxtData_2.split(extract_2);
+    var extract_2 = /(\d+-\d+為題組[\s\S]*?\(\s*D\s*\)[\s\S]*?\(\s*D\s*\)\D+)|(\d*\s*\d*\s*\.[\s\S]*?\(\s*D\s*\)\s*[\s\S]*?\D+)/g;
 
-    for (var i = 0; i < TxtData_2.length; i++) {
-      TxtData_2[i] = TxtData_2[2 * i + 1];
-    }
-    TxtData_2 = TxtData_2.slice(0, 23);
-
-    //console.log(TxtData_2);
-    var content = {
-      name: this.name,
-      post: TxtData_2
-    };
-
-    var newTxt = new txtModel(content);
-
-    newTxt.save(function(err) {
-      if (err) {
-        return callback(err);
+    let m;
+    var AllData = [];
+    while ((m = extract_2.exec(TxtData_2)) !== null) {
+      // This is necessary to avoid infinite loops with zero-width matches
+      if (m.index === extract_2.lastIndex) {
+        regex.lastIndex++;
       }
-      callback(null);
-    });
 
-    fs.writeFile(filename, TxtData_2);
+      // The result can be accessed through the `m`-variable.
+      AllData.push(m[0]);
+      console.log(AllData);
+    }
+
+    ChineseAnswer(this.name, this.ans, AllData);
+
+    fs.writeFile(filename, AllData);
 
     console.log("Extract Done\n");
+    callback(null);
 
   });
 }
@@ -149,10 +144,6 @@ TXT.prototype.SaveMath = function(filename, callback) {
 
     // var extract = /10\s*\d+\s*年[\s\S]*?-\s*.\s*-|第[\s+\d+\s+]*?頁|二\s*、[\s\S]*?算。|第\s*壹[\s\S]*?算\s*。|第\s*貳[\s\S]*|-+Page \([\d+]\) Break-+|大學入\s*[\s\S]*?-\s*.\s*-/g;
     // TxtData_2 = TxtData_2.replace(extract, "");
-
-
-
-
 
     console.log(TxtData_2);
 
@@ -206,29 +197,23 @@ TXT.prototype.SaveSocial = function(filename, callback) {
     TxtData_2 = TxtData_2.replace(extract, "");
 
     var extract_2 = /([\d*\s*\d*\s*-\s*\d\s*\d*\d*\s*\d+\s*\.\s\S]*?\(\s*D\s*\)\s*[\s\S]*?\D+)/g;
-    TxtData_2 = TxtData_2.split(extract_2);
+    let m;
 
-    for (var i = 0; i < TxtData_2.length; i++) {
-      TxtData_2[i] = TxtData_2[2 * i + 1];
+    while ((m = regex.exec(str)) !== null) {
+      // This is necessary to avoid infinite loops with zero-width matches
+      if (m.index === regex.lastIndex) {
+        regex.lastIndex++;
+      }
+
+      // The result can be accessed through the `m`-variable.
+      m.forEach((match, groupIndex) => {
+        console.log(`Found match, group ${groupIndex}: ${match}`);
+      });
     }
-    TxtData_2 = TxtData_2.slice(0, 72);
 
 
     //console.log(TxtData_2);
 
-    var content = {
-      name: this.name,
-      post: TxtData_2
-    };
-
-    var newTxt = new txtModel(content);
-
-    newTxt.save(function(err) {
-      if (err) {
-        return callback(err);
-      }
-      callback(null, AllData.length);
-    });
 
 
     fs.writeFile(filename, TxtData_2);
@@ -281,6 +266,136 @@ TXT.edit = function(filename, p, post, ans, callback) {
 };
 
 var EnglishAnswer = function(txtname, ansname, postData) {
+  var filename = "./public/images/" + ansname + ".txt";
+  //console.log(filename);
+
+
+  fs.readFile(filename, 'utf8', (err, data) => {
+    if (err)
+      throw err;
+
+    var TxtData_2 = data;
+
+    var extract = /10+[\s\S]*?案|題號 答案|-+Page\s*\([\d]\)\s*Break-+/g;
+    var extract_2 = /([A-Z])/g;
+    TxtData_2 = TxtData_2.replace(extract, "");
+
+    let m;
+    var AllData = [];
+    var one = [];
+    var two = [];
+    var three = [];
+    while ((m = extract_2.exec(TxtData_2)) !== null) {
+      // This is necessary to avoid infinite loops with zero-width matches
+      if (m.index === extract_2.lastIndex) {
+        extract_2.lastIndex++;
+      }
+      AllData.push(m[0]);
+    }
+    //console.log(TxtData_2);
+
+    for (var i = 0; i < 48; i++) {
+      if (i % 3 == 0) one.push(AllData[i]);
+      if (i % 3 == 1) two.push(AllData[i]);
+      if (i % 3 == 2) three.push(AllData[i]);
+    }
+
+    for (var i = 48; i < 56; i++) {
+      if (i % 2 == 0) one.push(AllData[i]);
+      if (i % 2 == 1) two.push(AllData[i]);
+    }
+    AllData = one.concat(two, three);
+    //console.log("AllData: "+AllData);
+
+    var content = {
+      name: txtname,
+      post: postData,
+      ans: AllData
+    };
+
+    console.log(content);
+    var newTxt = new txtModel(content);
+
+    newTxt.save(function(err) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+    });
+
+    fs.writeFile(filename, TxtData_2);
+
+    console.log("Extract answer Done\n");
+    return;
+
+  });
+}
+
+var ChineseAnswer = function(txtname, ansname, postData) {
+  var filename = "./public/images/" + ansname + ".txt";
+  //console.log(filename);
+
+
+  fs.readFile(filename, 'utf8', (err, data) => {
+    if (err)
+      throw err;
+
+    var TxtData_2 = data;
+
+    var extract = /10+[\s\S]*?[答案]+|題號 答案|-+Page\s*\([\d]\)\s*Break-+/g;
+    var extract_2 = /([A-Z])+/g;
+    TxtData_2 = TxtData_2.replace(extract, "");
+
+    let m;
+    var AllData = [];
+    var one = [];
+    var two = [];
+    while ((m = extract_2.exec(TxtData_2)) !== null) {
+      // This is necessary to avoid infinite loops with zero-width matches
+      if (m.index === extract_2.lastIndex) {
+        extract_2.lastIndex++;
+      }
+      AllData.push(m[0]);
+    }
+    //console.log(TxtData_2);
+
+    for (var i = 0; i < 6; i++) {
+      if (i % 2 == 0) one.push(AllData[i]);
+      if (i % 2 == 1) two.push(AllData[i]);
+
+    }
+
+    for (var i = 6; i < 23; i++) {
+      one.push(AllData[i]);
+    }
+    AllData = one.concat(two);
+    //console.log("AllData: "+AllData);
+
+    var content = {
+      name: txtname,
+      post: postData,
+      ans: AllData
+    };
+
+    console.log(content);
+    var newTxt = new txtModel(content);
+
+    newTxt.save(function(err) {
+      if (err) {
+        console.log(err);
+        return;
+      }
+    });
+
+    fs.writeFile(filename, TxtData_2);
+
+    console.log("Extract answer Done\n");
+    return;
+
+  });
+}
+
+var SocialAnswer = function(txtname, ansname, postData) {
   var filename = "./public/images/" + ansname + ".txt";
   //console.log(filename);
 

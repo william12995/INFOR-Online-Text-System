@@ -263,7 +263,10 @@ var txt_name;
 var ans_name;
 
 var english_flag,
-  chinese_flag;
+  chinese_flag,
+  social_flag,
+  math_flag,
+  science_flag;
 
 router.post('/pdfUpload', checkLogin);
 
@@ -288,6 +291,12 @@ router.post('/pdfUpload', PDFupload.array('pdf', 12), function(req, res) {
     english_flag = true;
   if (req.body.chinese)
     chinese_flag = true;
+  if (req.body.social)
+    social_flag = true;
+  if (req.body.math)
+    math_flag = true;
+  if (req.body.science)
+    science_flag = true;
   //console.log(req.files[0].filename);
   req.flash('success', 'PDF上傳成功');
   res.redirect('/');
@@ -306,6 +315,27 @@ router.get('/txt', function(req, res) {
   if (chinese_flag) {
     var newTXT = new Txt(txt_name, ans_name);
     newTXT.SaveChinese(txt_name, function(err) {
+      req.flash('success', '題目已抓取，請檢查');
+      res.redirect('/txt/' + txt_name);
+    })
+  }
+  if (social_flag) {
+    var newTXT = new Txt(txt_name, ans_name);
+    newTXT.SaveSocial(txt_name, function(err) {
+      req.flash('success', '題目已抓取，請檢查');
+      res.redirect('/txt/' + txt_name);
+    })
+  }
+  if (math_flag) {
+    var newTXT = new Txt(txt_name, ans_name);
+    newTXT.SaveMath(txt_name, function(err) {
+      req.flash('success', '題目已抓取，請檢查');
+      res.redirect('/txt/' + txt_name);
+    })
+  }
+  if (science_flag) {
+    var newTXT = new Txt(txt_name, ans_name);
+    newTXT.SaveScience(txt_name, function(err) {
       req.flash('success', '題目已抓取，請檢查');
       res.redirect('/txt/' + txt_name);
     })
