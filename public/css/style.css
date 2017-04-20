@@ -26,3 +26,8 @@ body, html{
   margin: 0 auto -120px;
   padding: 0 0 120px;
 }
+
+.modal-dialog {
+  /*position:absolute;*/
+  top:5% !important;
+}
