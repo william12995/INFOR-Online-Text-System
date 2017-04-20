@@ -55,13 +55,22 @@
       <p><span class="grey">瀏覽次數: <%= post.pv %></span></p>
    </div>
    <% })  %>
-   <div>
-      <% if(!isFirstPage){ %>
-      <span class="prepage" > <a title="上一頁" href="?p=<%= page-1 %>" > 上一頁 </a> </span>
-      <% } %>
-      <% if(!isLastPage){ %>
-      <span class="nextpage" > <a title="下一頁" href="?p=<%= page+1 %>" > 下一頁 </a> </span>
-      <% } %>
+   <div class="col-md-9 col-md-offset-3">
+       <ul class="pagination pagination-lg">
+           <% if(!isFirstPage){ %>
+               <li><a href="?p=<%= page-1 %>">«</a></li>
+           <% } %>
+           <% for(var i = 1; i <= total; i++){ %>
+               <% if(page == i){ %>
+                   <li class="active"><a href="?p=<%= i %>"><%= i %></a></li>
+               <% }else{ %>
+                   <li><a href="?p=<%= i %>"><%= i %></a></li>
+               <% } %>
+           <% } %>
+          <% if(!isLastPage){ %>
+              <li><a href="?p=<%= page+1 %>">»</a></li>
+          <% } %>
+        </ul>
    </div>
 </section>
 <div class="modal fade" id="post" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

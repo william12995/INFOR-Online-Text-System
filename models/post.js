@@ -97,6 +97,13 @@ Post.getTen = function(name, page, callback) {
 
 };
 
+Post.getLength = () => {
+    postModel.count({}, (err, count) => {
+        // console.log('docs: ', count);
+        return count;
+    });
+}
+
 Post.getOne = function(name, day, title, callback) {
 
   postModel.findOne({

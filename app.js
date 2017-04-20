@@ -115,12 +115,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {
     title: 'error',
-    error: err.stack,
-    head: {
-      head: err.status,
-      sub: err.message,
-      class: null
-    }
   });
 });
 
