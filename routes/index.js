@@ -168,8 +168,8 @@ router.post('/post', function(req, res) {
   var currentUser = req.session.user;
   //console.log(currentUser);
   var tags = (req.body.tags + '#end').split(/\s*#/);
-  tags.splice(0,1);
-  tags.splice(tags.length - 1,1);
+  tags.splice(0, 1);
+  tags.splice(tags.length - 1, 1);
   console.log(tags);
   var post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.editor1, {});
   post.save(function(err) {
@@ -291,7 +291,7 @@ router.post('/pdfUpload', PDFupload.array('pdf', 12), function(req, res) {
     social_flag = true;
   if (req.body.subject == 'math')
     math_flag = true;
-  if (req.body.subject == science)
+  if (req.body.subject == 'science')
     science_flag = true;
   //console.log(req.files[0].filename);
   req.flash('success', 'PDF上傳成功');
