@@ -25,6 +25,19 @@ body, html{
     color: #777;
 }
 
+.radio {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#check {
+    padding: 8px;
+}
+
+#check-item {
+    padding-left: 15px;
+}
+
 #wrap {
   min-height: 100%;
   height: auto;
