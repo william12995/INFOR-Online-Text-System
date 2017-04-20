@@ -405,22 +405,22 @@ router.get('/history', function(req, res) {
   });
 });
 
-// router.get('/tags', function(req, res){
+// router.get('/tags', function(req, res) {
 //
-// 	Post.getTags(function(err, posts){
-// 		if (err){
-// 			req.flash('error', err);
-// 			return res.redirect('/');
-// 		}
+//   Post.getTags(function(err, posts) {
+//     if (err) {
+//       req.flash('error', err);
+//       return res.redirect('/');
+//     }
 //
-// 		res.render('tags', {
-// 			title: '標籤',
-// 			posts:posts,
-// 	 		user: req.session.user,
-// 	  		success: req.flash('success').toString(),
-// 	  		error: req.flash('error').toString()
-// 		});
-// 	});
+//     res.render('tags', {
+//       title: '標籤',
+//       posts: posts,
+//       user: req.session.user,
+//       success: req.flash('success').toString(),
+//       error: req.flash('error').toString()
+//     });
+//   });
 // });
 
 router.get('/tags/:tag', function(req, res) {
