@@ -1,6 +1,6 @@
 <%- include header %>
-   <div class="container">
-     <div class="col-md-6 col-md-offset-3">
+<div class="container">
+   <div class="col-md-6 col-md-offset-3">
       <% if(success){ %>
       <div class="alert alert-dismissible alert-success">
          <button type="button" class="close" data-dismiss="alert">×</button>
@@ -20,50 +20,48 @@
       <!-- <ol class="breadcrumb">
          <li class="active">blog</li>
          </ol> -->
-       </div>
    </div>
-
+</div>
 <section id="main">
    <div class="container">
    <div class="row">
-     <!-- <div class="col-md-6 col-md-offset-3">
-         <div class="well well-sm">
-               <form action="/search" method="GET" id="searchbar" >
-                      <input type="text" name="keyword" class="form-control"  placeholder="Search">
-               </form>
-        </div>
-     </div> -->
-     <div class="col-md-6 col-md-offset-3">
-         <div class="btn-group btn-group-justified btn-group-raised">
-           <a data-toggle="modal" data-target="#post" class="btn ">發文</a>
-           <a data-toggle="modal" data-target="#uploadpdf" class="btn ">新增題目</a>
-         </div>
-     </div>
-      <div class="col-md-6 col-md-offset-3" style="margin-top:10px">
-               <% posts.forEach(function(post, index){  %>
-               <div class="well">
-                  <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
-                  <p class="grey"><%= post.time.date %> — <%= post.name %></p>
-                  <h4>
-                     <p><%- post.post %></p>
-                  </h4>
-                  <span class="grey">Tags:</span>
-                  <% post.tags.forEach(function(tag, index){ %>
-                  <% if(tag){  %>
-                  <span><a href="/tags/<%= tag %>"><%= tag %></a></span>
-                  <% } %>
-                  <% }) %>
-                  <p><span class="grey">瀏覽次數: <%= post.pv %></span></p>
-               </div>
-               <% })  %>
-               <div>
-                  <% if(!isFirstPage){ %>
-                  <span class="prepage" > <a title="上一頁" href="?p=<%= page-1 %>" > 上一頁 </a> </span>
-                  <% } %>
-                  <% if(!isLastPage){ %>
-                  <span class="nextpage" > <a title="下一頁" href="?p=<%= page+1 %>" > 下一頁 </a> </span>
-                  <% } %>
-
+   <!-- <div class="col-md-6 col-md-offset-3">
+      <div class="well well-sm">
+            <form action="/search" method="GET" id="searchbar" >
+                   <input type="text" name="keyword" class="form-control"  placeholder="Search">
+            </form>
+      </div>
+      </div> -->
+   <div class="col-md-6 col-md-offset-3">
+      <div class="btn-group btn-group-justified btn-group-raised">
+         <a data-toggle="modal" data-target="#post" class="btn ">發文</a>
+         <a data-toggle="modal" data-target="#uploadpdf" class="btn ">新增題目</a>
+      </div>
+   </div>
+   <div class="col-md-6 col-md-offset-3" style="margin-top:10px">
+   <% posts.forEach(function(post, index){  %>
+   <div class="well">
+      <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
+      <p class="grey"><%= post.time.date %> — <%= post.name %></p>
+      <h4>
+         <p><%- post.post %></p>
+      </h4>
+      <span class="grey">Tags:</span>
+      <% post.tags.forEach(function(tag, index){ %>
+      <% if(tag){  %>
+      <span><a href="/tags/<%= tag %>"><%= tag %></a></span>
+      <% } %>
+      <% }) %>
+      <p><span class="grey">瀏覽次數: <%= post.pv %></span></p>
+   </div>
+   <% })  %>
+   <div>
+      <% if(!isFirstPage){ %>
+      <span class="prepage" > <a title="上一頁" href="?p=<%= page-1 %>" > 上一頁 </a> </span>
+      <% } %>
+      <% if(!isLastPage){ %>
+      <span class="nextpage" > <a title="下一頁" href="?p=<%= page+1 %>" > 下一頁 </a> </span>
+      <% } %>
    </div>
 </section>
 <div class="modal fade" id="post" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
@@ -83,7 +81,7 @@
                   <textarea type="text" name="editor1" class="form-control" placeholder="Page Body" rows = "20" cols = "100"></textarea>
                </div>
                <div class="form-group">
-                  <label>Meta Tags</label>
+                  <label>Tags</label>
                   <input type="text" name="tags" class="form-control" placeholder="Use # to add tags">
                </div>
             </div>
@@ -115,31 +113,56 @@
          </form>
       </div>
    </div>
-</div> -->
+   </div> -->
 <div class="modal fade" id="uploadpdf" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
    <div class="modal-dialog" role="document">
       <div class="modal-content">
          <form method="post" action='/pdfUpload' enctype = 'multipart/form-data'>
             <div class="modal-header">
                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-               <h4 class="modal-title" id="myModalLabel">Upload PDF file</h4>
+               <h4 class="modal-title" id="myModalLabel">新增題目</h4>
             </div>
             <div class="modal-body">
                <div class="form-group">
-                  <label>題目: </label>
+                  <label>上傳題目PDF檔案</label>
                   <input type="file" name="pdf" class="form-control">
                </div>
                <div class="form-group">
-                  <label>答案: </label>
+                  <label>上傳答案PDF檔案</label>
                   <input type="file" name="pdf" class="form-control">
                </div>
                <div class="form-group">
-                  <label>科目: </label><br>
-                  <input type="radio" name="english" value="english"> English<br>
-                  <input type="radio" name="chinese" value="chinese"> Chinese<br>
-                  <input type="radio" name="social" value="social"> Social<br>
-                  <input type="radio" name="math" value="math"> Math<br>
-                  <input type="radio" name="science" value="science"> Science<br>
+                  <label>選擇科目</label><br>
+                  <div class="radio radio-primary">
+                     <label>
+                     <input type="radio" name="subject" value="chinese" id="radio1">
+                     國文
+                     </label>
+                  </div>
+                  <div class="radio radio-primary">
+                     <label>
+                     <input type="radio" name="subject" value="english" id="radio2">
+                     英文
+                     </label>
+                  </div>
+                  <div class="radio radio-primary">
+                     <label>
+                     <input type="radio" name="subject" value="math" id="radio3">
+                     數學
+                     </label>
+                  </div>
+                  <div class="radio radio-primary">
+                     <label>
+                     <input type="radio" name="subject" value="social">
+                     社會
+                     </label>
+                  </div>
+                  <div class="radio radio-primary">
+                     <label>
+                     <input type="radio" name="subject" value="science">
+                     自然
+                     </label>
+                  </div>
                </div>
             </div>
             <div class="modal-footer">

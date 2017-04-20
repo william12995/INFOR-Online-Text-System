@@ -137,7 +137,7 @@ router.get('/verify', function(req, res) {
 
         req.session.user = user;
         console.log('verified');
-        req.flash('success', 'email verified successfully!');
+        req.flash('email 認證成功');
         res.redirect('/');
       });
     }
@@ -289,15 +289,15 @@ router.post('/pdfUpload', PDFupload.array('pdf', 12), function(req, res) {
   newPDF.convert(name_1);
   newPDF_2.convert(name_2);
 
-  if (req.body.english)
+  if (req.body.subject == 'english')
     english_flag = true;
-  if (req.body.chinese)
+  if (req.body.subject == 'chinese')
     chinese_flag = true;
-  if (req.body.social)
+  if (req.body.subject == 'social')
     social_flag = true;
-  if (req.body.math)
+  if (req.body.subject == 'math')
     math_flag = true;
-  if (req.body.science)
+  if (req.body.subject == science)
     science_flag = true;
   //console.log(req.files[0].filename);
   req.flash('success', 'PDF上傳成功');
