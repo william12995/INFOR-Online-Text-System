@@ -925,7 +925,7 @@ label.checkbox-inline input[type=checkbox]:focus:checked + .checkbox-material:be
 label.checkbox-inline input[type=checkbox]:focus:checked + .checkbox-material .check:before {
   -webkit-animation: checkbox-on 0.3s forwards;
        -o-animation: checkbox-on 0.3s forwards;
-          animation: checkbox-on 0.3s forwards;
+          animation: checkbox-on 0.2s forwards;
 }
 .checkbox input[type=checkbox]:focus:checked + .checkbox-material .check:after,
 label.checkbox-inline input[type=checkbox]:focus:checked + .checkbox-material .check:after {
