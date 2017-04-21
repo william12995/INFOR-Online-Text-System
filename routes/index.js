@@ -168,9 +168,10 @@ router.post('/post', function(req, res) {
   var currentUser = req.session.user;
   //console.log(currentUser);
   var tags = (req.body.tags + '#end').split(/\s*#/);
+
   tags.splice(0, 1);
   tags.splice(tags.length - 1, 1);
-  console.log(tags);
+
   var post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.editor1, {});
   post.save(function(err) {
     if (err) {
