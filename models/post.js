@@ -303,7 +303,7 @@ Post.search = function(keyword, callback) {
       console.log(err);
       return callback(err);
     }
-    console.log("Search:" + docs);
+
     callback(null, docs);
   });
 };

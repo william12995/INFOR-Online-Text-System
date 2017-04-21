@@ -40,7 +40,7 @@
             </div>
             <div class="col-md-6 col-md-offset-3" style="margin-top:10px">
                 <% posts.forEach(function(post, index){  %>
-                <div class="well">
+                <div class="well" >
                     <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
                     <p class="grey"><%= post.time.date %> — <%= post.name %></p>
                     <h4>
