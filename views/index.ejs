@@ -44,7 +44,9 @@
                     <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
                     <p class="grey"><%= post.time.date %> — <%= post.name %></p>
                     <h4>
-                        <p><%- post.post.split(/\s+</)[0]%></p>
+                        <% if(post.post){ %>
+                            <p><%- post.post.split(/\s+</)[0]%></p>
+                        <% } %>
                     </h4>
                     <span style="font-size: 15x;margin-top:0px;"><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">繼續閱讀</a></span><br><br>
                     <span class="grey">Tags:</span>
@@ -137,31 +139,17 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <!-- <label>上傳題目PDF檔案</label> -->
-                        <input type="file" name="pdf" id="fileElem" class="form-control" onchange="handleFiles(this.files)" style="display:none;">
-                        <a href="#" id="fileSelect" class="btn">Select file</a>
-                    </div>
-                    <script type="text/javascript">
-                        var listener = function(){
-                            var fileSelect = document.getElementById("fileSelect");
-                            var fileElem = document.getElementById("fileElem");
-                            var files = fileInput.files;
-                            console.log('filelist length: ', files.length);
-                            for(var i = 0; i < files.length; i++){
-                              let file = files[i];
-                              console.log('name: ', file.name);
-                              console.log('size: ', file.size);
-                              console.log('type: ', file.type);
-                            }
-                        }
-                        document.getElementById("uploadfile").onchange = listener;
-                    </script>
-                    <div class="form-group">
-                        <label>上傳答案PDF檔案</label>
-                        <input type="file" name="pdf" class="form-control">
+                        <label style="color:#888;">上傳題目PDF檔案</label><br>
+                        <input type="file" name="pdf" id="fileElem1" class="form-control" onchange="handleFiles1(this.files)" style="display:none;">
+                        <a href="#" id="fileSelect1" class="btn" style="width:80%;background-color:#ddd;text-transform:none">+</a>
                     </div>
                     <div class="form-group">
-                        <label>選擇科目</label><br>
+                        <label style="color:#888;">上傳答案PDF檔案</label><br>
+                        <input type="file" name="pdf" id="fileElem2" class="form-control" onchange="handleFiles2(this.files)" style="display:none;">
+                        <a href="#" id="fileSelect2" class="btn" style="width:80%;background-color:#ddd;text-transform:none">+</a>
+                    </div>
+                    <div class="form-group">
+                        <label style="color:#888;">選擇科目</label><br>
                         <div class="radio radio-primary">
                             <label>
                             <input type="radio" name="subject" value="chinese" id="radio1">

@@ -23,15 +23,15 @@ function printRawItems(filename, callback){
       console.log("page =", item.page);
     else if (item.x){
       //console.log([item.x, item.y, item.oc, item.A, Math.floor(item.w), item.text].join("\t"));
-    
+
     //console.log([item.text].join("\t"));
-     
-        
+
+
     }else
       console.warn(item);
   });
 
-  
+
 }
 
 function parseData(filename, callback){
@@ -70,7 +70,7 @@ function parseData(filename, callback){
     }
   });
 
-  
+
 }
 
 
@@ -94,5 +94,5 @@ else {
   // console.log(typeof(filename));
   // parseData(PDFfilename,function(){
   //   console.log("\n done.\n");
-  // });  
+  // });
 }
