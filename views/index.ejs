@@ -43,9 +43,10 @@
                 <div class="well" >
                     <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
                     <p class="grey"><%= post.time.date %> — <%= post.name %></p>
-                    <h4>
-                        <p><%- post.post %></p>
-                    </h4>
+                      <h4>
+                          <p><%- post.post.split(/\s+</)[0]%></p>
+                      </h4>
+                      <span style="font-size: 15x;margin-top:0px;"><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">繼續閱讀</a></span><br><br>
                     <span class="grey">Tags:</span>
                     <% post.tags.forEach(function(tag, index){ %>
                     <% if(tag){  %>
@@ -58,7 +59,7 @@
                 <div class="col-md-9 col-md-offset-3">
                     <ul class="pagination pagination-lg">
                         <% if(!isFirstPage){ %>
-                        <li><a href="?p=<%= page-1 %>">«</a></li>
+                        <li><a href="?p=<%= page-1 %>">Previous</a></li>
                         <% } %>
                         <% for(var i = 1; i <= total; i++){ %>
                         <% if(page == i){ %>
@@ -68,7 +69,7 @@
                         <% } %>
                         <% } %>
                         <% if(!isLastPage){ %>
-                        <li><a href="?p=<%= page+1 %>">»</a></li>
+                        <li><a href="?p=<%= page+1 %>">Next</a></li>
                         <% } %>
                     </ul>
                 </div>
