@@ -31,7 +31,7 @@
                            <input type="text" name="keyword" class="form-control"  placeholder="Search">
                     </form>
                 </div>
-            </div> -->
+                </div> -->
             <div class="col-md-6 col-md-offset-3">
                 <div class="btn-group btn-group-justified btn-group-raised">
                     <a data-toggle="modal" data-target="#post" class="btn" id="custom-btn">發文</a>
@@ -43,10 +43,10 @@
                 <div class="well" >
                     <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
                     <p class="grey"><%= post.time.date %> — <%= post.name %></p>
-                      <h4>
-                          <p><%- post.post.split(/\s+</)[0]%></p>
-                      </h4>
-                      <span style="font-size: 15x;margin-top:0px;"><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">繼續閱讀</a></span><br><br>
+                    <h4>
+                        <p><%- post.post.split(/\s+</)[0]%></p>
+                    </h4>
+                    <span style="font-size: 15x;margin-top:0px;"><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">繼續閱讀</a></span><br><br>
                     <span class="grey">Tags:</span>
                     <% post.tags.forEach(function(tag, index){ %>
                     <% if(tag){  %>
@@ -137,9 +137,25 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>上傳題目PDF檔案</label>
-                        <input type="file" name="pdf" class="form-control">
+                        <!-- <label>上傳題目PDF檔案</label> -->
+                        <input type="file" name="pdf" id="fileElem" class="form-control" onchange="handleFiles(this.files)" style="display:none;">
+                        <a href="#" id="fileSelect" class="btn">Select file</a>
                     </div>
+                    <script type="text/javascript">
+                        var listener = function(){
+                            var fileSelect = document.getElementById("fileSelect");
+                            var fileElem = document.getElementById("fileElem");
+                            var files = fileInput.files;
+                            console.log('filelist length: ', files.length);
+                            for(var i = 0; i < files.length; i++){
+                              let file = files[i];
+                              console.log('name: ', file.name);
+                              console.log('size: ', file.size);
+                              console.log('type: ', file.type);
+                            }
+                        }
+                        document.getElementById("uploadfile").onchange = listener;
+                    </script>
                     <div class="form-group">
                         <label>上傳答案PDF檔案</label>
                         <input type="file" name="pdf" class="form-control">
