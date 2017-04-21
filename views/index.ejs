@@ -25,20 +25,20 @@
 <section id="main">
     <div class="container">
         <div class="row">
-            <div class="col-md-6 col-md-offset-3">
+            <!-- <div class="col-md-6 col-md-offset-3">
                 <div class="well">
                     <form action="/search" method="GET" id="searchbar" >
                            <input type="text" name="keyword" class="form-control"  placeholder="Search">
                     </form>
                 </div>
-            </div>
+            </div> -->
             <div class="col-md-6 col-md-offset-3">
                 <div class="btn-group btn-group-justified btn-group-raised">
                     <a data-toggle="modal" data-target="#post" class="btn" id="custom-btn">發文</a>
                     <a data-toggle="modal" data-target="#uploadpdf" class="btn" id="custom-btn">新增題目</a>
                 </div>
             </div>
-            <div class="col-md-6 col-md-offset-3" style="margin-top:10px">
+            <div class="col-md-6 col-md-offset-3" style="margin-top:20px">
                 <% posts.forEach(function(post, index){  %>
                 <div class="well" >
                     <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
