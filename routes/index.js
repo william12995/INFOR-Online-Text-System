@@ -303,35 +303,35 @@ router.get('/txt', checkLogin);
 router.get('/txt', function(req, res) {
 
   if (english_flag) {
-    var newTXT = new Txt(txt_name, ans_name);
+    var newTXT = new Txt(txt_name, ans_name, 'english');
     newTXT.SaveEnglish(txt_name, function(err) {
       req.flash('success', '題目已抓取，請檢查');
       res.redirect('/txt/' + txt_name);
     })
   }
   if (chinese_flag) {
-    var newTXT = new Txt(txt_name, ans_name);
+    var newTXT = new Txt(txt_name, ans_name, 'chinese');
     newTXT.SaveChinese(txt_name, function(err) {
       req.flash('success', '題目已抓取，請檢查');
       res.redirect('/txt/' + txt_name);
     })
   }
   if (social_flag) {
-    var newTXT = new Txt(txt_name, ans_name);
+    var newTXT = new Txt(txt_name, ans_name, 'social');
     newTXT.SaveSocial(txt_name, function(err) {
       req.flash('success', '題目已抓取，請檢查');
       res.redirect('/txt/' + txt_name);
     })
   }
   if (math_flag) {
-    var newTXT = new Txt(txt_name, ans_name);
+    var newTXT = new Txt(txt_name, ans_name, 'math');
     newTXT.SaveMath(txt_name, function(err) {
       req.flash('success', '題目已抓取，請檢查');
       res.redirect('/txt/' + txt_name);
     })
   }
   if (science_flag) {
-    var newTXT = new Txt(txt_name, ans_name);
+    var newTXT = new Txt(txt_name, ans_name, 'science');
     newTXT.SaveScience(txt_name, function(err) {
       req.flash('success', '題目已抓取，請檢查');
       res.redirect('/txt/' + txt_name);
@@ -442,6 +442,49 @@ router.get('/tags/:tag', function(req, res) {
     res.render('tag', {
       title: 'TAG: ' + req.params.tag,
       posts: posts,
+      user: req.session.user,
+      success: req.flash('success').toString(),
+      error: req.flash('error').toString()
+    });
+  });
+});
+
+router.get('/test', function(req, res) {
+
+  Txt.getList({}, function(err, docs) {
+    if (err) {
+      req.flash('error', err);
+      return res.redirect('/');
+    }
+
+    res.render('test', {
+      title: 'Test List',
+      docs: docs,
+      user: req.session.user,
+      success: req.flash('success').toString(),
+      error: req.flash('error').toString()
+    });
+  });
+});
+router.get('/test/:txtname', checkLogin);
+router.get('/test/:txtname', function(req, res) {
+
+  Txt.get(req.params.txtname, function(err, doc) {
+    if (err) {
+      req.flash('error', err);
+      return res.redirect('/');
+    }
+    var ejs;
+    if (doc.subject == 'english')
+      ejs = 'english';
+    if (doc.subject == 'chinese')
+      ejs = 'chinese';
+    if (doc.subject == 'social')
+      ejs = 'social';
+
+    res.render(ejs, {
+      title: doc.name,
+      doc: doc,
       user: req.session.user,
       success: req.flash('success').toString(),
       error: req.flash('error').toString()

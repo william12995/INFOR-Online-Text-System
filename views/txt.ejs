@@ -49,7 +49,8 @@
            <% var i = page; %>
 
              <textarea name = "post" rows = "20" cols = "100"> <%= content[i] %> </textarea><br/>
-             <span><a title="刪除" href="/txt/remove/<%= title %>?p=<%= page %>" > 刪除 </a></span>
+             <span><a href="/txt/remove/<%= title %>?p=<%= page %>" > 刪除 </a></span>
+             <span><a href="/test/<%= title %>" > 回到列表 </a></span>
              <input type="submit" value="儲存修改">
            </form>
            <!-- <form action="remove/<%= title %>?p=<%= page %>" method="get">
