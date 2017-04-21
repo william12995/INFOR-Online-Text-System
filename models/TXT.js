@@ -10,17 +10,19 @@ var mongoose = require('mongoose');
 var txtSchema = new mongoose.Schema({
   name: String,
   post: Array,
-  ans: Array
+  ans: Array,
+  subject: String
 }, {
   collection: 'txt'
 });
 
 var txtModel = mongoose.model('Txt', txtSchema);
 
-function TXT(filename, ansname) {
+function TXT(filename, ansname, subject) {
   this.name = filename;
   this.ans = ansname;
   this.post = [];
+  this.subject = subject;
 }
 ;
 
@@ -80,7 +82,7 @@ TXT.prototype.SaveEnglish = function(filename, callback) {
 
     //this.post = AllData;
     console.log("this.name: " + this.name);
-    EnglishAnswer(this.name, this.ans, AllData);
+    EnglishAnswer(this.name, this.ans, this.subject, AllData);
 
     fs.writeFile(filename, AllData);
     console.log("Extract Done\n");
@@ -119,7 +121,7 @@ TXT.prototype.SaveChinese = function(filename, callback) {
       console.log(AllData);
     }
 
-    ChineseAnswer(this.name, this.ans, AllData);
+    ChineseAnswer(this.name, this.ans, this.subject, AllData);
 
     fs.writeFile(filename, AllData);
 
@@ -208,7 +210,7 @@ TXT.prototype.SaveSocial = function(filename, callback) {
       AllData.push(m[0]);
     }
 
-    SocialAnswer(this.name, this.ans, AllData);
+    SocialAnswer(this.name, this.ans, this.subject, AllData);
 
     fs.writeFile(filename, AllData);
 
@@ -232,6 +234,20 @@ TXT.get = function(name, callback) {
 
 
 };
+
+TXT.getList = function(name, callback) {
+  var query = name;
+
+  txtModel.find(query).sort({
+    time: -1,
+  }).exec(function(err, docs) {
+    if (err) {
+      return callback(err);
+    }
+    //console.log(docs + "321");
+    callback(null, docs);
+  });
+}
 
 
 TXT.edit = function(filename, p, post, ans, callback) {
@@ -286,7 +302,7 @@ TXT.remove = function(filename, p, callback) {
   });
 };
 
-var EnglishAnswer = function(txtname, ansname, postData) {
+var EnglishAnswer = function(txtname, ansname, subject, postData) {
   var filename = "./public/images/" + ansname + ".txt";
   //console.log(filename);
 
@@ -331,7 +347,8 @@ var EnglishAnswer = function(txtname, ansname, postData) {
     var content = {
       name: txtname,
       post: postData,
-      ans: AllData
+      ans: AllData,
+      subject: subject
     };
 
     console.log(content);
@@ -352,7 +369,7 @@ var EnglishAnswer = function(txtname, ansname, postData) {
   });
 }
 
-var ChineseAnswer = function(txtname, ansname, postData) {
+var ChineseAnswer = function(txtname, ansname, subject, postData) {
   var filename = "./public/images/" + ansname + ".txt";
   //console.log(filename);
 
@@ -395,10 +412,11 @@ var ChineseAnswer = function(txtname, ansname, postData) {
     var content = {
       name: txtname,
       post: postData,
-      ans: AllData
+      ans: AllData,
+      subject: subject
     };
 
-    console.log(content);
+    //console.log(content);
     var newTxt = new txtModel(content);
 
     newTxt.save(function(err) {
@@ -416,7 +434,7 @@ var ChineseAnswer = function(txtname, ansname, postData) {
   });
 }
 
-var SocialAnswer = function(txtname, ansname, postData) {
+var SocialAnswer = function(txtname, ansname, subject, postData) {
   var filename = "./public/images/" + ansname + ".txt";
   //console.log(filename);
 
@@ -464,10 +482,11 @@ var SocialAnswer = function(txtname, ansname, postData) {
     var content = {
       name: txtname,
       post: postData,
-      ans: AllData
+      ans: AllData,
+      subject: subject
     };
 
-    console.log(content);
+    //console.log(content);
     var newTxt = new txtModel(content);
 
     newTxt.save(function(err) {

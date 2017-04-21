@@ -85,7 +85,8 @@ Post.getTen = function(name, page, callback) {
   }
   postModel.count(query, function(err, total) {
     postModel.find({}).sort({
-      time: -1
+      time: -1,
+      pv: -1,
     }).skip((page - 1) * 10).limit(10).exec(function(err, docs) {
       if (err) {
         return callback(err);
