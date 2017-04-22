@@ -700,6 +700,21 @@ router.get('/reprint/:name/:day/:title', function(req, res) {
   });
 });
 
+router.post('/uploadfile', function(req, res) {
+    console.log(req.busboy);
+    var fstream;
+    req.pipe(req.busboy);
+    req.busboy.on('file', function (fieldname, file, filename) {
+        console.log("Uploading: " + filename);
+        fstream = fs.createWriteStream('./public/files/' + filename);
+        file.pipe(fstream);
+        fstream.on('close', function () {
+            req.flash('success', 'success');
+            res.redirect('/');
+        });
+    });
+});
+
 function checkLogin(req, res, next) {
   //console.log(req.session);
   if (req.session.user == null) {

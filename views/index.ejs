@@ -133,23 +133,21 @@
 <div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-                <!-- <div class="modal-header">
-                    <a href="#" type="button" class="close" data-dismiss="modal" aria-label="Close" id="clear"><span aria-hidden="true">&times;</span></a>
-                    <h4 class="modal-title" id="myModalLabel">Upload</h4>
-                </div> -->
+                <div class="modal-header">
+                    <a href="#" type="button" class="close" data-dismiss="modal" aria-label="Close" id="close" style="display:none"><span aria-hidden="true">&times;</span></a>
+                </div>
                 <div class="modal-body" id="area">
+                    <h3 id="title">Upload File</h3>
                     <div id="progressBar" style="display:none">
-                        <h3>Uploading</h3>
                         <div class="bs-component">
                             <div class="progress progress-striped active">
-                                <div class="progress-bar" style="width:50%" id="percentage"></div>
+                                <div class="progress-bar" style="width:0%" id="percentage"></div>
                             </div>
                         </div>
                     </div>
                     <div style="container" id="fileSelect">
-                        <h3>Upload File</h3>
                         <input type="file" name="pdf" id="fileElem1" class="form-control" onchange="handleFiles1(this.files)" style="display:none">
-                        <a href="#" id="fileSelect1" class="btn" style="width:65%;background-color:#ddd;text-transform:none">+</a>
+                        <a href="#" id="fileSelect1" class="btn" style="width:95%;background-color:#ddd;text-transform:none;margin-left:10px">+</a>
                     </div>
                 </div>
                 <div class="modal-footer">
