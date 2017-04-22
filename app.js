@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var busboy = require('connect-busboy');
 // var expressLayouts = require('express-e6js-layouts');
 
 //var session = require('cookie-session');
@@ -65,6 +66,7 @@ app.use(bodyParser.urlencoded({
   extended: false
 }));
 app.use(cookieParser());
+app.use(busboy());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(err, req, res, next) {
