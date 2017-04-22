@@ -7,3 +7,4 @@ credentials.js
 *.pdf
 *.txt
 error.log
+access.log

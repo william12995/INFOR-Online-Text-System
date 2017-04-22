@@ -488,23 +488,39 @@ router.get('/test/:txtname', function (req, res) {
 	});
 });
 
-router.get('/search', function (req, res) {
+router.post('/test/:txtname', checkLogin);
+router.post('/test/:txtname', function(req, res) {
 
-	Post.search(req.query.keyword, function (err, posts) {
+  Txt.compare(req.params.txtname, req.body, function(err, error_ans) {
+    console.log(error_ans);
+  })
+  res.render('/', {
+    title: doc.name,
+    doc: doc,
+    user: req.session.user,
+    success: req.flash('success').toString(),
+    error: req.flash('error').toString()
+  });
+//});
+});
 
-		if (err) {
-			req.flash('error', err);
-			return res.redirect('/');
-		}
-		console.log("Search:" + posts);
-		res.render('search', {
-			title: req.query.keyword,
-			posts: posts,
-			user: req.session.user,
-			success: req.flash('success').toString(),
-			error: req.flash('error').toString()
-		});
-	});
+router.get('/search', function(req, res) {
+
+  Post.search(req.query.keyword, function(err, posts) {
+
+    if (err) {
+      req.flash('error', err);
+      return res.redirect('/');
+    }
+    console.log("Search:" + posts);
+    res.render('search', {
+      title: req.query.keyword,
+      posts: posts,
+      user: req.session.user,
+      success: req.flash('success').toString(),
+      error: req.flash('error').toString()
+    });
+  });
 });
 
 router.get('/u/:name', function (req, res) {

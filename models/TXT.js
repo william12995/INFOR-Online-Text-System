@@ -231,9 +231,42 @@ TXT.get = function(name, callback) {
     }
     callback(null, data);
   });
-
-
 };
+
+TXT.compare = function(filename, user_ans, callback) {
+  txtModel.findOne({
+    name: filename
+  }, function(err, doc) {
+    if (err) {
+      console.log(err);
+      return callback(err);
+    }
+    var result = Object.keys(user_ans).map(function(e) {
+
+      if (user_ans[e].length > 1) {
+        var merge = '';
+        for (var i = 0; i < user_ans[e].length; i++) {
+          merge = merge + user_ans[e][i];
+        }
+        user_ans[e] = merge;
+      }
+      return user_ans[e];
+    });
+
+    //console.log(doc.ans);
+    //console.log(result);
+    var error_ans = [];
+    //if (result.length != doc.ans.length) callback('Array Length Error');
+    for (var i = 0; i < doc.ans.length; i++) {
+      if (result[i] !== doc.ans[i]) {
+        error_ans.push(i);
+      }
+    }
+    //console.log(error_ans);
+    //console.log(docs + "321");
+    callback(null, error_ans);
+  });
+}
 
 TXT.getList = function(name, callback) {
   var query = name;

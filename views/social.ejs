@@ -12,7 +12,7 @@
                         <p class="text-danger">*必填</p>
                         <br>
                     </div>
-                    <form>
+                    <form action="/test/<%= doc.name %>" method="post">
                         <fieldset>
                           <% doc.post.forEach(function(test, index){ %>
                             <div class="col-md-16 col-md-offset-0">
@@ -22,25 +22,25 @@
                                 <div class="form-group">
                                     <div class="radio radio-primary">
                                         <label>
-                                        <input type="radio" name="option" value="A" id="radio1">
+                                        <input type="radio" name="<%= index %>" value="A" id="radio1">
                                         選項A
                                         </label>
                                     </div>
                                     <div class="radio radio-primary">
                                         <label>
-                                        <input type="radio" name="option" value="B" id="radio2">
+                                        <input type="radio" name="<%= index %>" value="B" id="radio2">
                                         選項B
                                         </label>
                                     </div>
                                     <div class="radio radio-primary">
                                         <label>
-                                        <input type="radio" name="option" value="C" id="radio3">
+                                        <input type="radio" name="<%= index %>" value="C" id="radio3">
                                         選項C
                                         </label>
                                     </div>
                                     <div class="radio radio-primary">
                                         <label>
-                                        <input type="radio" name="option" value="D" id="radio4">
+                                        <input type="radio" name="<%= index %>" value="D" id="radio4">
                                         選項D
                                         </label>
                                     </div>
@@ -49,6 +49,7 @@
                             </div>
 
                         </fieldset>
+                        <input type="submit" value="送出答案">
                     </form>
                 </div>
             </div>
