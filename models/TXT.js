@@ -80,6 +80,45 @@ TXT.prototype.SaveEnglish = function(filename, callback) {
 
     var AllData = txt_1.concat(txt_16, txt_20, txt_26, txt_30, txt_41, txt_45, txt_49, txt_53);
 
+    // var regex_post = /(\d+\.[\s\S]*?)\(\s*A|(第[\s\S]*?)\d+\./g;
+    // var regex_ans = /[A-Za-z]\s*\)([\s\S]*?)[\d\.\(\r第]+/g;
+    // var finalData = [];
+    //
+    // for (var i = 0; i < AllData.length; i++) {
+    //   let m,
+    //     n;
+    //   var newtest = {
+    //     post: [],
+    //     ans: []
+    //   };
+    //   while ((m = regex_ans.exec(AllData[i])) !== null) {
+    //     // This is necessary to avoid infinite loops with zero-width matches
+    //     if (m.index === regex_ans.lastIndex) {
+    //       regex_ans.lastIndex++;
+    //     }
+    //
+    //     newtest.ans.push(m[1]);
+    //   }
+    //
+    //
+    //   while ((n = regex_post.exec(AllData[i])) !== null) {
+    //     // This is necessary to avoid infinite loops with zero-width matches
+    //     if (n.index === regex_post.lastIndex) {
+    //       regex_post.lastIndex++;
+    //     }
+    //     if (n[1] !== null) {
+    //       newtest.post.push(n[1]);
+    //     } else if (n[0] !== null) {
+    //       newtest.post.push(n[0]);
+    //     }
+    //
+    //   }
+    //
+    //   finalData.push(newtest);
+    //
+    // }
+    // console.log(JSON.stringify(finalData));
+
     //this.post = AllData;
     console.log("this.name: " + this.name);
     EnglishAnswer(this.name, this.ans, this.subject, AllData);
