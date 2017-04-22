@@ -8,3 +8,4 @@ credentials.js
 *.txt
 error.log
 access.log
+**/files
