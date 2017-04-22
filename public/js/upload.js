@@ -1,19 +1,24 @@
-let fileSelect1 = document.getElementById("fileSelect1");
-let fileElem1 = document.getElementById("fileElem1");
-let fileSelect2 = document.getElementById("fileSelect2");
-let fileElem2 = document.getElementById("fileElem2");
-let pg = document.getElementById("progressBar");
-let fs = document.getElementById("fileSelect");
+var fileSelect1 = document.getElementById("fileSelect1");
+var fileElem1 = document.getElementById("fileElem1");
+var fileSelect2 = document.getElementById("fileSelect2");
+var fileElem2 = document.getElementById("fileElem2");
+var pg = document.getElementById("progressBar");
+var fs = document.getElementById("fileSelect");
+var close = document.getElementById("close");
 
+// let widget = document.createElement('div');
 // widget.innerHTML = '<input type="file" name="pdf" id="fileElem1" class="form-control" onchange="upload(this.files)" style="display:none"><a href="#" id="fileSelect1" class="btn" style="width:80%;background-color:#ddd;text-transform:none">+</a>';
 
 function handleFiles1(files) {
 	console.log('1', files.length);
-    let file = files[0]
-	fileSelect1.innerText = file.name;
+    let file = files[0];
     $('#fileSelect').hide();
+	$('#title').text('Uploading ' + file.name);
     $('#progressBar').show();
     uploadFile(file);
+	$('#progressBar').hide();
+	$('#title').text('Succeed');
+	$('#close').show();
 }
 
 function handleFiles2(files) {
