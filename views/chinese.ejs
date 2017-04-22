@@ -12,7 +12,7 @@
                         <p class="text-danger">*必填</p>
                         <br>
                     </div>
-                    <form>
+                    <form action="/test/<%= doc.name %>" method="post">
                         <fieldset>
                           <% doc.post.forEach(function(test, index){ %>
                             <div class="col-md-15 col-md-offset-0">
@@ -20,29 +20,28 @@
                                     <pre ><%= test %></pre>
                                 </strong>
                                 <% if( index < 16 ) {%>
-                                  <% console.log(index); %>
                                 <div class="form-group">
                                     <div class="radio radio-primary">
                                         <label>
-                                        <input type="radio" name="option" value="A" id="radio1">
+                                        <input type="radio" name="<%= index %>" value="A" id="radio1">
                                         選項A
                                         </label>
                                     </div>
                                     <div class="radio radio-primary">
                                         <label>
-                                        <input type="radio" name="option" value="B" id="radio2">
+                                        <input type="radio" name="<%= index %>" value="B" id="radio2">
                                         選項B
                                         </label>
                                     </div>
                                     <div class="radio radio-primary">
                                         <label>
-                                        <input type="radio" name="option" value="C" id="radio3">
+                                        <input type="radio" name="<%= index %>" value="C" id="radio3">
                                         選項C
                                         </label>
                                     </div>
                                     <div class="radio radio-primary">
                                         <label>
-                                        <input type="radio" name="option" value="D" id="radio4">
+                                        <input type="radio" name="<%= index %>" value="D" id="radio4">
                                         選項D
                                         </label>
                                     </div>
@@ -52,25 +51,25 @@
                                   <div class="form-group">
                                       <div class="checkbox">
                                           <label id="check">
-                                              <input type="checkbox" style="padding-right:5px">
+                                              <input type="checkbox" name="<%= index %>" value="A">
                                               <span id="check-item">選項A</span>
                                           </label>
                                       </div>
                                       <div class="checkbox">
                                           <label id="check">
-                                              <input type="checkbox">
+                                              <input type="checkbox" name="<%= index %>" value="B">
                                               <span id="check-item">選項B</span>
                                           </label>
                                       </div>
                                       <div class="checkbox">
                                           <label id="check">
-                                              <input type="checkbox">
+                                              <input type="checkbox" name="<%= index %>" value="C">
                                               <span id="check-item">選項C</span>
                                           </label>
                                       </div>
                                       <div class="checkbox">
                                           <label id="check">
-                                              <input type="checkbox">
+                                              <input type="checkbox" name="<%= index %>" value="D">
                                               <span id="check-item">選項D</span>
                                           </label>
                                       </div>
@@ -80,6 +79,7 @@
                             </div>
 
                         </fieldset>
+                        <input type="submit" value="送出答案">
                     </form>
                 </div>
             </div>
