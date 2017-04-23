@@ -30,6 +30,14 @@ body, html{
     margin-bottom: 20px;
 }
 
+.img-circle {
+    border-radius: 100%;
+    display: block;
+    width: 56px;
+    height: 56px;
+    vertical-align: middle;
+}
+
 #check {
     padding: 8px;
 }

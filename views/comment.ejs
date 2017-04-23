@@ -1,55 +1,35 @@
-
-<div class="modal-dialog">
-  <div class="modal-content">
-    <div class="modal-header">
-      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h4 class="modal-title">留言板</h4>
-    </div>
-      <div class="modal-body">
-				<form method="post" class="form-horizontal">
-					<fieldset>
-
-						<div class="form-group">
-							<div class="col-md-10 ">
-								<div class="list-group">
-									<div class="list-group-item">
-										<div class="row-picture">
-											<img class="circle" src="<%= user.head %>" alt="icon">
-										</div>
-										<div class="row-content">
-											<h4 class="list-group-item-heading"><%= user.name %></h4>
-											<textarea class=" list-group-item-text form-control" rows="3" id="textArea" name = "content"></textarea>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						 <div class="modal-footer">
-			         <button  class="btn btn-primary">Save changes</button>
-			       </div>
-					</fieldset>
-				</form>
-
-				<% post.comments.forEach(function(comment, index){  %>
-						<div class="list-group">
-							<div class="list-group-item">
-								<div class="row-picture">
-									<img class="circle" src="<%= comment.head %>" alt="icon">
-								</div>
-								<div class="row-content">
-									<h4 class="list-group-item-heading"><a href="<%= comment.website %>"><%= comment.name %></a></h4>
-
-									<p class="list-group-item-text"><%- comment.content %></p>
-								</div>
-								<span class="info"> 回復於: <%= comment.time %></span></p>
-								<% if(user.name == comment.name){ %>
-								<a href="/rm_comment/<%= post.name %>/<%= post.time.day %>/<%= post.title %>/<%= comment.content%>">刪除</a>
-								<% } %>
-							</div>
-							<div class="list-group-separator"></div>
-						</div>
-				<% }) %>
-      </div>
-    </div>
-  </div>
+<div class="col-md-11 col-md-offset-1">
+   <div class="well" >
+       <div class="container">
+           <div class="col-md-12">
+               <div class="col-md-1" style="padding-top:20px;">
+                   <img class="img-circle" src="<%= user.head %>" alt="icon">
+               </div>
+               <div class="col-md-9 form-group">
+                    <textarea class="form-control" rows="1" id="textArea" name="content" placeholder="Leave a comment" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }" style="width:95%;"></textarea>
+               </div>
+           </div>
+       </div>
+          <% post.comments.forEach(function(comment, index){  %>
+              <hr>
+              <div class="container">
+                  <div class="col-md-12">
+                      <div class="col-md-1">
+                          <img class="img-circle" src="<%= comment.head %>" alt="icon">
+                      </div>
+                      <div class="col-md-9">
+                          <div style="width:100%;">
+                              <a href="<%= comment.website %>" style="font-size:17px"><%= comment.name %></a>
+                              <span> - <%= comment.time %></span>
+                              <% if(user.name == comment.name){ %>
+                              <span style="padding-left:70%;"><a href="/rm_comment/<%= post.name %>/<%= post.time.day %>/<%= post.title %>/<%= comment.content%>">刪除</a><span>
+                              <% } %>
+                          </div>
+                          <p class="list-group-item-text" style="margin-top:5px"><%- comment.content %></p>
+                      </div>
+                  </div>
+              </div>
+          <% }) %>
+          <hr>
+   </div>
 </div>
