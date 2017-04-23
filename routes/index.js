@@ -507,7 +507,7 @@ router.post('/test/:txtname', function(req, res) {
     success: req.flash('success').toString(),
     error: req.flash('error').toString()
   });
-//});
+
 });
 router.get('/search', checkLogin);
 router.get('/search', function(req, res) {
@@ -518,7 +518,7 @@ router.get('/search', function(req, res) {
       req.flash('error', err);
       return res.redirect('/');
     }
-    console.log("Search:" + posts);
+    //console.log("Search:" + posts);
     res.render('search', {
       title: req.query.keyword,
       posts: posts,
@@ -581,9 +581,6 @@ router.post('/u/:name/:day/:title', function(req, res) {
   var time = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "" + date.getHours() + ":"
   + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
 
-  var md5 = crypto.createHash('md5');
-  var email_MD5 = md5.update(req.session.user.email.toLowerCase()).digest('hex');
-  var head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
   var head = req.session.user.head;
 
   var comment = {
@@ -591,7 +588,8 @@ router.post('/u/:name/:day/:title', function(req, res) {
     head: head,
     email: req.session.user.email,
     time: time,
-    content: req.body.content
+    content: req.body.content,
+    star: 0
   };
   var newComment = new Comment(req.params.name, req.params.day, req.params.title, comment);
 
