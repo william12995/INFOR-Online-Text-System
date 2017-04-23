@@ -96,7 +96,7 @@
 function appendText(index) {
   var id = "container"+index;
   var node = document.createElement("div");
-  node.innerHTML = '<div class="checkbox"><label id="check"><input type="checkbox" name="p" value="B"><span id="check-item">選項B</span></label></div>';
+  node.innerHTML = '<div class="form-group"><div class="radio radio-primary"><label><input type="radio" name="p" value="A" id="radio1">選項A</label></div><div class="radio radio-primary"><label><input type="radio" name="p" value="B" id="radio2">選項B</label></div><div class="radio radio-primary"><label><input type="radio" name="p" value="C" id="radio3">選項C</label></div><div class="radio radio-primary"><label><input type="radio" name="p" value="D" id="radio4">選項D</label></div></div>';
   document.getElementById(id).appendChild(node);
 
 }
