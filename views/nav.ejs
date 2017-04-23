@@ -13,7 +13,7 @@
         <li><a href="/login">login</a></li>
       <% }else{ %>
         <li>
-            <a data-toggle="modal" data-target="#profile" type="btn">Welcome, <%= user.name %></a>
+            <a href="/user/<%= user.name %>" type="btn">Welcome, <%= user.name %></a>
         </li>
         <li><a href="/logout">logout</a></li>
       <% } %>

@@ -109,15 +109,24 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
   res.locals.user = req.session.user;
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error', {
-    title: 'error',
-  });
+
+  if(err.status == 500){
+      res.render('error', {
+        title: 'Oops',
+        code: err.status,
+      });
+  }else{
+      res.render('error', {
+         title: 'Not found',
+         code: err.status,
+      });
+  }
+
 });
 
 module.exports = app;
