@@ -13,6 +13,7 @@ var userSchema = mongoose.Schema({
     default: false
   },
   head: String,
+  message: {}
 }, {
   collection: 'user'
 });
@@ -28,6 +29,24 @@ userSchema.methods.validPassword = function(password) {
 
 userSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+};
+
+userSchema.methods.message = function(username, message, callback) {
+  this.model('userModel').update({
+    name: username
+  }, {
+    $push: {
+      message: message
+    }
+  }, {
+    safe: true,
+    upsert: true
+  }, function(err) {
+    if (err) {
+      callback(err);
+    }
+    callback(null);
+  })
 };
 
 module.exports = mongoose.model('User', userSchema);

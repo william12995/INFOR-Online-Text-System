@@ -134,8 +134,6 @@ Post.getOne = function(name, day, title, callback) {
       callback(null, doc);
     }
   });
-
-
 };
 
 Post.edit = function(name, day, title, callback) {

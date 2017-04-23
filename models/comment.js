@@ -77,3 +77,35 @@ Comment.remove = function(name, day, title, comment, callback) {
     callback(null);
   });
 }
+
+Comment.star = function(name, day, title, callback) {
+
+  postModel.findOne({
+    "name": name,
+    "time.day": day,
+    "title": title
+  }, function(err, doc) {
+
+    if (err) {
+      return callback(err);
+    }
+    if (doc) {
+      postModel.update({
+        "name": name,
+        "time.day": day,
+        "title": title
+      }, {
+        $inc: {
+          comments: {
+            star: 1
+          }
+        }
+      }, function(err) {
+        if (err) {
+          return callback(err);
+        }
+      });
+      callback(null);
+    }
+  });
+};
