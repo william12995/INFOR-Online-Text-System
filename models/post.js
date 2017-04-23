@@ -10,6 +10,7 @@ var postSchema = new mongoose.Schema({
   post: String,
   tags: Array,
   head: String,
+  comments: [],
   time: {},
   reprint_info: {
     reprint_from: {

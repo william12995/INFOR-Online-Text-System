@@ -17,6 +17,7 @@ var Pdf = require('../pdfreader/parse');
 
 
 /* GET home page. */
+router.get('/', checkLogin);
 router.get('/', function(req, res, next) {
   //console.log(req.session.user);
   if (req.session.user) {
@@ -394,7 +395,7 @@ router.get('/txt/remove/:txtname', function(req, res) {
     res.redirect(url);
   });
 });
-
+router.get('/history', checkLogin);
 router.get('/history', function(req, res) {
 
   Post.getArchive(function(err, posts) {
@@ -448,7 +449,7 @@ router.get('/tags/:tag', function(req, res) {
     });
   });
 });
-
+router.get('/test', checkLogin);
 router.get('/test', function(req, res) {
 
   Txt.getList({}, function(err, docs) {
@@ -508,7 +509,7 @@ router.post('/test/:txtname', function(req, res) {
   });
 //});
 });
-
+router.get('/search', checkLogin);
 router.get('/search', function(req, res) {
 
   Post.search(req.query.keyword, function(err, posts) {
@@ -581,14 +582,14 @@ router.post('/u/:name/:day/:title', function(req, res) {
   + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes());
 
   var md5 = crypto.createHash('md5');
-  var email_MD5 = md5.update(req.body.email.toLowerCase()).digest('hex');
+  var email_MD5 = md5.update(req.session.user.email.toLowerCase()).digest('hex');
   var head = "http://www.gravatar.com/avatar/" + email_MD5 + "?s=48";
+  var head = req.session.user.head;
 
   var comment = {
-    name: req.body.name,
+    name: req.session.user.name,
     head: head,
-    email: req.body.email,
-    website: req.body.website,
+    email: req.session.user.email,
     time: time,
     content: req.body.content
   };
@@ -600,6 +601,21 @@ router.post('/u/:name/:day/:title', function(req, res) {
       return res.redirect('back');
     }
     req.flash('success', '留言成功');
+    res.redirect('back');
+  });
+});
+
+router.get('/rm_comment/:name/:day/:title/:content', checkLogin);
+router.get('/rm_comment/:name/:day/:title/:content', function(req, res) {
+  var currentUser = req.session.user;
+
+  Comment.remove(req.params.name, req.params.day, req.params.title, req.params.content, function(err, post) {
+    if (err) {
+      req.flash('error', err);
+      return res.redirect('back');
+    }
+
+    req.flash('success', '刪除留言成功');
     res.redirect('back');
   });
 });
@@ -701,18 +717,18 @@ router.get('/reprint/:name/:day/:title', function(req, res) {
 });
 
 router.post('/uploadfile', function(req, res) {
-    console.log(req.busboy);
-    var fstream;
-    req.pipe(req.busboy);
-    req.busboy.on('file', function (fieldname, file, filename) {
-        console.log("Uploading: " + filename);
-        fstream = fs.createWriteStream('./public/files/' + filename);
-        file.pipe(fstream);
-        fstream.on('close', function () {
-            req.flash('success', 'success');
-            res.redirect('/');
-        });
+  //console.log(req.busboy);
+  var fstream;
+  req.pipe(req.busboy);
+  req.busboy.on('file', function(fieldname, file, filename) {
+    console.log("Uploading: " + filename);
+    fstream = fs.createWriteStream('./public/files/' + filename);
+    file.pipe(fstream);
+    fstream.on('close', function() {
+      req.flash('success', 'success');
+      res.redirect('/');
     });
+  });
 });
 
 function checkLogin(req, res, next) {

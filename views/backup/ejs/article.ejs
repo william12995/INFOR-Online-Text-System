@@ -1,11 +1,11 @@
 
 <%- include header  %>
-	
+
 	<br/><br/>
 
 	<% if ( user && (user.name == post.name) ) { %>
 		<span> <a class="edit" href="/edit/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">編輯</a></span>
-		<span> <a class="edit" href="/remove/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">刪除</a></span>	
+		<span> <a class="edit" href="/remove/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">刪除</a></span>
 	<% } %>
 
 	<% var flag = 1 ; %>
@@ -44,11 +44,11 @@
 
 	<p><%- post.post %></p>
 
-	<p class="info"> 
+	<p class="info">
 
 	 瀏覽次數: <%= post.pv %> |
 	 留言數: <%= post.comments.length %> | 
-	 轉載: 
+	 轉載:
 		 <% if ( post.reprint_info.reprint_to ) { %>
 		 	<%= post.reprint_info.reprint_to.length %>
 		 <% }else{ %>
