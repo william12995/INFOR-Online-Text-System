@@ -20,8 +20,6 @@ var userSchema = mongoose.Schema({
 
 var userModel = mongoose.model('User', userSchema);
 
-
-
 // checking if password is valid
 userSchema.methods.validPassword = function(password) {
   return bcrypt.compareSync(password, this.password);

@@ -21,7 +21,7 @@
                       </div>
                       <div class="col-md-9">
                           <div style="width:100%;">
-                              <a href="<%= comment.website %>" style="font-size:17px"><%= comment.name %></a>
+                              <a href="/user/<%= comment.name %>" style="font-size:17px"><%= comment.name %></a>
                               <span> - <%= comment.time %></span>
                               <% if(user.name == comment.name){ %>
                               <span style="padding-left:70%;"><a href="/rm_comment/<%= post.name %>/<%= post.time.day %>/<%= post.title %>/<%= comment.content%>">刪除</a><span>

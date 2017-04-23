@@ -1,3 +1,28 @@
-<%- include header %>
-  <pre><%= error %></pre>
-<%- include footer %>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title><%= title %></title>
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+        <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap-material-design.css">
+    </head>
+    <body>
+        <section id="main">
+            <div class="container">
+                <div class="row" style="padding-top:20%;">
+                    <div class="col-md-8 col-md-offset-2">
+                            <% if(code == 404){ %>
+                                <h1>404 Not found</h1>
+                                <h3>The page You're looking for is not exist or has been removed</h3>
+                            <% }else{ %>
+                                <h1>Internal error</h1>
+                                <h3>Something went wrong</h3>
+                                <pre><%= error %></pre>
+                            <% } %>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
