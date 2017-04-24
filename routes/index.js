@@ -91,7 +91,7 @@ router.get('/user/:user',function(req, res){
         else{
             res.render('profile',{
          		title: 'Profile',
-         		user: req.session.user,
+         		user: user,
           		success: req.flash('success').toString(),
           		error: req.flash('error').toString()
          	});

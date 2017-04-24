@@ -25,6 +25,7 @@
              </div>
            </div>
           <% post.comments.forEach(function(comment, index){  %>
+              <hr style="margin:1px;">
               <div class="list-group-item" style="padding-top:20px;padding-bottom:20px;">
                 <div class="row-picture">
                   <img class="circle" src="<%= comment.head %>" alt="icon">
@@ -35,7 +36,6 @@
                   <small class="grey"><%- comment.time %></small>
                 </div>
               </div>
-              <hr style="margin:1px;">
               <!-- <hr>
               <div class="container">
                   <div class="col-md-12">
