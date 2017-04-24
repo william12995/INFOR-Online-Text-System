@@ -12,8 +12,9 @@ var User = require('../models/user');
 var Post = require('../models/post');
 var Txt = require('../models/TXT');
 var Comment = require('../models/comment');
-var User = require('../models/user');
 var Pdf = require('../pdfreader/parse');
+
+
 
 /* GET home page. */
 router.get('/', checkLogin);
@@ -79,25 +80,15 @@ router.get('/login', function(req, res) {
   });
 });
 
-router.get('/user/:user', checkLogin);
-router.get('/user/:user',function(req, res){
-    User.findOne({
-        'name': req.params.user
-    }, function(err, user){
-        if(err){
-            console.log('error finding user: ', err);
-            res.redirect('/');
-        }
-        else{
-            res.render('profile',{
-         		title: 'Profile',
-         		user: req.session.user,
-          		success: req.flash('success').toString(),
-          		error: req.flash('error').toString()
-         	});
-        }
-    });
-});
+// router.get('/profile', checkLogin);
+// router.get('/profile',function(req, res){
+//  	res.render('profile',{
+//  		title: 'Profile',
+//  		user: req.session.user,
+//   		success: req.flash('success').toString(),
+//   		error: req.flash('error').toString()
+//  	});
+// });
 
 
 router.post('/signup', checkBeenLogin);
@@ -451,7 +442,6 @@ router.get('/tags/:tag', function(req, res) {
 
     res.render('tag', {
       title: 'TAG: ' + req.params.tag,
-      tag: req.params.tag,
       posts: posts,
       user: req.session.user,
       success: req.flash('success').toString(),
@@ -723,6 +713,26 @@ router.get('/reprint/:name/:day/:title', function(req, res) {
     });
   });
 });
+
+router.post('/choice', function(req, res) {
+
+  var data = req.body;
+  // console.log(data);
+  // console.log("name: " + data.name);
+  // console.log("choice: " + data.choice);
+  // console.log("num: " + data.number);
+
+  var newchoice = [data.choice, data.number];
+  Txt.choice(data.name, data.index, newchoice, function(err) {
+    if (err) {
+      req.flash('error', err);
+      return res.redirect('/');
+    }
+
+    req.flash('success', '新增成功');
+
+  });
+})
 
 router.post('/uploadfile', function(req, res) {
   //console.log(req.busboy);
