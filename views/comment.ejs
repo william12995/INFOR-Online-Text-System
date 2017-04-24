@@ -1,6 +1,6 @@
 <div class="col-md-11 col-md-offset-1">
-   <div class="well" style="padding-bottom:40px;">
-       <div class="container">
+   <div class="well" style="padding-bottom:10px;padding-top:10px">
+       <!-- <div class="container">
            <div class="col-md-12">
                <div class="col-md-1" style="padding-top:20px;">
                    <img class="img-circle" src="<%= user.head %>" alt="icon">
@@ -11,9 +11,32 @@
                    </form>
                </div>
            </div>
-       </div>
+       </div> -->
+       <div class="list-group">
+           <div class="list-group-item" style="padding-top:20px;padding-bottom:20px;">
+             <div class="row-picture">
+               <img class="circle" src="<%= user.head %>" alt="icon">
+             </div>
+             <div class="row-content">
+                 <form method="post">
+                     <textarea class="form-control" rows="1" id="textArea" name="content" placeholder="Leave a comment" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></textarea>
+                 </form>
+               <!-- <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus</p> -->
+             </div>
+           </div>
           <% post.comments.forEach(function(comment, index){  %>
-              <hr>
+              <div class="list-group-item" style="padding-top:20px;padding-bottom:20px;">
+                <div class="row-picture">
+                  <img class="circle" src="<%= comment.head %>" alt="icon">
+                </div>
+                <div class="row-content">
+                  <h4 class="list-group-item-heading" style="margin-bottom:0px;font-size:19px;"><a href="/user/<%= comment.name %>"><%= comment.name %></a></h4>
+                  <p class="list-group-item-text" style="font-size:17px;"><%- comment.content %></p>
+                  <small class="grey"><%- comment.time %></small>
+                </div>
+              </div>
+              <hr style="margin:1px;">
+              <!-- <hr>
               <div class="container">
                   <div class="col-md-12">
                       <div class="col-md-1">
@@ -30,7 +53,8 @@
                           <p class="list-group-item-text" style="margin-top:5px"><%- comment.content %></p>
                       </div>
                   </div>
-              </div>
+              </div> -->
           <% }) %>
+          </div>
    </div>
 </div>
