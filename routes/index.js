@@ -23,7 +23,7 @@ router.get('/welcome', function(req, res) {
 });
 
 router.get('/', checkLogin);
-router.get('/', function(err, req, res, next) {
+router.get('/', function(req, res) {
   //console.log(req.session.user);
   if (req.session.user) {
     if (!req.session.user.isVerified) {
@@ -37,7 +37,6 @@ router.get('/', function(err, req, res, next) {
     if (err) {
       console.log(err);
       posts = {};
-      next(err);
     }
     total = parseInt(total / 10) + 1;
     // console.log("posts: "+JSON.stringify(posts));
@@ -125,7 +124,7 @@ router.post('/login', passport.authenticate('local-login', {
 }));
 
 
-router.get('/verify', function(err, req, res, next) {
+router.get('/verify', function(req, res) {
 
   User.update({
     'verifyId': req.query.id
@@ -134,9 +133,7 @@ router.get('/verify', function(err, req, res, next) {
   }, function(err) {
 
     if (err) {
-
       console.log('Something went wrong: ' + err);
-      next(err);
     } else {
       User.findOne({
         'verifyId': req.query.id
@@ -144,7 +141,6 @@ router.get('/verify', function(err, req, res, next) {
         // if there are any errors, return the error before anything else
         if (err) {
           console.log(err);
-          next(err);
         }
 
         req.session.user = user;
@@ -379,7 +375,7 @@ router.get('/txt/:txtname', function(req, res) {
 
 
 router.post('/txt/:txtname', checkLogin);
-router.post('/txt/:txtname', function(err, req, res, next) {
+router.post('/txt/:txtname', function(req, res) {
 
   var page = req.query.p ? parseInt(req.query.p) : 0;
 
@@ -388,8 +384,7 @@ router.post('/txt/:txtname', function(err, req, res, next) {
     if (err) {
       console.log(err);
       req.flash('error', err);
-      next(err);
-    //   return res.redirect(url);
+      return res.redirect(url);
     }
 
     req.flash('success', '修改成功!');
@@ -398,16 +393,15 @@ router.post('/txt/:txtname', function(err, req, res, next) {
 });
 
 router.get('/txt/remove/:txtname', checkLogin);
-router.get('/txt/remove/:txtname', function(err, req, res, next) {
+router.get('/txt/remove/:txtname', function(err, req, res) {
   var page = req.query.p ? parseInt(req.query.p) : 0;
 
   Txt.remove(req.params.txtname, page, function(err, data) {
     var url = encodeURI('/txt/' + req.params.txtname + '?p=' + page);
     if (err) {
       console.log(err);
-      next(err);
-    //   req.flash('error', err);
-    //   return res.redirect(url);
+      req.flash('error', err);
+      return res.redirect(url);
     }
 
     req.flash('success', '刪除成功!');
@@ -577,13 +571,12 @@ router.get('/u/:name', function(req, res) {
   });
 });
 
-router.get('/u/:name/:day/:title', function(err, req, res, next) {
+router.get('/u/:name/:day/:title', function(req, res) {
   Post.getOne(req.params.name, req.params.day, req.params.title, function(err, post) {
     if (err) {
       console.log(err);
-      next(err);
-    //   req.flash('error', err);
-    //   return res.redirect('/');
+      req.flash('error', err);
+      return res.redirect('/');
     }
 
     res.render('article', {
@@ -691,7 +684,7 @@ router.get('/remove/:name/:day/:title', function(req, res) {
 });
 
 router.get('/reprint/:name/:day/:title', checkLogin);
-router.get('/reprint/:name/:day/:title', function(err, req, res, next) {
+router.get('/reprint/:name/:day/:title', function(req, res) {
   Post.edit(req.params.name, req.params.day, req.params.title, function(err, post) {
     if (err) {
       req.flash('error', err);
@@ -714,9 +707,8 @@ router.get('/reprint/:name/:day/:title', function(err, req, res, next) {
     Post.reprint(reprint_from, reprint_to, function(err, post) {
       if (err) {
         console.log(err);
-        next(err);
-        // req.flash('error', err);
-        // return res.redirect('back');
+        req.flash('error', err);
+        return res.redirect('back');
       }
 
       var reprint_post = new Post(post.name, post.head, post.title, post.tags, post.post, post.reprint_info);
