@@ -12,8 +12,9 @@ var User = require('../models/user');
 var Post = require('../models/post');
 var Txt = require('../models/TXT');
 var Comment = require('../models/comment');
-var User = require('../models/user');
 var Pdf = require('../pdfreader/parse');
+
+
 
 /* GET home page. */
 
@@ -460,7 +461,6 @@ router.get('/tags/:tag', function(req, res) {
 
     res.render('tag', {
       title: 'TAG: ' + req.params.tag,
-      tag: req.params.tag,
       posts: posts,
       user: req.session.user,
       success: req.flash('success').toString(),
@@ -734,6 +734,26 @@ router.get('/reprint/:name/:day/:title', function(err, req, res, next) {
     });
   });
 });
+
+router.post('/choice', function(req, res) {
+
+  var data = req.body;
+  // console.log(data);
+  // console.log("name: " + data.name);
+  // console.log("choice: " + data.choice);
+  // console.log("num: " + data.number);
+
+  var newchoice = [data.choice, data.number];
+  Txt.choice(data.name, data.index, newchoice, function(err) {
+    if (err) {
+      req.flash('error', err);
+      return res.redirect('/');
+    }
+
+    req.flash('success', '新增成功');
+
+  });
+})
 
 router.post('/uploadfile', function(req, res) {
   //console.log(req.busboy);

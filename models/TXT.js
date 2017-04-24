@@ -11,7 +11,8 @@ var txtSchema = new mongoose.Schema({
   name: String,
   post: Array,
   ans: Array,
-  subject: String
+  subject: String,
+  choice: Array
 }, {
   collection: 'txt'
 });
@@ -415,12 +416,19 @@ var EnglishAnswer = function(txtname, ansname, subject, postData) {
     }
     AllData = one.concat(two, three);
     //console.log("AllData: "+AllData);
+    var choice = [];
+    var single = ["single", 1];
+    for (var i = 0; i < postData.length; i++) {
+
+      choice.push(single);
+    }
 
     var content = {
       name: txtname,
       post: postData,
       ans: AllData,
-      subject: subject
+      subject: subject,
+      choice: choice
     };
 
     console.log(content);
@@ -472,20 +480,31 @@ var ChineseAnswer = function(txtname, ansname, subject, postData) {
     for (var i = 0; i < 6; i++) {
       if (i % 2 == 0) one.push(AllData[i]);
       if (i % 2 == 1) two.push(AllData[i]);
-
     }
 
     for (var i = 6; i < 23; i++) {
       one.push(AllData[i]);
     }
     AllData = one.concat(two);
-    //console.log("AllData: "+AllData);
+
+    var choice = [];
+    var single = ["single", 1];
+    var multiple = ["multiple", 1];
+    for (var i = 0; i < postData.length - 8; i++) {
+
+      choice.push(single);
+    }
+    for (var i = 15; i < 23; i++) {
+      choice.push(multiple);
+    }
+
 
     var content = {
       name: txtname,
       post: postData,
       ans: AllData,
-      subject: subject
+      subject: subject,
+      choice: choice
     };
 
     //console.log(content);
@@ -550,12 +569,19 @@ var SocialAnswer = function(txtname, ansname, subject, postData) {
     }
     AllData = one.concat(two, three, four);
     //console.log("AllData: "+AllData);
+    var choice = [];
+    var single = ["single", 1];
+    for (var i = 0; i < postData.length; i++) {
+
+      choice.push(single);
+    }
 
     var content = {
       name: txtname,
       post: postData,
       ans: AllData,
-      subject: subject
+      subject: subject,
+      choice: choice
     };
 
     //console.log(content);
@@ -572,6 +598,29 @@ var SocialAnswer = function(txtname, ansname, subject, postData) {
 
     console.log("Extract answer Done\n");
     return;
+
+  });
+}
+
+TXT.choice = function(filename, index, choice, callback) {
+  txtModel.findOne({
+    name: filename
+  }, function(err, data) {
+    data.choice[index] = choice ;
+    var newchoice = data.choice;
+
+    txtModel.update({
+      "name": filename
+    }, {
+      $set: {
+        "choice": newchoice
+      }
+    }, function(err) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null);
+    });
 
   });
 }
