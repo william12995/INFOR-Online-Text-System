@@ -6,20 +6,23 @@ var pg = document.getElementById("progressBar");
 var fs = document.getElementById("fileSelect");
 var close = document.getElementById("close");
 
-// let widget = document.createElement('div');
-// widget.innerHTML = '<input type="file" name="pdf" id="fileElem1" class="form-control" onchange="upload(this.files)" style="display:none"><a href="#" id="fileSelect1" class="btn" style="width:80%;background-color:#ddd;text-transform:none">+</a>';
-
-async function handleFiles1(files) {
+function handleFiles1(files) {
 	console.log('1', files.length);
 	let file = files[0];
 	$('#fileSelect').hide();
-	$('#title').text('Uploading ' + file.name);
+	$('#title').text('正在上傳 ' + file.name);
 	$('#progressBar').show();
+	$('#fileName').val(file.name);
 	uploadFile(file);
 	// $('#progressBar').hide();
 	// $('#title').text('Succeed');
 	// $('#close').show();
 }
+
+// function handleFiles1(files) {
+// 	console.log('1', files.length);
+// 	fileSelect1.innerText = files[0].name;
+// }
 
 function handleFiles2(files) {
 	console.log('2', files.length);
@@ -50,13 +53,18 @@ function uploadFile(file) {
 	// your url upload
 	xhr.open('post', '/uploadfile', true);
 
-	xhr.upload.onprogress = function (e) {
+	let percentage;
 
-		let percentage;
+	xhr.upload.onprogress = function (e) {
 		if (e.lengthComputable) {
-			percentage = ((e.loaded / e.total) * 100).toString() + '%';
-			$('#percentage').css('width', percentage);
+			percentage = (e.loaded / e.total) * 100;
+			$('#percentage').css('width', (percentage).toString() + '%');
 			console.log(percentage);
+			if(percentage == 100){
+				$('#progressBar').hide();
+				$('#title').text(file.name);
+				$('#close').show();
+			}
 		}
 	};
 

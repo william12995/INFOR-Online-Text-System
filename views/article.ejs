@@ -2,7 +2,7 @@
 <section id="main">
    <div class="container">
       <div class="row">
-         <div class="col-md-11 col-md-offset-1">
+         <div class="col-md-10 col-md-offset-1">
             <div>
                <h1><%= post.title %></h1>
                <p class="lead">by <a href="/user/<%= post.name %>"><%= post.name %></a></p>
@@ -39,8 +39,28 @@
                 <% } %>
                 <% }) %>
             </div>
+
             <!-- <p><span class="glyphicon glyphicon-time"></span> Posted on <%= post.time.date %></p> -->
 
+         </div>
+         <div class="col-md-5 col-md-offset-1">
+             <div class="well">
+                 <h4>附件</h4>
+                 <hr>
+                 <% if(post.file){ %>
+                     <span><%= post.file %></span>
+                     <span><a href="/files/<%= post.file %>" download class="btn btn-default glyphicon glyphicon-download-alt" style=""></a></span>
+                 <% }else{ %>
+                     <p>無附件</p>
+                 <% } %>
+             </div>
+         </div>
+         <div class="col-md-5">
+             <div class="well">
+                 <h4>時間</h4>
+                 <hr>
+                 <p>發布：<%= post.time.date.toLocaleTimeString("TW",{year: "numeric", month: "numeric", hour12: "true"}) %></p>
+             </div>
          </div>
           <%- include comment %>
       </div>

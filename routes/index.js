@@ -182,11 +182,13 @@ router.post('/post', function(req, res) {
   var currentUser = req.session.user;
   //console.log(currentUser);
   var tags = (req.body.tags + '#end').split(/\s*#/);
+  console.log(req.body);
+  var file = (typeof req.body.file !== 'undefined') ?  req.body.file : '';;
 
   tags.splice(0, 1);
   tags.splice(tags.length - 1, 1);
 
-  var post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.editor1, {});
+  var post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.editor1, {}, req.body.file);
   post.save(function(err) {
     if (err) {
       req.flash('error', err);

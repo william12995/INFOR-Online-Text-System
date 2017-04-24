@@ -10,6 +10,7 @@ var postSchema = new mongoose.Schema({
   post: String,
   tags: Array,
   head: String,
+  file: String,
   comments: [],
   time: {},
   reprint_info: {
@@ -31,12 +32,13 @@ var postSchema = new mongoose.Schema({
 
 var postModel = mongoose.model('Post', postSchema);
 
-function Post(name, head, title, tags, post, info) {
+function Post(name, head, title, tags, post, info, file) {
   this.name = name;
   this.title = title;
   this.post = post;
   this.tags = tags;
   this.head = head;
+  this.file = file;
   this.reprint_info = info;
 }
 
@@ -57,6 +59,7 @@ Post.prototype.save = function(callback) {
     title: this.title,
     tags: this.tags,
     post: this.post,
+    file: this.file,
     time: time,
     reprint_info: {},
     pv: 0
