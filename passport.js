@@ -199,7 +199,7 @@ module.exports = function(passport) {
             // set the users facebook id
             // we will save the token that facebook provides to the user
             newUser.name = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
-            newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
+            if(profile.emails)newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
             newUser.isVerified = true;
             newUser.head = profile.photos[0].value;
 
