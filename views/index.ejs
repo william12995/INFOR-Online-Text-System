@@ -36,7 +36,7 @@
                 <div class="btn-group btn-group-justified btn-group-raised">
                     <a data-toggle="modal" data-target="#post" class="btn" id="custom-btn">發文</a>
                     <a href="/pdfUpload" class="btn" id="custom-btn">新增題目</a>
-                    <a data-toggle="modal" data-target="#upload" class="btn" id="custom-btn">上傳檔案</a>
+                    <!-- <a data-toggle="modal" data-target="#upload" class="btn" id="custom-btn">上傳檔案</a> -->
                 </div>
             </div>
             <div class="col-md-8 col-md-offset-2" style="margin-top:20px">
@@ -100,14 +100,29 @@
                 <div class="modal-body">
                     <div class="form-group label-floating">
                         <label class="control-label">Title</label>
-                        <input type="text" name="title" class="form-control">
+                        <input type="text" name="title" class="form-control" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <textarea type="text" name="editor1" class="form-control" placeholder="Page Body" rows = "20" cols = "100"></textarea>
                     </div>
                     <div class="form-group">
                         <label>Tags</label>
-                        <input type="text" name="tags" class="form-control" placeholder="Use # to add tags">
+                        <input type="text" name="tags" class="form-control" placeholder="Use # to add tags" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" name="file" id="fileName" style="display:none">
+                        <p id="title" style="font-size:15px;">附件</p>
+                        <div id="progressBar" style="display:none">
+                            <div class="bs-component">
+                                <div class="progress progress-striped active">
+                                    <div class="progress-bar" style="width:0%" id="percentage"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div style="container" id="fileSelect">
+                            <input type="file" name="pdf" id="fileElem1" class="form-control" onchange="handleFiles1(this.files)" style="display:none">
+                            <a href="#" id="fileSelect1" class="btn" style="background-color:#ddd;text-transform:none;width:100%">+</a>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -118,27 +133,6 @@
         </div>
     </div>
 </div>
-<!-- <div class="modal fade" id="uploadimage" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-       <div class="modal-content">
-          <form method="post" action="/upload" enctype = 'multipart/form-data'>
-             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Upload images</h4>
-             </div>
-             <div class="modal-body">
-                <div class="form-group">
-                   <input type="file" name="photos" class="form-control">
-                </div>
-             </div>
-             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Upload</button>
-             </div>
-          </form>
-       </div>
-    </div>
-    </div> -->
 <div class="modal fade" id="upload" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -165,33 +159,4 @@
         </div>
     </div>
 </div>
-<% if(user){ %>
-<div class="modal fade" id="profile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Profile</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-sm-6 col-md-4">
-                        <img src="<%= user.head %>" alt="" class="img-responsive">
-                    </div>
-                    <div class="col-sm-6 col-md-8">
-                        <h4><%= user.name %></h4>
-                        <ul>
-
-                          <li></li>
-                        </ul>
-                        <p>
-                            <span class="glyphicon glyphicon-envelope"></span> <%= user.email %>
-                            <br />
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<% } %>
 <%- include footer %>

@@ -2,25 +2,29 @@
 <section id="main">
     <div class="container">
         <div class="row">
-            <form method="post">
-               <div class="modal-body">
-            	  <div class="form-group">
-            		 <label>Page Title</label>
-            		 <input type="text" name="title" class="form-control" placeholder="Untitled" value="<%= post.title %>" disabled = "disabled">
-            	  </div>
-            	  <div class="form-group">
-            		 <label>Page Body</label>
-            		 <textarea type="text" name="editor1" class="form-control" placeholder="Page Body" rows = "20" cols = "100"><%- post.post %></textarea>
-            	  </div>
-            	  <div class="form-group">
-            		 <label>Meta Tags</label>
-                     <input type="text" name="tags" class="form-control" placeholder="empty" value= "<%= post.tags.join(' ') %>" disabled= "disabled">
-            	  </div>
-               </div>
-               <div class="modal-footer">
-            	  <button type="submit" class="btn btn-primary">Save</button>
-               </div>
-            </form>
+            <div class="col-md-10 col-md-offset-1">
+                <div class="well">
+                    <form method="post">
+                       <div class="modal-body">
+                          <div class="form-group">
+                             <label>Page Title</label>
+                             <input type="text" name="title" class="form-control" placeholder="Untitled" value="<%= post.title %>" disabled = "disabled">
+                          </div>
+                          <div class="form-group">
+                             <label>Page Body</label>
+                             <textarea type="text" name="editor1" class="form-control" placeholder="Page Body" rows = "20" cols = "100"><%- post.post %></textarea>
+                          </div>
+                          <div class="form-group">
+                             <label>Meta Tags</label>
+                             <input type="text" name="tags" class="form-control" placeholder="empty" value= "<%= post.tags.join(' ') %>" disabled= "disabled">
+                          </div>
+                       </div>
+                       <div class="modal-footer">
+                          <button type="submit" class="btn btn-primary">Save</button>
+                       </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </section>

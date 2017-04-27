@@ -17,8 +17,13 @@ var Pdf = require('../pdfreader/parse');
 
 
 /* GET home page. */
+
+router.get('/welcome', function(req, res) {
+    res.render('welcome');
+});
+
 router.get('/', checkLogin);
-router.get('/', function(req, res, next) {
+router.get('/', function(req, res) {
   //console.log(req.session.user);
   if (req.session.user) {
     if (!req.session.user.isVerified) {
@@ -82,6 +87,7 @@ router.get('/login', function(req, res) {
   });
 });
 
+<<<<<<< HEAD
 router.get('/profile', checkLogin);
 router.get('/profile', function(req, res) {
 
@@ -92,6 +98,26 @@ router.get('/profile', function(req, res) {
     success: req.flash('success').toString(),
     error: req.flash('error').toString()
   });
+=======
+router.get('/user/:user', checkLogin);
+router.get('/user/:user',function(req, res){
+    User.findOne({
+        'name': req.params.user
+    }, function(err, user){
+        if(err){
+            console.log('error finding user: ', err);
+            res.redirect('/');
+        }
+        else{
+            res.render('profile',{
+         		title: 'Profile',
+         		user: user,
+          		success: req.flash('success').toString(),
+          		error: req.flash('error').toString()
+         	});
+        }
+    });
+>>>>>>> 1f304a7d86fae860717d871854b437fbdbe5da55
 });
 
 
@@ -122,9 +148,7 @@ router.get('/verify', function(req, res) {
   }, function(err) {
 
     if (err) {
-
       console.log('Something went wrong: ' + err);
-      res.redirect('/');
     } else {
       User.findOne({
         'verifyId': req.query.id
@@ -173,11 +197,13 @@ router.post('/post', function(req, res) {
   var currentUser = req.session.user;
   //console.log(currentUser);
   var tags = (req.body.tags + '#end').split(/\s*#/);
+  console.log(req.body);
+  var file = (typeof req.body.file !== 'undefined') ?  req.body.file : '';;
 
   tags.splice(0, 1);
   tags.splice(tags.length - 1, 1);
 
-  var post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.editor1, {});
+  var post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.editor1, {}, req.body.file);
   post.save(function(err) {
     if (err) {
       req.flash('error', err);
@@ -384,7 +410,7 @@ router.post('/txt/:txtname', function(req, res) {
 });
 
 router.get('/txt/remove/:txtname', checkLogin);
-router.get('/txt/remove/:txtname', function(req, res) {
+router.get('/txt/remove/:txtname', function(err, req, res) {
   var page = req.query.p ? parseInt(req.query.p) : 0;
 
   Txt.remove(req.params.txtname, page, function(err, data) {

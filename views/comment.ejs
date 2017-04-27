@@ -1,4 +1,4 @@
-<div class="col-md-11 col-md-offset-1">
+<div class="col-md-10 col-md-offset-1">
    <div class="well" style="padding-bottom:10px;padding-top:10px">
        <!-- <div class="container">
            <div class="col-md-12">
@@ -25,6 +25,7 @@
              </div>
            </div>
           <% post.comments.forEach(function(comment, index){  %>
+              <hr style="margin:1px;">
               <div class="list-group-item" style="padding-top:20px;padding-bottom:20px;">
                 <div class="row-picture">
                   <img class="circle" src="<%= comment.head %>" alt="icon">
@@ -35,10 +36,13 @@
                   <small class="grey"><%- comment.time %></small>
                 </div>
               </div>
+<<<<<<< HEAD
 							<% if(user.name == comment.name){ %>
 							<span style="padding-left:70%;"><a href="/rm_comment/<%= post.name %>/<%= post.time.day %>/<%= post.title %>/<%= comment.content%>">刪除</a><span>
 							<% } %>
               <hr style="margin:1px;">
+=======
+>>>>>>> 1f304a7d86fae860717d871854b437fbdbe5da55
               <!-- <hr>
               <div class="container">
                   <div class="col-md-12">
