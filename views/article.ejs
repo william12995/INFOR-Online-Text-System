@@ -40,28 +40,14 @@
                 <hr><p><%- post.post %></p>
 
                 <br>
-                <%function checkstar(){ %>
 
-                  <%if((post.starname.length == 0)) return true;%>
-                  <% post.starname.forEach(function(name, index){ %>
+                  <% if(post.starname.indexOf(user.name) == -1 || post.starname.length ==0 ){  %>
 
-                    <% if(user.name != name){  %>
-                      <% return true; %>
-                      <% console.log(user.name != name)%>
-                      <% } %>
-                      <% }) %>
-                        <% return false; %>
-
-
-                  <% }; %>
-
-                  <% if(checkstar()){  %>
-                    <% console.log(checkstar())%>
                     <button type="button" class="btn btn-default btn-lg" onclick="star('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',1)">
                       <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> Star <%= post.star %>
                     </button>
                   <% }else{ %>
-                    <% console.log(checkstar())%>
+
                     <button type="button" class="btn btn-default btn-lg" onclick="star('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',-1)">
                       <span class="glyphicon glyphicon-star" aria-hidden="true"></span> unStar <%= post.star %>
                     </button>

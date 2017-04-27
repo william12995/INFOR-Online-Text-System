@@ -78,34 +78,48 @@ Comment.remove = function(name, day, title, comment, callback) {
   });
 }
 
-Comment.star = function(name, day, title, callback) {
+Comment.star = function(name, day, title, username, index, callback) {
 
-  postModel.findOne({
+  commentModel.findOne({
     "name": name,
     "time.day": day,
     "title": title
+  }, {
+    strict: false,
+    safe: true,
+    upsert: true,
+    multi: false
   }, function(err, doc) {
 
     if (err) {
+      console.log(err);
       return callback(err);
     }
+    console.log("comment: " + doc.comments)
+    var newcomment = doc.comments;
+    newcomment[index].starname.push(username);
+    newcomment[index].star = newcomment[index].star + 1;
     if (doc) {
       postModel.update({
         "name": name,
         "time.day": day,
         "title": title
       }, {
-        $inc: {
-          comments: {
-            star: 1
-          }
+        $set: {
+          comments: newcomment
         }
+      }, {
+        strict: false,
+        safe: true,
+        upsert: true,
+        multi: false
       }, function(err) {
         if (err) {
           return callback(err);
         }
+
       });
       callback(null);
     }
-  });
+  })
 };

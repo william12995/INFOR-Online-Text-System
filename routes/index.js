@@ -19,7 +19,7 @@ var Pdf = require('../pdfreader/parse');
 /* GET home page. */
 
 router.get('/welcome', function(req, res) {
-    res.render('welcome');
+  res.render('welcome');
 });
 
 router.get('/', checkLogin);
@@ -87,37 +87,24 @@ router.get('/login', function(req, res) {
   });
 });
 
-<<<<<<< HEAD
-router.get('/profile', checkLogin);
-router.get('/profile', function(req, res) {
 
-  //console.log("req.se: " + JSON.stringify(req.session.user));
-  res.render('profile', {
-    title: 'Profile',
-    user: req.session.user,
-    success: req.flash('success').toString(),
-    error: req.flash('error').toString()
-  });
-=======
 router.get('/user/:user', checkLogin);
-router.get('/user/:user',function(req, res){
-    User.findOne({
-        'name': req.params.user
-    }, function(err, user){
-        if(err){
-            console.log('error finding user: ', err);
-            res.redirect('/');
-        }
-        else{
-            res.render('profile',{
-         		title: 'Profile',
-         		user: user,
-          		success: req.flash('success').toString(),
-          		error: req.flash('error').toString()
-         	});
-        }
-    });
->>>>>>> 1f304a7d86fae860717d871854b437fbdbe5da55
+router.get('/user/:user', function(req, res) {
+  User.findOne({
+    'name': req.params.user
+  }, function(err, user) {
+    if (err) {
+      console.log('error finding user: ', err);
+      res.redirect('/');
+    } else {
+      res.render('profile', {
+        title: 'Profile',
+        user: user,
+        success: req.flash('success').toString(),
+        error: req.flash('error').toString()
+      });
+    }
+  });
 });
 
 
@@ -198,7 +185,8 @@ router.post('/post', function(req, res) {
   //console.log(currentUser);
   var tags = (req.body.tags + '#end').split(/\s*#/);
   console.log(req.body);
-  var file = (typeof req.body.file !== 'undefined') ?  req.body.file : '';;
+  var file = (typeof req.body.file !== 'undefined') ? req.body.file : '';
+  ;
 
   tags.splice(0, 1);
   tags.splice(tags.length - 1, 1);
@@ -602,7 +590,8 @@ router.post('/u/:name/:day/:title', function(req, res) {
     email: req.session.user.email,
     time: time,
     content: req.body.content,
-    star: 0
+    star: 0,
+    starname: []
   };
   var newComment = new Comment(req.params.name, req.params.day, req.params.title, comment);
 
@@ -638,6 +627,31 @@ router.post('/u/:name/:day/:title', function(req, res) {
     }
     res.redirect('back');
   })
+});
+
+router.post('/comments/star/', function(req, res) {
+  var data = req.body;
+  console.log(data);
+  if (data.inc == 1) {
+    Post.comment_star(data.postname, data.day, data.title, data.username, data.index, function(err) {
+      if (err) {
+        console.log(err);
+        req.flash('error', err);
+        return res.redirect('/');
+      }
+      res.redirect('back');
+    });
+  }
+  if (data.inc == -1) {
+    Post.comment_unstar(data.postname, data.day, data.title, data.username, data.index, function(err) {
+      if (err) {
+        console.log(err);
+        req.flash('error', err);
+        return res.redirect('/');
+      }
+      res.redirect('back');
+    });
+  }
 });
 
 router.post('/u/star/', function(req, res) {

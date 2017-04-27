@@ -457,4 +457,97 @@ Post.prototype.ReprintSave = function(callback) {
 
 };
 
+Post.comment_star = function(name, day, title, username, index, callback) {
+
+  postModel.findOne({
+    "name": name,
+    "time.day": day,
+    "title": title
+  }, function(err, doc) {
+
+    if (err) {
+      console.log(err);
+      return callback(err);
+    }
+    var newcomment = doc.comments;
+    newcomment[index].starname.push(username);
+    newcomment[index].star = newcomment[index].star + 1;
+    if (doc) {
+      postModel.update({
+        "name": name,
+        "time.day": day,
+        "title": title
+      }, {
+        $set: {
+          comments: newcomment
+        }
+      }, {
+        strict: false,
+        safe: true,
+        upsert: true,
+        multi: false
+      }, function(err) {
+        if (err) {
+          return callback(err);
+        }
+
+      });
+      callback(null);
+    }
+  })
+};
+
+Post.comment_unstar = function(name, day, title, username, index, callback) {
+
+  postModel.findOne({
+    "name": name,
+    "time.day": day,
+    "title": title
+  }, function(err, doc) {
+
+    if (err) {
+      console.log(err);
+      return callback(err);
+    }
+    var newcomment = doc.comments;
+    removeA(newcomment[index].starname, username);
+    newcomment[index].star = newcomment[index].star - 1;
+    if (doc) {
+      postModel.update({
+        "name": name,
+        "time.day": day,
+        "title": title
+      }, {
+        $set: {
+          comments: newcomment
+        }
+      }, {
+        strict: false,
+        safe: true,
+        upsert: true,
+        multi: false
+      }, function(err) {
+        if (err) {
+          return callback(err);
+        }
+
+      });
+      callback(null);
+    }
+  })
+};
+
+function removeA(arr) {
+  var what,
+    a = arguments,
+    L = a.length,
+    ax;
+  while (L > 1 && arr.length) {
+    what = a[--L];
+    while ((ax = arr.indexOf(what)) !== -1) {
+      arr.splice(ax, 1);
+    }
+  }
+  return arr;
+}
 module.exports = Post;

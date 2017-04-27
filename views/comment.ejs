@@ -35,33 +35,52 @@
                   <p class="list-group-item-text" style="font-size:17px;"><%- comment.content %></p>
                   <small class="grey"><%- comment.time %></small>
                 </div>
+                <% if(user.name == comment.name){ %>
+  							<span style="padding-left:70%;"><a href="/rm_comment/<%= post.name %>/<%= post.time.day %>/<%= post.title %>/<%= comment.content%>">刪除</a><span>
+  							<% } %>
               </div>
-<<<<<<< HEAD
-							<% if(user.name == comment.name){ %>
-							<span style="padding-left:70%;"><a href="/rm_comment/<%= post.name %>/<%= post.time.day %>/<%= post.title %>/<%= comment.content%>">刪除</a><span>
-							<% } %>
-              <hr style="margin:1px;">
-=======
->>>>>>> 1f304a7d86fae860717d871854b437fbdbe5da55
-              <!-- <hr>
-              <div class="container">
-                  <div class="col-md-12">
-                      <div class="col-md-1">
-                          <img class="img-circle" src="<%= comment.head %>" alt="icon">
-                      </div>
-                      <div class="col-md-9">
-                          <div style="width:100%;">
-                              <a href="/user/<%= comment.name %>" style="font-size:17px"><%= comment.name %></a>
-                              <span> - <%= comment.time %></span>
-                              <% if(user.name == comment.name){ %>
-                              <span style="padding-left:70%;"><a href="/rm_comment/<%= post.name %>/<%= post.time.day %>/<%= post.title %>/<%= comment.content%>">刪除</a><span>
-                              <% } %>
-                          </div>
-                          <p class="list-group-item-text" style="margin-top:5px"><%- comment.content %></p>
-                      </div>
-                  </div>
-              </div> -->
+
+                <% if(comment.starname.indexOf(user.name) == -1 || comment.starname.length ==0 ){  %>
+
+                  <button type="button" class="btn btn-default btn-lg" onclick="starcomment('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',1,<%= index %>)">
+                    <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> Star <%= comment.star %>
+                  </button>
+                <% }else{ %>
+
+                  <button type="button" class="btn btn-default btn-lg" onclick="starcomment('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',-1,<%= index %>)">
+                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span> unStar <%= comment.star %>
+                  </button>
+                <% } %>
+
           <% }) %>
+
+
           </div>
    </div>
 </div>
+<script type="text/javascript">
+function starcomment(postname,day,title,username,inc,index) {
+
+  var data ={
+    postname:postname,
+    day:day,
+    title:title,
+    username:username,
+    inc:inc,
+    index:index
+  };
+
+
+  $.ajax({
+          type: 'POST',
+          url: 'http://localhost:1209/comments/star/',
+          data: data,
+          dataType: 'application/json',
+          success: function(data) {
+              console.log('success');
+              console.log(data);
+          }
+      });
+      location.reload(true);
+}
+</script>
