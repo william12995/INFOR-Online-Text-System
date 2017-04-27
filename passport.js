@@ -85,6 +85,8 @@ module.exports = function(passport) {
             newUser.head = head;
             newUser.isVerified = false;
             newUser.verifyId = randomstring.generate(15);
+            newUser.message = [];
+            newUser.read = 0;
 
             let link = 'http://' + req.get('host') + '/verify?id=' + newUser.verifyId;
             let mailOptions = {
@@ -173,7 +175,7 @@ module.exports = function(passport) {
       // console.log('call facebook-login');
       // console.log('token: ', token);
       // console.log('refreshToken: ', refreshToken);
-      console.log('profile: ', profile);
+      //console.log('profile: ', profile);
       // asynchronous
       process.nextTick(function() {
 
@@ -202,6 +204,7 @@ module.exports = function(passport) {
             newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
             newUser.isVerified = true;
             newUser.head = profile.photos[0].value;
+            newUser.read = 0;
 
             // save our user to the database
             newUser.save(function(err) {
@@ -210,7 +213,6 @@ module.exports = function(passport) {
               User.findOne({
                 'name': newUser.name
               }, function(err, user) {
-
                 req.session.user = user;
                 return done(null, newUser);
               });

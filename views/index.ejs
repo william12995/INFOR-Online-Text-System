@@ -42,7 +42,13 @@
             <div class="col-md-8 col-md-offset-2" style="margin-top:20px">
                 <% posts.forEach(function(post, index){  %>
                 <div class="well" >
-                    <h3><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a></h3>
+                    <h3>
+                      <span class="grey" >
+                      <a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a>
+                      <b ><i class="material-icons">stars</i><%= post.star %></b>
+                    </span>
+                    </h3>
+
                     <p class="grey"><%= post.time.date %> — <%= post.name %></p>
                     <h4>
                         <% if(post.post){ %>
@@ -57,6 +63,7 @@
                     <% } %>
                     <% }) %>
                     <p><span class="grey">瀏覽次數: <%= post.pv %></span></p>
+
                 </div>
                 <% })  %>
                 <div class="col-md-9 col-md-offset-3">

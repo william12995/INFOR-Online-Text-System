@@ -38,6 +38,7 @@ router.get('/', function(req, res, next) {
     //console.log('posts: ', posts);
     res.render('index', {
       title: 'Home',
+      req: req,
       user: req.session.user,
       posts: posts,
       page: page,
@@ -56,6 +57,7 @@ router.get('/signup', checkBeenLogin);
 router.get('/signup', function(req, res) {
   res.render('signup', {
     title: 'Register',
+    req: req,
     user: null,
     success: req.flash('success').toString(),
     error: req.flash('error').toString()
@@ -80,15 +82,17 @@ router.get('/login', function(req, res) {
   });
 });
 
-// router.get('/profile', checkLogin);
-// router.get('/profile',function(req, res){
-//  	res.render('profile',{
-//  		title: 'Profile',
-//  		user: req.session.user,
-//   		success: req.flash('success').toString(),
-//   		error: req.flash('error').toString()
-//  	});
-// });
+router.get('/profile', checkLogin);
+router.get('/profile', function(req, res) {
+
+  //console.log("req.se: " + JSON.stringify(req.session.user));
+  res.render('profile', {
+    title: 'Profile',
+    user: req.session.user,
+    success: req.flash('success').toString(),
+    error: req.flash('error').toString()
+  });
+});
 
 
 router.post('/signup', checkBeenLogin);
@@ -414,23 +418,6 @@ router.get('/history', function(req, res) {
   });
 });
 
-// router.get('/tags', function(req, res) {
-//
-//   Post.getTags(function(err, posts) {
-//     if (err) {
-//       req.flash('error', err);
-//       return res.redirect('/');
-//     }
-//
-//     res.render('tags', {
-//       title: '標籤',
-//       posts: posts,
-//       user: req.session.user,
-//       success: req.flash('success').toString(),
-//       error: req.flash('error').toString()
-//     });
-//   });
-// });
 
 router.get('/tags/:tag', function(req, res) {
 
@@ -599,8 +586,56 @@ router.post('/u/:name/:day/:title', function(req, res) {
       return res.redirect('back');
     }
     req.flash('success', '留言成功');
-    res.redirect('back');
+
   });
+  var url = '/u/' + req.params.name + '/' + req.params.day + '/' + req.params.title;
+  var message = req.session.user.name + '在你的文章中留言';
+
+  var newMessage = {
+    message: message,
+    url: url
+  }
+  User.update({
+    name: req.params.name
+  }, {
+    $push: {
+      message: newMessage
+    }
+  }, {
+    safe: true,
+    upsert: true
+  }, function(err) {
+    if (err) {
+      console.log(err);
+      req.flash('error', err);
+      return res.redirect('back');
+    }
+    res.redirect('back');
+  })
+});
+
+router.post('/u/star/', function(req, res) {
+  var data = req.body;
+  if (data.inc == 1) {
+    Post.star(data.postname, data.day, data.title, data.username, function(err) {
+      if (err) {
+        console.log(err);
+        req.flash('error', err);
+        return res.redirect('/');
+      }
+      res.redirect('back');
+    });
+  }
+  if (data.inc == -1) {
+    Post.unstar(data.postname, data.day, data.title, data.username, function(err) {
+      if (err) {
+        console.log(err);
+        req.flash('error', err);
+        return res.redirect('/');
+      }
+      res.redirect('back');
+    });
+  }
 });
 
 router.get('/rm_comment/:name/:day/:title/:content', checkLogin);

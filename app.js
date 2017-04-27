@@ -85,6 +85,7 @@ app.use(session({
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 30 //30天
   },
+  seen: 0,
   store: new MongoStore({
     db: settings.db,
     host: settings.host,
@@ -96,6 +97,30 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.user = req.session.user;
+  res.locals.req = req;
+
+  // render the error page
+  res.status(err.status || 500);
+
+  if (err.status == 500) {
+    res.render('error', {
+      title: 'Oops',
+      code: err.status,
+    });
+  } else {
+    res.render('error', {
+      title: 'Not found',
+      code: err.status,
+    });
+  }
+  next();
+});
+
 app.use('/', index);
 
 
@@ -106,27 +131,6 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-  res.locals.user = req.session.user;
 
-  // render the error page
-  res.status(err.status || 500);
-
-  if(err.status == 500){
-      res.render('error', {
-        title: 'Oops',
-        code: err.status,
-      });
-  }else{
-      res.render('error', {
-         title: 'Not found',
-         code: err.status,
-      });
-  }
-
-});
 
 module.exports = app;

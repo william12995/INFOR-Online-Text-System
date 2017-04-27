@@ -13,7 +13,8 @@ var userSchema = mongoose.Schema({
     default: false
   },
   head: String,
-  message: {}
+  message: Array,
+  read: Number
 }, {
   collection: 'user'
 });
@@ -29,8 +30,8 @@ userSchema.methods.generateHash = function(password) {
   return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
 };
 
-userSchema.methods.message = function(username, message, callback) {
-  this.model('userModel').update({
+userSchema.statics.message = function(username, message, callback) {
+  userModel.update({
     name: username
   }, {
     $push: {
@@ -41,6 +42,7 @@ userSchema.methods.message = function(username, message, callback) {
     upsert: true
   }, function(err) {
     if (err) {
+      console.log(err);
       callback(err);
     }
     callback(null);

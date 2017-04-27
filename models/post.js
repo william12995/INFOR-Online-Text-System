@@ -24,6 +24,8 @@ var postSchema = new mongoose.Schema({
     }
   },
   pv: Number,
+  star: Number,
+  starname: Array
 }, {
   collection: 'posts'
 });
@@ -59,7 +61,9 @@ Post.prototype.save = function(callback) {
     post: this.post,
     time: time,
     reprint_info: {},
-    pv: 0
+    pv: 0,
+    star: 0,
+    starname: []
   };
 
   var newPost = new postModel(post);
@@ -134,6 +138,53 @@ Post.getOne = function(name, day, title, callback) {
       callback(null, doc);
     }
   });
+};
+
+Post.star = function(name, day, title, username, callback) {
+
+  postModel.update({
+    "name": name,
+    "time.day": day,
+    "title": title
+  }, {
+    $inc: {
+      "star": 1
+    },
+    $push: {
+      "starname": username
+    }
+  }, function(err) {
+    if (err) {
+      console.log(err);
+      return callback(err);
+    }
+    return callback(null);
+  });
+
+};
+
+
+Post.unstar = function(name, day, title, username, callback) {
+
+  postModel.update({
+    "name": name,
+    "time.day": day,
+    "title": title
+  }, {
+    $inc: {
+      "star": -1
+    },
+    $pull: {
+      "starname": username
+    }
+  }, function(err) {
+    if (err) {
+      console.log(err);
+      return callback(err);
+    }
+    return callback(null);
+  });
+
 };
 
 Post.edit = function(name, day, title, callback) {

@@ -8,14 +8,16 @@
           <input type="text" name="keyword" class="form-control col-md-8" placeholder="Search" id="searchbar">
         </div>
       </form>
+
    <ul class="nav navbar-nav navbar-right">
       <% if(!user){ %>
         <li><a href="/login">login</a></li>
       <% }else{ %>
-        <li>
-            <a href="/user/<%= user.name %>" type="btn">Welcome, <%= user.name %></a>
-        </li>
-        <li><a href="/logout">logout</a></li>
+
+        <li class="active"><a href="/profile">Welcome, <%= user.name %> <span class="badge">
+          0</span></a></li>
+        <li ><a href="/logout">logout <span class="badge"></span></a></li>
+
       <% } %>
    </ul>
 </div>
