@@ -110,17 +110,20 @@
                         <input type="text" name="tags" class="form-control" placeholder="Use # to add tags" autocomplete="off">
                     </div>
                     <div class="form-group">
-                        <input type="text" name="file" id="fileName" style="display:none">
-                        <p id="title" style="font-size:15px;">附件</p>
-                        <div id="progressBar" style="display:none">
-                            <div class="bs-component">
-                                <div class="progress progress-striped active">
-                                    <div class="progress-bar" style="width:0%" id="percentage"></div>
+                        <input type="text" name="fileName" id="fileName" style="display:none">
+                        <p style="font-size:15px;">附件</p>
+                        <div id="here">
+                            <p id="title" style="font-size:15px;"></p>
+                            <div id="progressBar" style="display:none">
+                                <div class="bs-component">
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar" style="width:0%" id="percentage"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <div style="container" id="fileSelect">
-                            <input type="file" name="pdf" id="fileElem1" class="form-control" onchange="handleFiles1(this.files)" style="display:none">
+                            <input type="file" name="file" id="fileElem1" class="form-control" onchange="handleFiles1(this.files)" style="display:none">
                             <a href="#" id="fileSelect1" class="btn" style="background-color:#ddd;text-transform:none;width:100%">+</a>
                         </div>
                     </div>

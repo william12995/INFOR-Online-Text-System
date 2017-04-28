@@ -62,11 +62,25 @@
              <div class="well">
                  <h4>附件</h4>
                  <hr>
-                 <% if(post.file){ %>
-                     <span><%= post.file %></span>
-                     <span><a href="/files/<%= post.file %>" download class="btn btn-default glyphicon glyphicon-download-alt" style=""></a></span>
+                 <% if(post.file.length > 1){ %>
+                     <div class="media">
+                         <% post.file.forEach(function(file, index){ %>
+                             <% if(file){  %>
+                                 <div class="media-left media-middle">
+                                     <img src="/icon/<%= file.split('.')[1] %>.png" alt="" style="height:35px;width:auto;padding-right:10px;">
+                                 </div>
+                                 <div class="media-body media-middle">
+                                     <%= file %>
+                                 </div>
+                                 <div class="media-right media-middle">
+                                     <a href="/files/<%= file %>" download class="btn btn-default glyphicon glyphicon-download-alt"></a>
+                                 </div>
+                                 <br>
+                             <% } %>
+                         <% }) %>
+                     </div>
                  <% }else{ %>
-                     <p>無附件</p>
+                    <p>無附件</p>
                  <% } %>
              </div>
          </div>

@@ -5,19 +5,7 @@ var fileElem2 = document.getElementById("fileElem2");
 var pg = document.getElementById("progressBar");
 var fs = document.getElementById("fileSelect");
 var close = document.getElementById("close");
-
-function handleFiles1(files) {
-	console.log('1', files.length);
-	let file = files[0];
-	$('#fileSelect').hide();
-	$('#title').text('正在上傳 ' + file.name);
-	$('#progressBar').show();
-	$('#fileName').val(file.name);
-	uploadFile(file);
-	// $('#progressBar').hide();
-	// $('#title').text('Succeed');
-	// $('#close').show();
-}
+var count = 0;
 
 // function handleFiles1(files) {
 // 	console.log('1', files.length);
@@ -45,7 +33,21 @@ fileSelect2.addEventListener("click", (e) => {
 	e.preventDefault();
 }, false);
 
-function uploadFile(file) {
+function handleFiles1(files) {
+	console.log('1', files.length);
+	let file = files[0];
+	$('#here').append('<p id="title' + count.toString() + '" style="font-size:15px;"></p><div id="progressBar' + count.toString() + '" style="display:none"><div class="bs-component"><div class="progress progress-striped active"><div class="progress-bar" style="width:0%" id="percentage' + count.toString() + '"></div></div></div></div>')
+	$('#title' + count.toString()).text('正在上傳 ' + file.name);
+	$('#progressBar' + count.toString()).show();
+	$('#fileName').val($('#fileName').val() + ',' + file.name);
+	uploadFile(file, count.toString());
+	count ++;
+	// $('#progressBar').hide();
+	// $('#title').text('Succeed');
+	// $('#close').show();
+}
+
+function uploadFile(file, id) {
 	var formData = new FormData();
 	formData.append('file', file);
 	var xhr = new XMLHttpRequest();
@@ -58,12 +60,11 @@ function uploadFile(file) {
 	xhr.upload.onprogress = function (e) {
 		if (e.lengthComputable) {
 			percentage = (e.loaded / e.total) * 100;
-			$('#percentage').css('width', (percentage).toString() + '%');
+			$('#percentage' + id).css('width', (percentage).toString() + '%');
 			console.log(percentage);
 			if(percentage == 100){
-				$('#progressBar').hide();
-				$('#title').text(file.name);
-				$('#close').show();
+				$('#progressBar' + id).hide();
+				$('#title' + id).text(file.name);
 			}
 		}
 	};

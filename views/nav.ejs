@@ -14,7 +14,7 @@
         <li><a href="/login">login</a></li>
       <% }else{ %>
 
-        <li class="active"><a href="/profile">Welcome, <%= user.name %> <span class="badge">
+        <li><a href="/user/<%= user.name %>">Welcome, <%= user.name %> <span class="badge">
           0</span></a></li>
         <li ><a href="/logout">logout <span class="badge"></span></a></li>
 
