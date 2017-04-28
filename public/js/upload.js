@@ -64,6 +64,7 @@ function uploadFile(file, id) {
 			console.log(percentage);
 			if(percentage == 100){
 				$('#progressBar' + id).hide();
+				console.log('hide: ',id);
 				$('#title' + id).text(file.name);
 			}
 		}
