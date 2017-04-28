@@ -67,13 +67,13 @@
                          <% post.file.forEach(function(file, index){ %>
                              <% if(file){  %>
                                  <div class="media-left media-middle">
-                                     <img src="/icon/<%= file.split('.')[1] %>.png" alt="" style="height:35px;width:auto;padding-right:10px;">
+                                     <img src="/icon/<%= file.split('.')[1].toLowerCase %>.png" alt="" style="height:35px;width:auto;padding-right:10px;">
                                  </div>
                                  <div class="media-body media-middle">
                                      <%= file %>
                                  </div>
                                  <div class="media-right media-middle">
-                                     <a href="/files/<%= file.toLowerCase() %>" download class="btn btn-default glyphicon glyphicon-download-alt"></a>
+                                     <a href="/files/<%= file %>" download class="btn btn-default glyphicon glyphicon-download-alt"></a>
                                  </div>
                                  <br>
                              <% } %>
