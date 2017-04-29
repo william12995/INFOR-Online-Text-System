@@ -185,13 +185,12 @@ router.post('/post', function(req, res) {
   //console.log(currentUser);
   var tags = (req.body.tags + '#end').split(/\s*#/);
   console.log(req.body);
-  var file = (typeof req.body.file !== 'undefined') ? req.body.file : '';
-  ;
+  var file = (typeof req.body.file !== 'undefined') ? req.body.fileName.split(',') : [];
 
   tags.splice(0, 1);
   tags.splice(tags.length - 1, 1);
 
-  var post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.editor1, {}, req.body.file);
+  var post = new Post(currentUser.name, currentUser.head, req.body.title, tags, req.body.editor1, {}, file);
   post.save(function(err) {
     if (err) {
       req.flash('error', err);
@@ -461,6 +460,7 @@ router.get('/tags/:tag', function(req, res) {
     res.render('tag', {
       title: 'TAG: ' + req.params.tag,
       posts: posts,
+      tag: req.params.tag,
       user: req.session.user,
       success: req.flash('success').toString(),
       error: req.flash('error').toString()

@@ -10,7 +10,7 @@ var postSchema = new mongoose.Schema({
   post: String,
   tags: Array,
   head: String,
-  file: String,
+  file: Array,
   comments: [],
   time: {},
   reprint_info: {
