@@ -45,7 +45,7 @@
                     <h3>
                       <span class="grey" >
                       <a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>"><%= post.title %></a>
-                      <b ><i class="material-icons">stars</i><%= post.star %></b>
+                      <!-- <b><i class="material-icons">stars</i><%= post.star %></b> -->
                     </span>
                     </h3>
 
@@ -55,14 +55,18 @@
                             <p><%- post.post.split(/\s+</)[0]%></p>
                         <% } %>
                     </h4>
-                    <span style="font-size: 15x;margin-top:0px;"><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">繼續閱讀</a></span><br><br>
-                    <span class="grey">Tags:</span>
+                    <span style="font-size: 15x;margin-top:0px;"><a href="/u/<%= post.name %>/<%= post.time.day %>/<%= post.title %>" style="margin-bottom:25px;">繼續閱讀</a></span><br><br>
+                    <!-- <span class="grey">Tags:</span>
                     <% post.tags.forEach(function(tag, index){ %>
                     <% if(tag){  %>
                     <span><a href="/tags/<%= tag %>"><%= tag %></a></span>
                     <% } %>
-                    <% }) %>
-                    <p><span class="grey">瀏覽次數: <%= post.pv %></span></p>
+                    <% }) %> -->
+                    <p>
+                        <span class="glyphicon glyphicon-thumbs-up grey" style="padding-right:5px;"></span><%= post.star %>
+                        <!-- <span class="grey" style="margin-right:25px;">推: <%= post.star %></span><br> -->
+                        <span class="fa fa-eye grey" style="padding-right:5px;padding-left:15px;"></span><%= post.pv %>
+                    </p>
 
                 </div>
                 <% })  %>

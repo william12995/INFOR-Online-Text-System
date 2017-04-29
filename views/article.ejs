@@ -6,12 +6,12 @@
             <div>
                <h1><%= post.title %></h1>
                <p class="lead">by <a href="/user/<%= post.name %>"><%= post.name %></a></p>
-               <hr><span>tags：</span>
+               <!-- <hr><span>tags：</span>
                <% post.tags.forEach(function(tag, index){ %>
                <% if(tag){  %>
                <span><a href="/tags/<%= tag %>"><%= tag %></a></span>
                <% } %>
-               <% }) %>
+               <% }) %> -->
             </div>
             <hr>
             <div class="well">
@@ -38,10 +38,15 @@
                     <span> <a class="edit" href="/reprint/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">轉載</a></span>
                 <% } %>
                 <hr><p><%- post.post %></p>
-
                 <br>
 
-                  <% if(post.starname.indexOf(user.name) == -1 || post.starname.length ==0 ){  %>
+                <% post.tags.forEach(function(tag, index){ %>
+                <% if(tag){  %>
+                <b><span><a href="/tags/<%= tag %>" style="padding-right:5px;">#<%= tag %></a></span></b>
+                <% } %>
+                <% }) %>
+
+                  <!-- <% if(post.starname.indexOf(user.name) == -1 || post.starname.length ==0 ){  %>
 
                     <button type="button" class="btn btn-default btn-lg" onclick="star('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',1)">
                       <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> Star <%= post.star %>
@@ -51,7 +56,7 @@
                     <button type="button" class="btn btn-default btn-lg" onclick="star('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',-1)">
                       <span class="glyphicon glyphicon-star" aria-hidden="true"></span> unStar <%= post.star %>
                     </button>
-                  <% } %>
+                  <% } %> -->
 
             </div>
 
@@ -67,7 +72,7 @@
                          <% post.file.forEach(function(file, index){ %>
                              <% if(file){  %>
                                  <div class="media-left media-middle">
-                                     <img src="/icon/<%= file.split('.')[1].toLowerCase() %>.png" alt="" style="height:35px;width:auto;padding-right:10px;">
+                                     <img src="/icon/<%= file.split('.')[file.split('.').length - 1].toLowerCase() %>.png" onerror="this.src='/icon/file.png'" style="height:35px;width:auto;padding-right:10px;">
                                  </div>
                                  <div class="media-body media-middle">
                                      <%= file %>

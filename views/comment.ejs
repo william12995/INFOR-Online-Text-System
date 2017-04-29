@@ -1,87 +1,96 @@
 <div class="col-md-10 col-md-offset-1">
-   <div class="well" style="padding-bottom:10px;padding-top:10px">
-       <!-- <div class="container">
-           <div class="col-md-12">
-               <div class="col-md-1" style="padding-top:20px;">
-                   <img class="img-circle" src="<%= user.head %>" alt="icon">
-               </div>
-               <div class="col-md-9 form-group">
-                   <form method="post">
-                       <textarea class="form-control" rows="1" id="textArea" name="content" placeholder="Leave a comment" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }" style="width:95%;"></textarea>
-                   </form>
-               </div>
-           </div>
-       </div> -->
-       <div class="list-group">
-           <div class="list-group-item" style="padding-top:20px;padding-bottom:20px;">
-             <div class="row-picture">
-               <img class="circle" src="<%= user.head %>" alt="icon">
-             </div>
-             <div class="row-content">
-                 <form method="post">
-                     <textarea class="form-control" rows="1" id="textArea" name="content" placeholder="Leave a comment" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></textarea>
-                 </form>
-               <!-- <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus</p> -->
-             </div>
-           </div>
-          <% post.comments.forEach(function(comment, index){  %>
-              <hr style="margin:1px;">
-              <div class="list-group-item" style="padding-top:20px;padding-bottom:20px;">
+    <div class="well" style="padding-bottom:10px;padding-top:10px">
+        <!-- <div class="container">
+            <div class="col-md-12">
+                <div class="col-md-1" style="padding-top:20px;">
+                    <img class="img-circle" src="<%= user.head %>" alt="icon">
+                </div>
+                <div class="col-md-9 form-group">
+                    <form method="post">
+                        <textarea class="form-control" rows="1" id="textArea" name="content" placeholder="Leave a comment" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }" style="width:95%;"></textarea>
+                    </form>
+                </div>
+            </div>
+            </div> -->
+        <div class="list-group">
+            <div class="list-group-item" style="padding-top:20px;padding-bottom:20px;">
                 <div class="row-picture">
-                  <img class="circle" src="<%= comment.head %>" alt="icon">
+                    <img class="circle" src="<%= user.head %>" alt="icon">
                 </div>
                 <div class="row-content">
-                  <span style="margin-bottom:0px;font-size:19px;"><a href="/user/<%= comment.name %>"><%= comment.name %></a></span>
-                  <% if(user.name == comment.name){ %>
-    							<span style="padding-left:70%;"><a href="/rm_comment/<%= post.name %>/<%= post.time.day %>/<%= post.title %>/<%= comment.content%>">刪除</a><span>
-    							<% } %>
-                  <!-- <span><h4 class="list-group-item-heading" style="margin-bottom:0px;font-size:19px;"><a href="/user/<%= comment.name %>"><%= comment.name %></a></h4></span> -->
-                  <p class="list-group-item-text" style="font-size:17px;"><%- comment.content %></p>
-                  <small class="grey"><%- comment.time %></small>
+                    <form method="post">
+                        <textarea class="form-control" rows="1" id="textArea" name="content" placeholder="Leave a comment" onkeydown="if (event.keyCode == 13) { this.form.submit(); return false; }"></textarea>
+                    </form>
+                    <!-- <p class="list-group-item-text">Donec id elit non mi porta gravida at eget metus</p> -->
                 </div>
-              </div>
-
-                <% if(comment.starname.indexOf(user.name) == -1 || comment.starname.length ==0 ){  %>
-
-                  <button type="button" class="btn btn-default btn-lg" onclick="starcomment('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',1,<%= index %>)">
-                    <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> Star <%= comment.star %>
-                  </button>
-                <% }else{ %>
-
-                  <button type="button" class="btn btn-default btn-lg" onclick="starcomment('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',-1,<%= index %>)">
-                    <span class="glyphicon glyphicon-star" aria-hidden="true"></span> unStar <%= comment.star %>
-                  </button>
-                <% } %>
-
-          <% }) %>
-
-
-          </div>
-   </div>
+            </div>
+            <% post.comments.forEach(function(comment, index){  %>
+            <hr style="margin:1px;">
+            <div class="list-group-item" style="padding-top:20px;padding-bottom:20px;">
+                <div class="row-picture">
+                    <img class="circle" src="<%= comment.head %>" alt="icon">
+                </div>
+                <div class="row-content">
+                    <span style="margin-bottom:0px;font-size:19px;"><a href="/user/<%= comment.name %>"><%= comment.name %></a></span>
+                    <% if(user.name == comment.name){ %>
+                    <span style="float:right;"><a href="/rm_comment/<%= post.name %>/<%= post.time.day %>/<%= post.title %>/<%= comment.content%>">刪除</a></span>
+                    <% } %>
+                    <!-- <span><h4 class="list-group-item-heading" style="margin-bottom:0px;font-size:19px;"><a href="/user/<%= comment.name %>"><%= comment.name %></a></h4></span> -->
+                    <p class="list-group-item-text" style="font-size:17px;"><%- comment.content %></p>
+                    <% if(comment.starname.indexOf(user.name) == -1 || comment.starname.length ==0 ){  %>
+                        <a href="#" onclick="starcomment('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',1,<%= index %>)" id="fakeButton">Like</a>
+                    </button>
+                    <% }else{ %>
+                        <a href="#" onclick="starcomment('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',-1,<%= index %>)" id="fakeButton">Unlike</a>
+                    <% } %>
+                    <% if(comment.starname.length > 0){ %>
+                        <span class="glyphicon glyphicon-thumbs-up grey" style="padding-left:5px;font-size:5px;"></span><%= comment.star %>
+                    <% } %>
+                    <small class="grey" style="padding-left:5px;"><%- comment.time %></small>
+                </div>
+            </div>
+            <!-- <% if(comment.starname.indexOf(user.name) == -1 || comment.starname.length ==0 ){  %>
+            <button type="button" class="btn btn-default btn-lg" onclick="starcomment('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',1,<%= index %>)">
+            <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> Star <%= comment.star %>
+            </button>
+            <% }else{ %>
+            <button type="button" class="btn btn-default btn-lg" onclick="starcomment('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',-1,<%= index %>)">
+            <span class="glyphicon glyphicon-star" aria-hidden="true"></span> unStar <%= comment.star %>
+            </button>
+            <% } %> -->
+            <% }) %>
+        </div>
+    </div>
 </div>
 <script type="text/javascript">
-function starcomment(postname,day,title,username,inc,index) {
+    var fakeButton = document.getElementById("fakeButton");
 
-  var data ={
-    postname:postname,
-    day:day,
-    title:title,
-    username:username,
-    inc:inc,
-    index:index
-  };
+    fakeButton.addEventListener("click", (e) => {
+        e.preventDefault();
+    }, false);
+
+    function starcomment(postname,day,title,username,inc,index) {
+
+      var data ={
+        postname:postname,
+        day:day,
+        title:title,
+        username:username,
+        inc:inc,
+        index:index
+      };
 
 
-  $.ajax({
-          type: 'POST',
-          url: 'http://localhost:1209/comments/star/',
-          data: data,
-          dataType: 'application/json',
-          success: function(data) {
-              console.log('success');
-              console.log(data);
-          }
-      });
-      location.reload(true);
-}
+      $.ajax({
+              type: 'POST',
+              url: 'http://localhost:1209/comments/star/',
+              data: data,
+              dataType: 'application/json',
+              success: function(data) {
+                  console.log('success');
+                  console.log(data);
+              }
+          });
+          history.go(0);
+    }
 </script>

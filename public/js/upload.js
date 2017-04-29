@@ -36,6 +36,7 @@ fileSelect2.addEventListener("click", (e) => {
 function handleFiles1(files) {
 	console.log('1', files.length);
 	let file = files[0];
+	console.log(file.type);
 	$('#here').append('<p id="title' + count.toString() + '" style="font-size:15px;"></p><div id="progressBar' + count.toString() + '" style="display:none"><div class="bs-component"><div class="progress progress-striped active"><div class="progress-bar" style="width:0%" id="percentage' + count.toString() + '"></div></div></div></div>')
 	$('#title' + count.toString()).text('正在上傳 ' + file.name);
 	$('#progressBar' + count.toString()).show();
@@ -64,7 +65,7 @@ function uploadFile(file, id) {
 			console.log(percentage);
 			if(percentage == 100){
 				$('#progressBar' + id).hide();
-				console.log('hide: ',id);
+				// console.log('hide: ',id);
 				$('#title' + id).text(file.name);
 			}
 		}
