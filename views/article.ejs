@@ -37,8 +37,13 @@
                 <% if(flag){ %>
                     <span> <a class="edit" href="/reprint/<%= post.name %>/<%= post.time.day %>/<%= post.title %>">轉載</a></span>
                 <% } %>
-                <hr><p><%- post.post %></p>
-                <br>
+                <span class="grey" style="float:right;margin-bottom:5px;">瀏覽次數：<%= post.pv %></span>
+                <hr>
+                <% if(post.post){ %>
+                    <p><%- post.post %></p>
+                <% }else{ %>
+                    <p>空空如也</p>
+                <% } %>
 
                 <% post.tags.forEach(function(tag, index){ %>
                 <% if(tag){  %>
@@ -46,17 +51,20 @@
                 <% } %>
                 <% }) %>
 
-                  <!-- <% if(post.starname.indexOf(user.name) == -1 || post.starname.length ==0 ){  %>
+                <hr>
 
-                    <button type="button" class="btn btn-default btn-lg" onclick="star('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',1)">
-                      <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span> Star <%= post.star %>
-                    </button>
+                  <% if(post.starname.indexOf(user.name) == -1 || post.starname.length ==0 ){  %>
+                    <!-- <button type="button" class="btn btn-default btn-lg" onclick="star('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',1)">
+                    </button> -->
+                    <a href="#" onclick="star('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',1)" id="fakeButton">Like</a>
                   <% }else{ %>
-
-                    <button type="button" class="btn btn-default btn-lg" onclick="star('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',-1)">
-                      <span class="glyphicon glyphicon-star" aria-hidden="true"></span> unStar <%= post.star %>
-                    </button>
-                  <% } %> -->
+                      <a href="#" onclick="star('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',-1)" id="fakeButton">Unlike</a>
+                    <!-- <button type="button" class="btn btn-default btn-lg" onclick="star('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',-1)">
+                    </button> -->
+                  <% } %>
+                  <% if(post.starname.length > 0){ %>
+                      <span class="glyphicon glyphicon-thumbs-up grey" style="padding-left:5px;font-size:5px;"></span><%= post.star %>
+                  <% } %>
 
             </div>
 
@@ -103,29 +111,5 @@
    </div>
 
 </section>
-<script type="text/javascript">
-function star(postname,day,title,username,inc) {
-
-  var data ={
-    postname:postname,
-    day:day,
-    title:title,
-    username:username,
-    inc:inc
-  };
-
-  $.ajax({
-          type: 'POST',
-          url: 'http://localhost:1209/u/star/',
-          data: data,
-          dataType: 'application/json',
-          success: function(data) {
-              console.log('success');
-              console.log(data);
-          }
-      });
-      location.reload(true);
-}
-</script>
 
 <%- include footer %>
