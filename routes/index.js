@@ -432,6 +432,23 @@ router.get('/history', function(req, res) {
   });
 });
 
+router.post('/test/:txtname', checkLogin);
+router.post('/test/:txtname', function(req, res) {
+
+  console.log(req.body);
+
+  Txt.testedit(req.params.txtname, page, req.body.post, req.body.ans, function(err, data) {
+    var url = encodeURI('/txt/' + req.params.txtname + '?p=' + page);
+    if (err) {
+      console.log(err);
+      req.flash('error', err);
+      return res.redirect(url);
+    }
+
+    req.flash('success', '修改成功!');
+    res.redirect(url);
+  });
+});
 
 router.get('/tags/:tag', function(req, res) {
 
@@ -494,22 +511,22 @@ router.get('/test/:txtname', function(req, res) {
   });
 });
 
-router.post('/test/:txtname', checkLogin);
-router.post('/test/:txtname', function(req, res) {
-
-  Txt.compare(req.params.txtname, req.body, function(err, error_ans) {
-    console.log(error_ans);
-  })
-
-  res.render('/', {
-    title: doc.name,
-    doc: doc,
-    user: req.session.user,
-    success: req.flash('success').toString(),
-    error: req.flash('error').toString()
-  });
-
-});
+// router.post('/test/:txtname', checkLogin);
+// router.post('/test/:txtname', function(req, res) {
+//
+//   Txt.compare(req.params.txtname, req.body, function(err, error_ans) {
+//     console.log(error_ans);
+//   })
+//
+//   res.render('/', {
+//     title: doc.name,
+//     doc: doc,
+//     user: req.session.user,
+//     success: req.flash('success').toString(),
+//     error: req.flash('error').toString()
+//   });
+//
+// });
 router.get('/search', checkLogin);
 router.get('/search', function(req, res) {
 

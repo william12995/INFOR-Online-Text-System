@@ -12,13 +12,13 @@
                         <p class="text-danger">*必填</p>
                         <br>
                     </div>
-
-                          <% var sum = 1; %>
+                    <form action="/test/<%= doc.name %>" method="post">
+                        <fieldset>
+                          <%var sum = 1; %>
                           <% doc.choice.forEach(function(type, index){ %>
                             <div class="col-md-20 col-md-offset-0" id="container<%= index %>">
-                              <form action="/test/<%= doc.name %>" method="post">
-                                  <fieldset>
-                                 <textarea name = "post" rows = "20" cols = "100"> <%= doc.post[0].test[ index ] %> </textarea><br/>
+
+                                 <textarea name = "post" rows = "20" cols = "100"> <%= doc.post[ index ] %> </textarea><br/>
 
 
                                 <% if(type[0] == 'single' ){ %>
@@ -29,35 +29,33 @@
                                   <p><%= sum %></p>
                                     <div class="radio radio-primary">
                                         <label>
-                                          選項A
-                                          <textarea name = "A" rows = "2" cols = "30"> <%= doc.post[0].choice[ index ].A %> </textarea>
+                                        <input type="radio" name="<%= index %>" value="A" id="radio1">
+                                        選項A
                                         </label>
                                     </div>
                                     <div class="radio radio-primary">
                                         <label>
-                                          選項B
-                                          <textarea name = "B" rows = "2" cols = "30"> <%= doc.post[0].choice[ index ].B %> </textarea>
+                                        <input type="radio" name="<%= index %>" value="B" id="radio2">
+                                        選項B
                                         </label>
                                     </div>
                                     <div class="radio radio-primary">
                                         <label>
-                                          選項C
-                                          <textarea name = "C" rows = "2" cols = "30"> <%= doc.post[0].choice[ index ].C %> </textarea>
+                                        <input type="radio" name="<%= index %>" value="C" id="radio3">
+                                        選項C
                                         </label>
                                     </div>
                                     <div class="radio radio-primary">
                                         <label>
-                                          選項D
-                                          <textarea name = "D" rows = "2" cols = "30"> <%= doc.post[0].choice[ index ].D %> </textarea>
+                                        <input type="radio" name="<%= index %>" value="D" id="radio4">
+                                        選項D
                                         </label>
                                     </div>
                                     <% sum = sum +1; %>
                                     <button onclick="removeText(<%= index%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button">刪除此題</button>
                                 </div>
-
                                   <% } %>
                                   <br>
-                                  <button >儲存變更</button>
                                   <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增單選</button>
                                   <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增多選</button>
                                 <% } %>
@@ -97,14 +95,14 @@
                                 </div>
                                   <% } %>
                                   <br>
-                                  <button onclick="savechange(<%= index%>,'<%= doc.name%>')">儲存變更</button>
                                   <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增單選</button>
                                   <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增多選</button>
                                 <% } %>
-                              </fieldset>
-                          </form>
-                      </div>
-                      <% }) %>
+                            </div>
+                            <% }) %>
+                        </fieldset>
+                        <input type="submit" value="送出答案">
+                    </form>
                 </div>
             </div>
         </div>

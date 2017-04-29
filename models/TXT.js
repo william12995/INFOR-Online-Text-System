@@ -121,8 +121,14 @@ TXT.prototype.SaveEnglish = function(filename, callback) {
     // console.log(JSON.stringify(finalData));
 
     //this.post = AllData;
+
+    var newtest = {
+      test: AllData,
+      choice: []
+    };
+
     console.log("this.name: " + this.name);
-    EnglishAnswer(this.name, this.ans, this.subject, AllData);
+    EnglishAnswer(this.name, this.ans, this.subject, newtest);
 
     fs.writeFile(filename, AllData);
     console.log("Extract Done\n");
@@ -328,7 +334,34 @@ TXT.edit = function(filename, p, post, ans, callback) {
   txtModel.findOne({
     name: filename
   }, function(err, data) {
-    data.post[p] = post ;
+    data.post.test[p] = post ;
+
+    var newpost = data.post;
+
+    txtModel.update({
+      "name": filename
+    }, {
+      $set: {
+        "post": newpost,
+        "ans": ans
+      }
+    }, function(err) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null);
+    });
+
+  });
+};
+
+TXT.testedit = function(filename, p, post, ans, callback) {
+
+  txtModel.findOne({
+    name: filename
+  }, function(err, data) {
+    data.post.test[p] = post ;
+
     var newpost = data.post;
 
     txtModel.update({
@@ -418,9 +451,16 @@ var EnglishAnswer = function(txtname, ansname, subject, postData) {
     //console.log("AllData: "+AllData);
     var choice = [];
     var single = ["single", 1];
-    for (var i = 0; i < postData.length; i++) {
+    var qus = {
+      A: null,
+      B: null,
+      C: null,
+      D: null
+    }
+    for (var i = 0; i < postData.test.length; i++) {
 
       choice.push(single);
+      postData.choice.push(qus);
     }
 
     var content = {
