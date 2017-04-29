@@ -31,13 +31,14 @@
                   <img class="circle" src="<%= comment.head %>" alt="icon">
                 </div>
                 <div class="row-content">
-                  <h4 class="list-group-item-heading" style="margin-bottom:0px;font-size:19px;"><a href="/user/<%= comment.name %>"><%= comment.name %></a></h4>
+                  <span style="margin-bottom:0px;font-size:19px;"><a href="/user/<%= comment.name %>"><%= comment.name %></a></span>
+                  <% if(user.name == comment.name){ %>
+    							<span style="padding-left:70%;"><a href="/rm_comment/<%= post.name %>/<%= post.time.day %>/<%= post.title %>/<%= comment.content%>">刪除</a><span>
+    							<% } %>
+                  <!-- <span><h4 class="list-group-item-heading" style="margin-bottom:0px;font-size:19px;"><a href="/user/<%= comment.name %>"><%= comment.name %></a></h4></span> -->
                   <p class="list-group-item-text" style="font-size:17px;"><%- comment.content %></p>
                   <small class="grey"><%- comment.time %></small>
                 </div>
-                <% if(user.name == comment.name){ %>
-  							<span style="padding-left:70%;"><a href="/rm_comment/<%= post.name %>/<%= post.time.day %>/<%= post.title %>/<%= comment.content%>">刪除</a><span>
-  							<% } %>
               </div>
 
                 <% if(comment.starname.indexOf(user.name) == -1 || comment.starname.length ==0 ){  %>

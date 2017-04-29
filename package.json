@@ -35,6 +35,8 @@
     "pdf2json": "^1.1.7",
     "pdfreader": "^0.2.3",
     "randomstring": "^1.1.5",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
     "serve-favicon": "~2.3.2",
     "underscore": "^1.8.3",
     "util": "^0.10.3"
