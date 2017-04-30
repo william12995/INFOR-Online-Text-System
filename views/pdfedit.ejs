@@ -60,6 +60,8 @@
                                   <button >儲存變更</button>
                                   <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增單選</button>
                                   <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增多選</button>
+                                  <br><br>
+                                  <button onclick="insert('<%= doc.name%>')" type="button">新增下一題</button><br><br>
                                 <% } %>
 
                                 <% if(type[0] == 'multiple' ){ %>
@@ -100,6 +102,8 @@
                                   <button >儲存變更</button>
                                   <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增單選</button>
                                   <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增多選</button>
+                                  <br><br>
+                                  <button onclick="insert('<%= doc.name%>')" type="button">新增下一題</button><br><br>
                                 <% } %>
                               </fieldset>
                           </form>
@@ -162,6 +166,25 @@ function removeText(type,index,sum,name,number) {
   $.ajax({
           type: 'POST',
           url: 'http://localhost:1209/removeChoice',
+          data: data,
+          dataType: 'application/json',
+          success: function(data) {
+              console.log('success');
+              console.log(data);
+          }
+      });
+  location.reload(true);
+};
+
+
+function insert(name) {
+  var data ={
+    name:name
+  };
+
+  $.ajax({
+          type: 'POST',
+          url: 'http://localhost:1209/testInsert',
           data: data,
           dataType: 'application/json',
           success: function(data) {

@@ -36,7 +36,7 @@
                 <div class="btn-group btn-group-justified btn-group-raised">
                     <a data-toggle="modal" data-target="#post" class="btn" id="custom-btn">發文</a>
                     <a href="/pdfUpload" class="btn" id="custom-btn">新增題目</a>
-                    <!-- <a data-toggle="modal" data-target="#upload" class="btn" id="custom-btn">上傳檔案</a> -->
+                    <a data-toggle="modal" data-target="#upload" class="btn" id="custom-btn">自訂考卷</a>
                 </div>
             </div>
             <div class="col-md-8 col-md-offset-2" style="margin-top:20px">
@@ -147,7 +147,7 @@
                     <a href="#" type="button" class="close" data-dismiss="modal" aria-label="Close" id="close" style="display:none"><span aria-hidden="true">&times;</span></a>
                 </div>
                 <div class="modal-body" id="area">
-                    <h3 id="title">Upload File</h3>
+                    <h3 id="title">自訂考卷</h3>
                     <div id="progressBar" style="display:none">
                         <div class="bs-component">
                             <div class="progress progress-striped active">
@@ -155,10 +155,48 @@
                             </div>
                         </div>
                     </div>
+                    <form method="post" action='/newtest'>
                     <div style="container" id="fileSelect">
-                        <input type="file" name="pdf" id="fileElem1" class="form-control" onchange="handleFiles1(this.files)" style="display:none">
-                        <a href="#" id="fileSelect1" class="btn" style="width:95%;background-color:#ddd;text-transform:none;margin-left:10px">+</a>
+                        <input type="text" name="title" class="form-control" autocomplete="off" placeholder="考卷名稱">
                     </div>
+                    <div class="form-group">
+                        <label style="color:#888;">選擇科目</label><br>
+                        <div class="radio radio-primary">
+                            <label>
+                            <input type="radio" name="subject" value="chinese" id="radio1">
+                            國文
+                            </label>
+                        </div>
+                        <div class="radio radio-primary">
+                            <label>
+                            <input type="radio" name="subject" value="english" id="radio2">
+                            英文
+                            </label>
+                        </div>
+                        <div class="radio radio-primary">
+                            <label>
+                            <input type="radio" name="subject" value="math" id="radio3">
+                            數學
+                            </label>
+                        </div>
+                        <div class="radio radio-primary">
+                            <label>
+                            <input type="radio" name="subject" value="social">
+                            社會
+                            </label>
+                        </div>
+                        <div class="radio radio-primary">
+                            <label>
+                            <input type="radio" name="subject" value="science">
+                            自然
+                            </label>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">新增</button>
+                        </div>
+                    </div>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <hr>
