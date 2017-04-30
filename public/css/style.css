@@ -39,6 +39,11 @@ body, html{
     overflow: hidden;
 }
 
+.file-btn {
+    margin: 0px;
+    font-size: 5px;
+}
+
 #check {
     padding: 8px;
 }

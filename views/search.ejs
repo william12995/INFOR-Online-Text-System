@@ -5,6 +5,7 @@
             <div class="col-md-10 col-md-offset-1">
                 <% var lastYear = 0; %>
                 <% if(posts[0]){ %>
+                    <h3>Results match "<%= title %>"</h3>
                     <% posts.forEach(function(post, index){  %>
                     <% if(lastYear != post.time.year) { %>
                     <p>
