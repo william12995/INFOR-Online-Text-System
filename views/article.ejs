@@ -102,7 +102,7 @@
              <div class="well">
                  <h4>時間</h4>
                  <hr>
-                 <p>發布：<%= post.time.date.toLocaleTimeString("TW",{year: "numeric", month: "numeric", hour12: "true"}) %></p>
+                 <p>發布：<%= post.time.date.toLocaleTimeString("TW",{year: "numeric", month: "numeric", day: "numeric", hour12: "true"}) %></p>
              </div>
          </div>
           <%- include comment %>

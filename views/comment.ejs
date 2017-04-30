@@ -36,12 +36,12 @@
                     <span style="float:right;"><a href="/rm_comment/<%= post.name %>/<%= post.time.day %>/<%= post.title %>/<%= comment.content%>">刪除</a></span>
                     <% } %>
                     <!-- <span><h4 class="list-group-item-heading" style="margin-bottom:0px;font-size:19px;"><a href="/user/<%= comment.name %>"><%= comment.name %></a></h4></span> -->
-                    <p class="list-group-item-text" style="font-size:17px;"><%- comment.content %></p>
+                    <p class="list-group-item-text" style="font-size:16px;"><%- comment.content %></p>
                     <% if(comment.starname.indexOf(user.name) == -1 || comment.starname.length ==0 ){  %>
-                        <a href="#" onclick="starcomment('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',1,<%= index %>)" id="fakeButton">Like</a>
+                        <a href="#" onclick="starcomment('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',1,<%= index %>)" id="fakeButton" style="font-size:12px;">Like</a>
                     </button>
                     <% }else{ %>
-                        <a href="#" onclick="starcomment('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',-1,<%= index %>)" id="fakeButton">Unlike</a>
+                        <a href="#" onclick="starcomment('<%= post.name %>','<%= post.time.day %>','<%= post.title %>','<%= user.name %>',-1,<%= index %>)" id="fakeButton" style="font-size:12px;">Unlike</a>
                     <% } %>
                     <% if(comment.starname.length > 0){ %>
                         <span class="glyphicon glyphicon-thumbs-up grey" style="padding-left:5px;font-size:5px;"></span><%= comment.star %>
