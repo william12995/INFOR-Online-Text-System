@@ -53,6 +53,7 @@
                                         <div id="btn-group-<%= index %>" style="display:none">
                                             <button onclick="removeText('single',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">刪除此題</button>
                                             <button class="btn btn-default" id="btn-<%= sum %>">儲存變更</button>
+                                            <button onclick="insert('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增下一題</button>
                                             <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增單選</button>
                                             <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增多選</button>
                                         </div>
@@ -95,6 +96,9 @@
                                     <button class="btn btn-default">儲存變更</button>
                                     <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default">新增單選</button>
                                     <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default">新增多選</button>
+                                    <br><br>
+                                    <button onclick="insert('<%= doc.name%>',<%= index%>)" type="button">新增下一題</button><br><br>
+                                    <button onclick="removeall('<%= doc.name%>',<%= index%>)" type="button">刪除此題</button><br><br>
                                     <% } %>
                                 </fieldset>
                             </form>

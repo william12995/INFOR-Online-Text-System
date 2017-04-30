@@ -717,7 +717,7 @@ TXT.removechoice = function(filename, index, allsum, choice, callback) {
 
 TXT.newtest = function(filename, subject, callback) {
   var postData = {
-    test: [],
+    test: ["\n"],
     choice: [[{
       A: null,
       B: null,
@@ -746,25 +746,79 @@ TXT.newtest = function(filename, subject, callback) {
 }
 
 
-TXT.insert = function(filename, callback) {
-  var newchoice = ["single", 1];
-  var postchoice = [{
-    A: null,
-    B: null,
-    C: null,
-    D: null
-  }];
-  txtModel.update({
-    "name": filename
-  }, {
-    $push: {
-      "choice": newchoice,
-      "post.choice": postchoice
-    }
-  }, function(err) {
-    if (err) {
-      return callback(err);
-    }
-    callback(null);
+TXT.insert = function(filename, index, callback) {
+
+  txtModel.findOne({
+    name: filename
+  }, function(err, data) {
+    var newtype = ["single", 1];
+    var postchoice = [{
+      A: null,
+      B: null,
+      C: null,
+      D: null
+    }];
+    var newindex = Number(index) + 1;
+    console.log("newindex: " + newindex);
+    data.choice.splice(newindex, 0, newtype);
+    var newchoice = data.choice;
+
+    data.post.choice.splice(newindex, 0, postchoice);
+    var newAnschoice = data.post.choice;
+
+    var insertTest = "\n";
+    data.post.test.splice(newindex, 0, insertTest);
+    txtModel.update({
+      "name": filename
+    }, {
+      $set: {
+        choice: newchoice,
+        post: {
+          choice: newAnschoice,
+          test: data.post.test
+        }
+      }
+    }, function(err) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null);
+    });
+
+  });
+};
+
+
+TXT.testremove = function(filename, index, callback) {
+
+  txtModel.findOne({
+    name: filename
+  }, function(err, data) {
+
+    var newindex = Number(index);
+    console.log(newindex);
+    data.choice.splice(newindex, 1);
+    var newchoice = data.choice;
+
+    data.post.choice.splice(newindex, 1);
+    var newAnschoice = data.post.choice;
+    data.post.test.splice(newindex, 1);
+    txtModel.update({
+      "name": filename
+    }, {
+      $set: {
+        choice: newchoice,
+        post: {
+          choice: newAnschoice,
+          test: data.post.test
+        }
+      }
+    }, function(err) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null);
+    });
+
   });
 };

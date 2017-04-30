@@ -84,6 +84,44 @@ function multiple(index,name,number) {
       location.reload(true);
 }
 
+function removeall(name,index) {
+  var data ={
+    name:name,
+    index:index
+  };
+
+  $.ajax({
+          type: 'POST',
+          url: 'http://localhost:1209/testremove',
+          data: data,
+          dataType: 'application/json',
+          success: function(data) {
+              console.log('success');
+              console.log(data);
+          }
+      });
+  location.reload(true);
+}
+
+function insert(name,index) {
+  var data ={
+    name:name,
+    index:index
+  };
+
+  $.ajax({
+          type: 'POST',
+          url: 'http://localhost:1209/testInsert',
+          data: data,
+          dataType: 'application/json',
+          success: function(data) {
+              console.log('success');
+              console.log(data);
+          }
+      });
+  location.reload(true);
+}
+
 function sectionFocus(id) {
     containerId = '#container' + id.toString();
     btnGrouptId = '#btn-group-' + id.toString();
