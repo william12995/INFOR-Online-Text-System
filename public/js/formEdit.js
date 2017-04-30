@@ -85,10 +85,17 @@ function multiple(index,name,number) {
 }
 
 function sectionFocus(id) {
-    id = '#container' + id.toString();
-    console.log(id);
-    $('.col-md-20').css('box-shadow','0px 0px 0px 0px');
-    $('.col-md-20').css('border-left','0px');
-    $(id).css('box-shadow','0px 0px 20px 0px rgba(0, 0, 0, 0.2), 0 10px 30px 0 rgba(0, 0, 0, 0.19)');
-    $(id).css('border-left','solid #009688');
+    containerId = '#container' + id.toString();
+    btnGrouptId = '#btn-group-' + id.toString();
+    $(containerId).css('box-shadow','0px 0px 20px 0px rgba(0, 0, 0, 0.2), 0 10px 30px 0 rgba(0, 0, 0, 0.19)');
+    $(containerId).css('border-left','solid #009688');
+    $(btnGrouptId).show();
+}
+
+function sectionFocusOut(id) {
+    containerId = '#container' + id.toString();
+    btnGrouptId = '#btn-group-' + id.toString();
+    $(containerId).css('box-shadow','0px 0px 0px 0px');
+    $(containerId).css('border-left','0px');
+    $(btnGrouptId).hide();
 }

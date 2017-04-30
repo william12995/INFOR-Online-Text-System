@@ -2,7 +2,7 @@
 <section id="main">
     <div class="container">
         <div class="row">
-            <div class="col-md-17 col-md-offset-0">
+            <div class="col-md-8 col-md-offset-2" style="margin-top:20px;">
                 <div class="well" style="padding-left:0px;padding-right:0px;">
                     <div class="container" style="margin-top:20px;margin-bottom:20px;margin-left:15px;">
                         <h1><%= doc.name %></h1>
@@ -12,11 +12,11 @@
                         <br>
                     </div>
                     <% doc.choice.forEach(function(type, index){ %>
-                    <div class="col-md-20 col-md-offset-0" id="container<%= index %>">
+                    <div class="col-md-13 col-md-offset-0" id="container<%= index %>">
                         <div class="container">
                             <form action="/test/<%= doc.name %>" method="post">
                                 <fieldset style="margin-left:20px;">
-                                    <textarea name = "post<%= index %>" rows="<%= doc.post.test[ index ].split('\n').length %>" class="form-control" style="overflow:hidden;width:80%;" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
+                                    <textarea name = "post<%= index %>" rows="<%= doc.post.test[ index ].split('\n').length %>" class="form-control" style="overflow:hidden;width:60%;" onfocus="sectionFocus(<%= index %>)" onfocusout="sectionFocusOut(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
                                     <br/>
                                     <% if(type[0] == 'single' ){ %>
                                     <%for(var i =0;i < Number(type[1]); i++){%>
@@ -50,14 +50,15 @@
                                             <textarea name = "D" class="form-control" rows="1" style="display:none"> <%= doc.post.choice[ index ][i].D %> </textarea>
                                             </label>
                                         </div>
-                                        <button onclick="removeText('single',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button" class="btn btn-default" style="">刪除此題</button>
+                                        <div id="btn-group-<%= index %>" style="display:none">
+                                            <button onclick="removeText('single',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">刪除此題</button>
+                                            <button class="btn btn-default" id="btn-<%= sum %>">儲存變更</button>
+                                            <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增單選</button>
+                                            <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增多選</button>
+                                        </div>
                                         <% sum = sum +1; %>
                                     </div>
                                     <% } %>
-                                    <br>
-                                    <button class="btn btn-default">儲存變更</button>
-                                    <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default">新增單選</button>
-                                    <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default">新增多選</button>
                                     <% } %>
                                     <% if(type[0] == 'multiple' ){ %>
                                     <%for(var i =0;i < Number(type[1]); i++){%>
