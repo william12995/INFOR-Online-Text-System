@@ -9,7 +9,7 @@ var mongoose = require('mongoose');
 
 var txtSchema = new mongoose.Schema({
   name: String,
-  post: Array,
+  post: Object,
   ans: Array,
   subject: String,
   choice: Array
@@ -83,44 +83,7 @@ TXT.prototype.SaveEnglish = function(filename, callback) {
 
     // var regex_post = /(\d+\.[\s\S]*?)\(\s*A|(第[\s\S]*?)\d+\./g;
     // var regex_ans = /[A-Za-z]\s*\)([\s\S]*?)[\d\.\(\r第]+/g;
-    // var finalData = [];
-    //
-    // for (var i = 0; i < AllData.length; i++) {
-    //   let m,
-    //     n;
-    //   var newtest = {
-    //     post: [],
-    //     ans: []
-    //   };
-    //   while ((m = regex_ans.exec(AllData[i])) !== null) {
-    //     // This is necessary to avoid infinite loops with zero-width matches
-    //     if (m.index === regex_ans.lastIndex) {
-    //       regex_ans.lastIndex++;
-    //     }
-    //
-    //     newtest.ans.push(m[1]);
-    //   }
-    //
-    //
-    //   while ((n = regex_post.exec(AllData[i])) !== null) {
-    //     // This is necessary to avoid infinite loops with zero-width matches
-    //     if (n.index === regex_post.lastIndex) {
-    //       regex_post.lastIndex++;
-    //     }
-    //     if (n[1] !== null) {
-    //       newtest.post.push(n[1]);
-    //     } else if (n[0] !== null) {
-    //       newtest.post.push(n[0]);
-    //     }
-    //
-    //   }
-    //
-    //   finalData.push(newtest);
-    //
-    // }
-    // console.log(JSON.stringify(finalData));
 
-    //this.post = AllData;
 
     var newtest = {
       test: AllData,
@@ -167,7 +130,12 @@ TXT.prototype.SaveChinese = function(filename, callback) {
       console.log(AllData);
     }
 
-    ChineseAnswer(this.name, this.ans, this.subject, AllData);
+    var newtest = {
+      test: AllData,
+      choice: []
+    };
+
+    ChineseAnswer(this.name, this.ans, this.subject, newtest);
 
     fs.writeFile(filename, AllData);
 
@@ -256,7 +224,12 @@ TXT.prototype.SaveSocial = function(filename, callback) {
       AllData.push(m[0]);
     }
 
-    SocialAnswer(this.name, this.ans, this.subject, AllData);
+    var newtest = {
+      test: AllData,
+      choice: []
+    };
+
+    SocialAnswer(this.name, this.ans, this.subject, newtest);
 
     fs.writeFile(filename, AllData);
 
@@ -361,15 +334,34 @@ TXT.testedit = function(filename, p, post, ans, callback) {
     name: filename
   }, function(err, data) {
     data.post.test[p] = post ;
-
-    var newpost = data.post;
+    if (data.choice[p][1] > 1) {
+      for (var i = 0; i < data.choice[p][1]; i++) {
+        // console.log(ans.A[i]);
+        // console.log(data.post.choice[p][i]);
+        data.post.choice[p][i].A = ans.A[i];
+        data.post.choice[p][i].B = ans.B[i];
+        data.post.choice[p][i].C = ans.C[i];
+        data.post.choice[p][i].D = ans.D[i];
+      }
+    } else {
+      data.post.choice[p][0].A = ans.A;
+      data.post.choice[p][0].B = ans.B;
+      data.post.choice[p][0].C = ans.C;
+      data.post.choice[p][0].D = ans.D;
+    }
+    // console.log("p: " + p);
+    // console.log(data.post.choice[p]);
+    var newpost = data.post.test;
+    var newchoice = data.post.choice;
 
     txtModel.update({
       "name": filename
     }, {
       $set: {
-        "post": newpost,
-        "ans": ans
+        post: {
+          "test": newpost,
+          "choice": newchoice
+        }
       }
     }, function(err) {
       if (err) {
@@ -386,10 +378,10 @@ TXT.remove = function(filename, p, callback) {
   txtModel.findOne({
     name: filename
   }, function(err, data) {
-    console.log("p: " + p);
+    // console.log("p: " + p);
     data.post.splice(p, 1);
     var newpost = data.post;
-    console.log(newpost);
+    // console.log(newpost);
     var ans = data.ans
     txtModel.update({
       "name": filename
@@ -460,7 +452,7 @@ var EnglishAnswer = function(txtname, ansname, subject, postData) {
     for (var i = 0; i < postData.test.length; i++) {
 
       choice.push(single);
-      postData.choice.push(qus);
+      postData.choice.push([qus]);
     }
 
     var content = {
@@ -471,7 +463,7 @@ var EnglishAnswer = function(txtname, ansname, subject, postData) {
       choice: choice
     };
 
-    console.log(content);
+    // console.log(content);
     var newTxt = new txtModel(content);
 
     newTxt.save(function(err) {
@@ -530,12 +522,22 @@ var ChineseAnswer = function(txtname, ansname, subject, postData) {
     var choice = [];
     var single = ["single", 1];
     var multiple = ["multiple", 1];
-    for (var i = 0; i < postData.length - 8; i++) {
+
+    var qus = {
+      A: null,
+      B: null,
+      C: null,
+      D: null
+    }
+
+    for (var i = 0; i < postData.test.length - 8; i++) {
 
       choice.push(single);
+      postData.choice.push([qus]);
     }
     for (var i = 15; i < 23; i++) {
       choice.push(multiple);
+      postData.choice.push([qus]);
     }
 
 
@@ -611,9 +613,15 @@ var SocialAnswer = function(txtname, ansname, subject, postData) {
     //console.log("AllData: "+AllData);
     var choice = [];
     var single = ["single", 1];
-    for (var i = 0; i < postData.length; i++) {
-
+    var qus = {
+      A: null,
+      B: null,
+      C: null,
+      D: null
+    }
+    for (var i = 0; i < postData.test.length; i++) {
       choice.push(single);
+      postData.choice.push([qus]);
     }
 
     var content = {
@@ -649,11 +657,53 @@ TXT.choice = function(filename, index, choice, callback) {
     data.choice[index] = choice ;
     var newchoice = data.choice;
 
+    var qus = {
+      A: null,
+      B: null,
+      C: null,
+      D: null
+    }
+    data.post.choice[index].push(qus);
+    var newAnschoice = data.post.choice;
     txtModel.update({
       "name": filename
     }, {
       $set: {
-        "choice": newchoice
+        "choice": newchoice,
+        post: {
+          choice: newAnschoice,
+          test: data.post.test
+        }
+      }
+    }, function(err) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null);
+    });
+
+  });
+}
+
+TXT.removechoice = function(filename, index, allsum, choice, callback) {
+  txtModel.findOne({
+    name: filename
+  }, function(err, data) {
+    data.choice[index] = choice ;
+    var newchoice = data.choice;
+
+    // console.log("allsum: " + allsum);
+    data.post.choice[index].splice(allsum, 1)
+    var newAnschoice = data.post.choice;
+    txtModel.update({
+      "name": filename
+    }, {
+      $set: {
+        "choice": newchoice,
+        post: {
+          choice: newAnschoice,
+          test: data.post.test
+        }
       }
     }, function(err) {
       if (err) {

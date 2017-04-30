@@ -435,9 +435,21 @@ router.post('/test/:txtname', checkLogin);
 router.post('/test/:txtname', function(req, res) {
 
   console.log(req.body);
+  var postindex = Object.keys(req.body)[0];
+  var post = req.body[String(postindex)];
+  console.log(post);
+  postindex = postindex.split('t')[1];
+  console.log(postindex);
+  var ansArray = {
+    A: req.body.A,
+    B: req.body.B,
+    C: req.body.C,
+    D: req.body.D
+  };
+  console.log(ansArray);
 
-  Txt.testedit(req.params.txtname, page, req.body.post, req.body.ans, function(err, data) {
-    var url = encodeURI('/txt/' + req.params.txtname + '?p=' + page);
+  Txt.testedit(req.params.txtname, postindex, post, ansArray, function(err, data) {
+
     if (err) {
       console.log(err);
       req.flash('error', err);
@@ -445,7 +457,7 @@ router.post('/test/:txtname', function(req, res) {
     }
 
     req.flash('success', '修改成功!');
-    res.redirect(url);
+    res.redirect('back');
   });
 });
 
@@ -493,17 +505,10 @@ router.get('/test/:txtname', function(req, res) {
       req.flash('error', err);
       return res.redirect('/');
     }
-    var ejs;
-    if (doc.subject == 'english')
-      ejs = 'english';
-    if (doc.subject == 'chinese')
-      ejs = 'chinese';
-    if (doc.subject == 'social')
-      ejs = 'social';
-
-    res.render(ejs, {
+    res.render('pdfedit', {
       title: doc.name,
       doc: doc,
+      sum: 1,
       user: req.session.user,
       success: req.flash('success').toString(),
       error: req.flash('error').toString()
@@ -816,6 +821,26 @@ router.post('/choice', function(req, res) {
 
   var newchoice = [data.choice, data.number];
   Txt.choice(data.name, data.index, newchoice, function(err) {
+    if (err) {
+      req.flash('error', err);
+      return res.redirect('/');
+    }
+
+    req.flash('success', '新增成功');
+
+  });
+})
+
+router.post('/removeChoice', function(req, res) {
+
+  var data = req.body;
+  // console.log(data);
+  // console.log("name: " + data.name);
+  // console.log("choice: " + data.choice);
+  // console.log("num: " + data.number);
+
+  var newchoice = [data.choice, data.number];
+  Txt.removechoice(data.name, data.index, data.sum, newchoice, function(err) {
     if (err) {
       req.flash('error', err);
       return res.redirect('/');

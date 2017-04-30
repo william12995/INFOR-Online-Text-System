@@ -12,15 +12,13 @@
                         <p class="text-danger">*必填</p>
                         <br>
                     </div>
-                    <form action="/test/<%= doc.name %>" method="post">
-                        <fieldset>
-                          <%var sum = 1; %>
+
+
                           <% doc.choice.forEach(function(type, index){ %>
                             <div class="col-md-20 col-md-offset-0" id="container<%= index %>">
-
-                                <strong>
-                                    <pre><%= doc.post[ index ] %></pre>
-                                </strong>
+                              <form action="/test/<%= doc.name %>" method="post">
+                                  <fieldset>
+                                 <textarea name = "post<%= index %>" rows = "20" cols = "100"> <%= doc.post.test[ index ] %> </textarea><br/>
 
                                 <% if(type[0] == 'single' ){ %>
 
@@ -30,34 +28,36 @@
                                   <p><%= sum %></p>
                                     <div class="radio radio-primary">
                                         <label>
-                                        <input type="radio" name="<%= index %>" value="A" id="radio1">
-                                        選項A
+                                          單選選項A
+                                          <textarea name = "A" rows = "2" cols = "30"> <%= doc.post.choice[ index ][i].A %> </textarea>
                                         </label>
                                     </div>
                                     <div class="radio radio-primary">
                                         <label>
-                                        <input type="radio" name="<%= index %>" value="B" id="radio2">
-                                        選項B
+                                          單選選項B
+                                          <textarea name = "B" rows = "2" cols = "30"> <%= doc.post.choice[ index ][i].B %> </textarea>
                                         </label>
                                     </div>
                                     <div class="radio radio-primary">
                                         <label>
-                                        <input type="radio" name="<%= index %>" value="C" id="radio3">
-                                        選項C
+                                          單選選項C
+                                          <textarea name = "C" rows = "2" cols = "30"> <%= doc.post.choice[ index ][i].C %> </textarea>
                                         </label>
                                     </div>
                                     <div class="radio radio-primary">
                                         <label>
-                                        <input type="radio" name="<%= index %>" value="D" id="radio4">
-                                        選項D
+                                          單選選項D
+                                          <textarea name = "D" rows = "2" cols = "30"> <%= doc.post.choice[ index ][i].D %> </textarea>
                                         </label>
                                     </div>
+
+                                    <button onclick="removeText('single',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button">刪除此題</button>
                                     <% sum = sum +1; %>
-                                    <button onclick="removeText(<%= index%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button">刪除此題</button>
-                                    
                                 </div>
+
                                   <% } %>
                                   <br>
+                                  <button >儲存變更</button>
                                   <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增單選</button>
                                   <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增多選</button>
                                 <% } %>
@@ -70,41 +70,41 @@
                                   <p><%= sum %></p>
                                   <div class="checkbox">
                                       <label id="check">
-                                          <input type="checkbox" name="<%= index %>" value="A">
-                                          <span id="check-item">選項A</span>
+                                        多選選項A
+                                        <textarea name = "A" rows = "2" cols = "30"> <%= doc.post.choice[ index ][i].A %> </textarea>
                                       </label>
                                   </div>
                                   <div class="checkbox">
                                       <label id="check">
-                                          <input type="checkbox" name="<%= index %>" value="B">
-                                          <span id="check-item">選項B</span>
+                                        多選選項B
+                                        <textarea name = "B" rows = "2" cols = "30"> <%= doc.post.choice[ index ][i].B %> </textarea>
                                       </label>
                                   </div>
                                   <div class="checkbox">
                                       <label id="check">
-                                          <input type="checkbox" name="<%= index %>" value="C">
-                                          <span id="check-item">選項C</span>
+                                        多選選項C
+                                        <textarea name = "C" rows = "2" cols = "30"> <%= doc.post.choice[ index ][i].C %> </textarea>
                                       </label>
                                   </div>
                                   <div class="checkbox">
                                       <label id="check">
-                                          <input type="checkbox" name="<%= index %>" value="D">
-                                          <span id="check-item">選項D</span>
+                                        多選選項D
+                                        <textarea name = "D" rows = "2" cols = "30"> <%= doc.post.choice[ index ][i].D %> </textarea>
                                       </label>
                                   </div>
-                                    <% sum = sum +1; %>
-                                    <button onclick="removeText(<%= index%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button">刪除此題</button>
+                                  <button onclick="removeText('multiple',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button">刪除此題</button>
+                                  <% sum = sum +1; %>
                                 </div>
                                   <% } %>
                                   <br>
+                                  <button >儲存變更</button>
                                   <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增單選</button>
                                   <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增多選</button>
                                 <% } %>
-                            </div>
-                            <% }) %>
-                        </fieldset>
-                        <input type="submit" value="送出答案">
-                    </form>
+                              </fieldset>
+                          </form>
+                      </div>
+                      <% }) %>
                 </div>
             </div>
         </div>
@@ -117,12 +117,12 @@ function single(index,name,number) {
 
   var id = "container"+index;
   var node = document.createElement("div");
-  node.innerHTML = '<div class="radio radio-primary"><label><input type="radio" name="p" value="A" id="radio1">選項A</label></div><div class="radio radio-primary"><label><input type="radio" name="p" value="B" id="radio2">選項B</label></div><div class="radio radio-primary"><label><input type="radio" name="p" value="C" id="radio3">選項C</label></div><div class="radio radio-primary"><label><input type="radio" name="p" value="D" id="radio4">選項D</label></div>';
+  node.innerHTML = '<div class="form-group" ><div class="radio radio-primary"><label>選項A<textarea name = "A" rows = "2" cols = "30"> "<%="+ doc.post[0].choice[ (sum-1) ].A +"%>" </textarea></label></div><div class="radio radio-primary"><label>選項B <textarea name = "B" rows = "2" cols = "30"> "<%="+ doc.post[0].choice[ (sum-1) ].B"%>"</textarea></label></div><div class="radio radio-primary"><label>選項C<textarea name = "C" rows = "2" cols = "30"> "<%=" doc.post[0].choice[ (sum-1) ].C "%>"</textarea></label></div><div class="radio radio-primary"><label>選項D<textarea name = "D" rows = "2" cols = "30"> "<%=" doc.post[0].choice[ (sum-1) ].D "%>"</textarea></label></div></div>';
   document.getElementById(id).appendChild(node);
 
   $.material.init();
   var choice = 'single';
-  var number = number;
+  var number = Number(number);
 
   var data ={
     name:name,
@@ -144,21 +144,24 @@ function single(index,name,number) {
       location.reload(true);
 }
 
-function removeText(index,name,number) {
+function removeText(type,index,sum,name,number) {
 
-  var choice = 'single';
+  var choice ;
+  if(type == 'single') choice = 'single';
+  if(type == 'multiple') choice = 'multiple';
   var number = number;
 
   var data ={
     name:name,
     choice:choice,
     number: number,
-    index: index
+    index: index,
+    sum:sum
   };
 
   $.ajax({
           type: 'POST',
-          url: 'http://localhost:1209/choice',
+          url: 'http://localhost:1209/removeChoice',
           data: data,
           dataType: 'application/json',
           success: function(data) {
@@ -173,7 +176,7 @@ function multiple(index,name,number) {
 
   var id = "container"+index;
   var node = document.createElement("div");
-  node.innerHTML = '<div class="checkbox"><label id="check"><input type="checkbox" name="l" value="A"><span id="check-item">選項A</span></label></div><div class="checkbox"><label id="check"><input type="checkbox" name="l" value="B"><span id="check-item">選項B</span></label></div><div class="checkbox"><label id="check"><input type="checkbox" name="l" value="C"><span id="check-item">選項C</span></label></div><div class="checkbox"><label id="check"><input type="checkbox" name="l" value="D"><span id="check-item">選項D</span></label></div>';
+  node.innerHTML = '<div class="form-group" ><div class="checkbox"><label id="check">選項A<textarea name = "A" rows = "2" cols = "30"> "<%="+ doc.post[0].choice[ (sum-1) ].A +"%>" </textarea></span></label></div><div class="checkbox"><label id="check">選項B <textarea name = "B" rows = "2" cols = "30"> "<%="+ doc.post[0].choice[ (sum-1)].B"%>"</textarea></span></label></div><div class="checkbox"><label id="check">選項C<textarea name = "C" rows = "2" cols = "30"> "<%=" doc.post[0].choice[ (sum-1) ].C "%>"</textarea></span></label></div><div class="checkbox"><label id="check">選項D<textarea name = "D" rows = "2" cols = "30"> "<%=" doc.post[0].choice[ (sum-1) ].D "%>"</textarea></span></label></div></div>';
   document.getElementById(id).appendChild(node);
 
   $.material.init();
