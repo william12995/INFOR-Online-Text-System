@@ -16,7 +16,7 @@
                         <div class="container">
                             <form action="/test/<%= doc.name %>" method="post">
                                 <fieldset style="margin-left:20px;">
-                                    <textarea name = "post<%= index %>" rows="<%= doc.post.test[ index ].split('\n').length %>" class="form-control" style="overflow:hidden;width:60%;" onfocus="sectionFocus(<%= index %>)" onfocusout="sectionFocusOut(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
+                                    <textarea name = "post<%= index %>" rows="1" class="form-control" style="overflow:hidden;width:60%;height:auto" onfocus="sectionFocus(<%= index %>)" onfocusout="sectionFocusOut(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
                                     <!-- <br/> -->
                                     <% if(type[0] == 'single' ){ %>
                                     <%for(var i =0;i < Number(type[1]); i++){%>
