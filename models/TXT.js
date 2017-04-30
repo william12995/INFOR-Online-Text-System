@@ -717,7 +717,7 @@ TXT.removechoice = function(filename, index, allsum, choice, callback) {
 
 TXT.newtest = function(filename, subject, callback) {
   var postData = {
-    test: [],
+    test: ["\n"],
     choice: [[{
       A: null,
       B: null,
@@ -765,7 +765,9 @@ TXT.insert = function(filename, index, callback) {
 
     data.post.choice.splice(newindex, 0, postchoice);
     var newAnschoice = data.post.choice;
-    data.post.test.splice(newindex, 0, null);
+
+    var insertTest = "\n";
+    data.post.test.splice(newindex, 0, insertTest);
     txtModel.update({
       "name": filename
     }, {
