@@ -51,7 +51,7 @@
                                         </label>
                                     </div>
 
-                                    <button onclick="removeText('single',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button">刪除此題</button>
+                                    <button onclick="removeText('single',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button">刪除</button>
                                     <% sum = sum +1; %>
                                 </div>
 
@@ -61,7 +61,8 @@
                                   <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增單選</button>
                                   <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增多選</button>
                                   <br><br>
-                                  <button onclick="insert('<%= doc.name%>')" type="button">新增下一題</button><br><br>
+                                  <button onclick="insert('<%= doc.name%>',<%= index%>)" type="button">新增下一題</button><br><br>
+                                  <button onclick="removeall('<%= doc.name%>',<%= index%>)" type="button">刪除此題</button><br><br>
                                 <% } %>
 
                                 <% if(type[0] == 'multiple' ){ %>
@@ -94,7 +95,7 @@
                                         <textarea name = "D" rows = "2" cols = "30"> <%= doc.post.choice[ index ][i].D %> </textarea>
                                       </label>
                                   </div>
-                                  <button onclick="removeText('multiple',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button">刪除此題</button>
+                                  <button onclick="removeText('multiple',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button">刪除</button>
                                   <% sum = sum +1; %>
                                 </div>
                                   <% } %>
@@ -103,7 +104,9 @@
                                   <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增單選</button>
                                   <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button">新增多選</button>
                                   <br><br>
-                                  <button onclick="insert('<%= doc.name%>')" type="button">新增下一題</button><br><br>
+                                  <button onclick="insert('<%= doc.name%>',<%= index %>)" type="button">新增下一題</button>
+                                  <button onclick="removeall('<%= doc.name%>',<%= index%>)" type="button">刪除此題</button><br><br>
+                                  <br><br>
                                 <% } %>
                               </fieldset>
                           </form>
@@ -176,10 +179,29 @@ function removeText(type,index,sum,name,number) {
   location.reload(true);
 };
 
-
-function insert(name) {
+function removeall(name,index) {
   var data ={
-    name:name
+    name:name,
+    index:index
+  };
+
+  $.ajax({
+          type: 'POST',
+          url: 'http://localhost:1209/testremove',
+          data: data,
+          dataType: 'application/json',
+          success: function(data) {
+              console.log('success');
+              console.log(data);
+          }
+      });
+  location.reload(true);
+}
+
+function insert(name,index) {
+  var data ={
+    name:name,
+    index:index
   };
 
   $.ajax({

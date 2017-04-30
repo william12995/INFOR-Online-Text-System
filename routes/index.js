@@ -497,8 +497,22 @@ router.post('/newtest', function(req, res) {
 
 router.post('/testInsert', checkLogin);
 router.post('/testInsert', function(req, res) {
-  console.log(req.body.name);
-  Txt.insert(req.body.name, function(err, data) {
+  Txt.insert(req.body.name, req.body.index, function(err, data) {
+    var url = encodeURI('/test/' + req.body.name);
+    if (err) {
+      console.log(err);
+      req.flash('error', err);
+      return res.redirect(url);
+    }
+
+    req.flash('success', '修改成功!');
+    res.redirect(url);
+  });
+});
+
+router.post('/testremove', checkLogin);
+router.post('/testremove', function(req, res) {
+  Txt.testremove(req.body.name, req.body.index, function(err, data) {
     var url = encodeURI('/test/' + req.body.name);
     if (err) {
       console.log(err);
