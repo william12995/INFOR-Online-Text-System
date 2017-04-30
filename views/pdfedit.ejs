@@ -4,19 +4,23 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2" style="margin-top:20px;">
                 <div class="well" style="padding-left:0px;padding-right:0px;padding-bottom:0px;">
-                    <div class="container" style="margin-top:20px;margin-bottom:20px;margin-left:15px;">
+                    <div class="col-md-13 col-md-offset-0" style="margin-top:20px;margin-bottom:20px;margin-left:40px;">
                         <h1><%= doc.name %></h1>
                         <!-- <p>請完成以下題目</p>
                             <h3><a title="編輯" href="/txt/<%= title %>" > 編輯 </a></h3>
                             <p class="text-danger">*必填</p> -->
-                        <br>
                     </div>
                     <% doc.choice.forEach(function(type, index){ %>
-                    <div class="col-md-13 col-md-offset-0" id="container<%= index %>">
-                        <div class="container">
+                    <div class="col-md-13 col-md-offset-0" id="container<%= index %>" style="padding:15px 45px 5px 45px">
+                        <!-- <div class="container" id="container<%= index %>"> -->
                             <form action="/test/<%= doc.name %>" method="post">
-                                <fieldset style="margin-left:20px;">
-                                    <textarea name = "post<%= index %>" rows="1" class="form-control" style="overflow:hidden;width:60%;height:auto" onfocus="sectionFocus(<%= index %>)" onfocusout="sectionFocusOut(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
+                                <fieldset>
+                                    <div id="title<%= index %>">
+                                        <strong>
+                                            <h4 onclick="edit(<%= index %>)"><%= doc.post.test[ index ] %></h4>
+                                        </strong>
+                                    </div>
+                                    <textarea id="title-edit<%= index %>" name="post<%= index %>" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;display:none" onfocus="sectionFocus(<%= index %>)" onfocusout="sectionFocusOut(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
                                     <!-- <br/> -->
                                     <% if(type[0] == 'single' ){ %>
                                     <%for(var i =0;i < Number(type[1]); i++){%>
@@ -106,7 +110,7 @@
                                 </fieldset>
                             </form>
                         </div>
-                    </div>
+                    <!-- </div> -->
                     <% }) %>
                 </div>
             </div>

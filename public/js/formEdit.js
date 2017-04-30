@@ -123,19 +123,31 @@ function insert(name, index) {
 }
 
 function sectionFocus(id) {
-    containerId = '#container' + id.toString();
-    btnGrouptId = '#btn-group-' + id.toString();
+    var containerId = '#container' + id.toString();
+    var btnGrouptId = '#btn-group-' + id.toString();
     $(containerId).css('box-shadow', '0px 0px 20px 0px rgba(0, 0, 0, 0.2), 0 10px 30px 0 rgba(0, 0, 0, 0.19)');
     $(containerId).css('border-left', 'solid #009688');
     $(btnGrouptId).show();
 }
 
 function sectionFocusOut(id) {
-    containerId = '#container' + id.toString();
-    btnGrouptId = '#btn-group-' + id.toString();
+    var titleId = '#title' + id.toString();
+    var editId = '#title-edit' + id.toString();
+    var containerId = '#container' + id.toString();
+    var btnGrouptId = '#btn-group-' + id.toString();
     $(containerId).css('box-shadow', '0px 0px 0px 0px');
     $(containerId).css('border-left', '0px');
     $(btnGrouptId).hide();
+    $(titleId).show();
+    $(editId).hide();
+}
+
+function edit(id) {
+    var titleId = '#title' + id.toString();
+    var editId = '#title-edit' + id.toString();
+    $(titleId).hide();
+    $(editId).show();
+    $(editId).focus();
 }
 
 function h(e) {
@@ -147,7 +159,6 @@ function h(e) {
 
 $('textarea').each(function () {
     h(this);
-}).on('input', function () {
-    console.log('jizz');
+}).on('focus', function () {
     h(this);
 });
