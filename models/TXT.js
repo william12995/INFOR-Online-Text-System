@@ -714,3 +714,57 @@ TXT.removechoice = function(filename, index, allsum, choice, callback) {
 
   });
 }
+
+TXT.newtest = function(filename, subject, callback) {
+  var postData = {
+    test: [],
+    choice: [[{
+      A: null,
+      B: null,
+      C: null,
+      D: null
+    }]]
+  };
+  var choice = [["single", 1]]
+  var content = {
+    name: filename,
+    post: postData,
+    ans: [],
+    subject: subject,
+    choice: choice
+  };
+
+  var newTxt = new txtModel(content);
+
+  newTxt.save(function(err) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+    callback(null);
+  });
+}
+
+
+TXT.insert = function(filename, callback) {
+  var newchoice = ["single", 1];
+  var postchoice = [{
+    A: null,
+    B: null,
+    C: null,
+    D: null
+  }];
+  txtModel.update({
+    "name": filename
+  }, {
+    $push: {
+      "choice": newchoice,
+      "post.choice": postchoice
+    }
+  }, function(err) {
+    if (err) {
+      return callback(err);
+    }
+    callback(null);
+  });
+};

@@ -377,7 +377,6 @@ router.get('/txt/:txtname', function(req, res) {
 });
 
 
-
 router.post('/txt/:txtname', checkLogin);
 router.post('/txt/:txtname', function(req, res) {
 
@@ -434,19 +433,19 @@ router.get('/history', function(req, res) {
 router.post('/test/:txtname', checkLogin);
 router.post('/test/:txtname', function(req, res) {
 
-  console.log(req.body);
+  // console.log(req.body);
   var postindex = Object.keys(req.body)[0];
   var post = req.body[String(postindex)];
-  console.log(post);
+  // console.log(post);
   postindex = postindex.split('t')[1];
-  console.log(postindex);
+  // console.log(postindex);
   var ansArray = {
     A: req.body.A,
     B: req.body.B,
     C: req.body.C,
     D: req.body.D
   };
-  console.log(ansArray);
+  // console.log(ansArray);
 
   Txt.testedit(req.params.txtname, postindex, post, ansArray, function(err, data) {
 
@@ -479,6 +478,39 @@ router.get('/tags/:tag', function(req, res) {
     });
   });
 });
+
+router.post('/newtest', checkLogin);
+router.post('/newtest', function(req, res) {
+
+  Txt.newtest(req.body.title, req.body.subject, function(err, data) {
+    var url = encodeURI('/test/' + req.body.title);
+    if (err) {
+      console.log(err);
+      req.flash('error', err);
+      return res.redirect(url);
+    }
+
+    req.flash('success', '修改成功!');
+    res.redirect(url);
+  });
+});
+
+router.post('/testInsert', checkLogin);
+router.post('/testInsert', function(req, res) {
+  console.log(req.body.name);
+  Txt.insert(req.body.name, function(err, data) {
+    var url = encodeURI('/test/' + req.body.name);
+    if (err) {
+      console.log(err);
+      req.flash('error', err);
+      return res.redirect(url);
+    }
+
+    req.flash('success', '修改成功!');
+    res.redirect(url);
+  });
+});
+
 router.get('/test', checkLogin);
 router.get('/test', function(req, res) {
 
