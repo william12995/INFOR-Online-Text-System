@@ -1,3 +1,5 @@
+var last = -1;
+
 function single(index, name, number) {
 
   var id = "#container" + index;
@@ -150,9 +152,17 @@ function sectionFocus(id) {
   $(containerId).css('box-shadow', '0px 0px 20px 0px rgba(0, 0, 0, 0.2), 0 10px 30px 0 rgba(0, 0, 0, 0.19)');
   $(containerId).css('border-left', 'solid #009688');
   $(btnGrouptId).show();
+  if(last == -1){
+      last = id;
+  }
+  else if(last != id){
+      sectionFocusOut(last);
+      last = id;
+  }
 }
 
 function sectionFocusOut(id) {
+    console.log(id);
   var titleId = '#title' + id.toString();
   var editId = '#title-edit' + id.toString();
   var containerId = '#container' + id.toString();

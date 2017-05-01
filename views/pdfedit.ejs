@@ -11,7 +11,7 @@
                             <p class="text-danger">*必填</p> -->
                     </div>
                     <% doc.choice.forEach(function(type, index){ %>
-                    <div class="col-md-13 col-md-offset-0" id="container<%= index %>" style="padding:15px 45px 5px 45px">
+                    <div class="col-md-13 col-md-offset-0" id="container<%= index %>" style="padding:15px 45px 5px 45px" onmousedown="sectionFocus(<%= index %>)">
                         <!-- <div class="container" id="container<%= index %>"> -->
                             <form action="/test/<%= doc.name %>" method="post">
                                 <fieldset>
@@ -20,7 +20,7 @@
                                             <h4 onclick="edit(<%= index %>)"><%= doc.post.test[ index ] %></h4>
                                         </strong>
                                     </div>
-                                    <textarea id="title-edit<%= index %>" name="post<%= index %>" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;display:none" onfocus="sectionFocus(<%= index %>)" > <%= doc.post.test[ index ] %> </textarea>
+                                    <textarea id="title-edit<%= index %>" name="post<%= index %>" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;display:none" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
                                     <!-- <br/> -->
                                     <% if(type[0] == 'single' ){ %>
 
@@ -34,9 +34,9 @@
                                         <% Object.keys(option).forEach(function(key) { %>
                                             <div class="radio radio-primary">
                                                 <label>
-                                                <input type="radio"  value="A" id="<%= sum %>A">
+                                                <input type="radio" name="<%= sum %>" value="<%= key %>" id="<%= sum %><%= key %>">
                                                 <%= doc.post.choice[ index ][i][key] %>
-                                                <textarea name = "<%= key %>" class="form-control" rows="1" > <%= doc.post.choice[ index ][i][key] %> </textarea>
+                                                <textarea name = "<%= key %>" class="form-control" rows="1" sectionFocus(<%= index %>)> <%= doc.post.choice[ index ][i][key] %> </textarea>
                                                 </label>
                                             </div>
                                         <% }) %>
@@ -45,7 +45,7 @@
                                         <button onclick="insertOption('<%= doc.name%>',<%= index%>,<%= i%>)" type="button" class="btn btn-default">新增選項</button>
                                         <% sum = sum +1; %>
                                         <% } %>
-                                        <div id="btn-group-<%= index %>" style="display:none" onfocusout="sectionFocusOut(<%= index %>)">
+                                        <div id="btn-group-<%= index %>" style="display:none">
                                             <button onclick="removeText('single',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">刪除此題</button>
                                             <button onclick="insert('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增下一題</button>
                                             <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增單選</button>
@@ -66,7 +66,7 @@
                                                 <label id="check">
                                                     <input type="checkbox" style="padding-right:5px">
                                                     <span id="check-item">A<%= doc.post.choice[ index ][i][key] %></span>
-                                                    <textarea name = "<%= key %>" rows = "1" > <%= doc.post.choice[ index ][i][key] %> </textarea>
+                                                    <textarea name = "<%= key %>" rows = "1" sectionFocus(<%= index %>)> <%= doc.post.choice[ index ][i][key] %> </textarea>
                                                 </label>
                                             </div>
                                         <% }) %>
@@ -74,7 +74,7 @@
                                         <button onclick="removeText('multiple',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button" class="btn btn-default">刪除</button>
                                         <button onclick="insertOption('<%= doc.name%>',<%= index%>,<%= i%>)" type="button" class="btn btn-default">新增選項</button>
                                         <% } %>
-                                        <div id="btn-group-<%= index %>" style="display:none" onfocusout="sectionFocusOut(<%= index %>)">
+                                        <div id="btn-group-<%= index %>" style="display:none">
                                             <button onclick="removeall('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">刪除此題</button>
                                             <button onclick="insert('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增下一題</button>
                                             <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增單選</button>
