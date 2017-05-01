@@ -527,6 +527,19 @@ router.post('/insertOption', function(req, res) {
   });
 });
 
+router.post('/removeOneOption', checkLogin);
+router.post('/removeOneOption', function(req, res) {
+  Txt.removeOneOption(req.body.name, req.body.index, req.body.sum, function(err) {
+    if (err) {
+      req.flash('error', err);
+      return res.redirect('/');
+    }
+
+    req.flash('success', '新增成功');
+
+  });
+});
+
 router.post('/testremove', checkLogin);
 router.post('/testremove', function(req, res) {
   Txt.testremove(req.body.name, req.body.index, function(err, data) {
@@ -877,13 +890,8 @@ router.get('/reprint/:name/:day/:title', function(req, res) {
 router.post('/choice', function(req, res) {
 
   var data = req.body;
-  // console.log(data);
-  // console.log("name: " + data.name);
-  // console.log("choice: " + data.choice);
-  // console.log("num: " + data.number);
 
-  var newchoice = [data.choice, data.number];
-  Txt.choice(data.name, data.index, newchoice, function(err) {
+  Txt.choice(data.name, data.index, data.choice, function(err) {
     if (err) {
       req.flash('error', err);
       return res.redirect('/');
@@ -897,13 +905,7 @@ router.post('/choice', function(req, res) {
 router.post('/removeChoice', function(req, res) {
 
   var data = req.body;
-  // console.log(data);
-  // console.log("name: " + data.name);
-  // console.log("choice: " + data.choice);
-  // console.log("num: " + data.number);
-
-  var newchoice = [data.choice, data.number];
-  Txt.removechoice(data.name, data.index, data.sum, newchoice, function(err) {
+  Txt.removechoice(data.name, data.index, data.sum, function(err) {
     if (err) {
       req.flash('error', err);
       return res.redirect('/');

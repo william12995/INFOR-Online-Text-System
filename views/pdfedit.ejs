@@ -16,16 +16,14 @@
                             <form action="/test/<%= doc.name %>" method="post">
                                 <fieldset>
                                     <span><%= sum %>.</span>
-                                    <span>
-                                        <div id="title<%= index %>">
-                                            <strong>
-                                                <h4 onclick="edit(<%= index %>)"><%- doc.post.test[ index ] %></h4>
-                                            </strong>
-                                        </div>
-                                        <div class="form-group" style="margin-top:0px;">
-                                            <textarea id="title-edit<%= index %>" name="post<%= index %>" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;display:none" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
-                                        </div>
-                                    </span>
+                                    <div id="title<%= index %>">
+                                        <strong>
+                                            <h4 onclick="edit(<%= index %>)"><%- doc.post.test[ index ] %></h4>
+                                        </strong>
+                                    </div>
+                                    <div class="form-group" style="margin-top:0px;">
+                                        <textarea id="title-edit<%= index %>" name="post<%= index %>" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;display:none" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
+                                    </div>
                                     <% if(type[0] == 'single' ){ %>
 
                                     <%for(var i =0;i < Number(type[1]); i++){%>
@@ -86,12 +84,10 @@
                                         </div>
                                         <% sum = sum +1; %>
                                     </div>
-
                                     <% } %>
                                 </fieldset>
                             </form>
                         </div>
-                    <!-- </div> -->
                     <% }) %>
                 </div>
             </div>

@@ -338,8 +338,8 @@ TXT.testedit = function(filename, p, post, ans, callback) {
     console.log(anskey);
 
     data.post.test[p] = post ;
-    if (data.choice[p][1] > 1) {
-      for (var i = 0; i < data.choice[p][1]; i++) {
+    if (data.choice[p].length > 1) {
+      for (var i = 0; i < data.choice[p].length; i++) {
 
         Object.keys(data.post.choice[p][i]).forEach(function(key, index) {
           console.log(typeof (ans[anskey[index]]));
@@ -451,12 +451,12 @@ var EnglishAnswer = function(txtname, ansname, subject, postData) {
     AllData = one.concat(two, three);
     //console.log("AllData: "+AllData);
     var choice = [];
-    var single = ["single", 1];
+    var single = ["single"];
     var qus = {
-      A: null,
-      B: null,
-      C: null,
-      D: null
+      A: "",
+      B: "",
+      C: "",
+      D: ""
     }
     for (var i = 0; i < postData.test.length; i++) {
 
@@ -529,14 +529,14 @@ var ChineseAnswer = function(txtname, ansname, subject, postData) {
     AllData = one.concat(two);
 
     var choice = [];
-    var single = ["single", 1];
-    var multiple = ["multiple", 1];
+    var single = ["single"];
+    var multiple = ["multiple"];
 
     var qus = {
-      A: null,
-      B: null,
-      C: null,
-      D: null
+      A: "",
+      B: "",
+      C: "",
+      D: ""
     }
 
     for (var i = 0; i < postData.test.length - 8; i++) {
@@ -621,12 +621,12 @@ var SocialAnswer = function(txtname, ansname, subject, postData) {
     AllData = one.concat(two, three, four);
     //console.log("AllData: "+AllData);
     var choice = [];
-    var single = ["single", 1];
+    var single = ["single"];
     var qus = {
-      A: null,
-      B: null,
-      C: null,
-      D: null
+      A: "",
+      B: "",
+      C: "",
+      D: ""
     }
     for (var i = 0; i < postData.test.length; i++) {
       choice.push(single);
@@ -663,14 +663,14 @@ TXT.choice = function(filename, index, choice, callback) {
   txtModel.findOne({
     name: filename
   }, function(err, data) {
-    data.choice[index] = choice ;
+    data.choice[index].push(choice);
     var newchoice = data.choice;
 
     var qus = {
-      '1': null,
-      '2': null,
-      '3': null,
-      '4': null
+      '1': "",
+      '2': "",
+      '3': "",
+      '4': ""
     }
     data.post.choice[index].push(qus);
     var newAnschoice = data.post.choice;
@@ -694,11 +694,11 @@ TXT.choice = function(filename, index, choice, callback) {
   });
 }
 
-TXT.removechoice = function(filename, index, allsum, choice, callback) {
+TXT.removechoice = function(filename, index, allsum, callback) {
   txtModel.findOne({
     name: filename
   }, function(err, data) {
-    data.choice[index] = choice ;
+    data.choice[index].splice(allsum, 1) ;
     var newchoice = data.choice;
 
     // console.log("allsum: " + allsum);
@@ -728,13 +728,13 @@ TXT.newtest = function(filename, subject, callback) {
   var postData = {
     test: ["點我編輯\n"],
     choice: [[{
-      '1': null,
-      '2': null,
-      '3': null,
-      '4': null
+      '1': "",
+      '2': "",
+      '3': "",
+      '4': ""
     }]]
   };
-  var choice = [["single", 1]]
+  var choice = [["single"]]
   var content = {
     name: filename,
     post: postData,
@@ -760,12 +760,12 @@ TXT.insert = function(filename, index, callback) {
   txtModel.findOne({
     name: filename
   }, function(err, data) {
-    var newtype = ["single", 1];
+    var newtype = ["single"];
     var postchoice = [{
-      '1': null,
-      '2': null,
-      '3': null,
-      '4': null
+      '1': "",
+      '2': "",
+      '3': "",
+      '4': ""
     }];
     var newindex = Number(index) + 1;
     console.log("newindex: " + newindex);
@@ -840,7 +840,37 @@ TXT.insertOption = function(filename, index, allsum, callback) {
     var optionindex = Object.keys(newoption);
     var optionLegth = optionindex.length;
     var key = String(optionLegth + 1);
-    newoption[key] = null;
+    newoption[key] = "";
+    data.post.choice[index][allsum] = newoption;
+
+    txtModel.update({
+      "name": filename
+    }, {
+      $set: {
+        post: {
+          choice: data.post.choice,
+          test: data.post.test
+        }
+      }
+    }, function(err) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null);
+    });
+
+  });
+}
+
+TXT.removeOneOption = function(filename, index, allsum, callback) {
+  txtModel.findOne({
+    name: filename
+  }, function(err, data) {
+    var newoption = data.post.choice[index][allsum];
+    var optionindex = Object.keys(newoption);
+    var optionLegth = optionindex.length;
+    var key = optionindex[optionLegth - 1]
+    delete newoption[key];
     data.post.choice[index][allsum] = newoption;
 
     txtModel.update({
