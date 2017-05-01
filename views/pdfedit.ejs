@@ -20,11 +20,12 @@
                                             <h4 onclick="edit(<%= index %>)"><%= doc.post.test[ index ] %></h4>
                                         </strong>
                                     </div>
-                                    <textarea id="title-edit<%= index %>" name="post<%= index %>" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;display:none" onfocus="sectionFocus(<%= index %>)" onfocusout="sectionFocusOut(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
+                                    <textarea id="title-edit<%= index %>" name="post<%= index %>" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;display:none" onfocus="sectionFocus(<%= index %>)" > <%= doc.post.test[ index ] %> </textarea>
                                     <!-- <br/> -->
                                     <% if(type[0] == 'single' ){ %>
                                     <%for(var i =0;i < Number(type[1]); i++){%>
                                     <div class="form-group" style="margin-top:10px;">
+                                      <%= sum %>
                                         <span class="circle"></span>
                                         <div class="radio radio-primary">
                                             <label>
@@ -54,17 +55,19 @@
                                             <textarea name = "D" class="form-control" rows="1" style="display:none"> <%= doc.post.choice[ index ][i].D %> </textarea>
                                             </label>
                                         </div>
-                                        <div id="btn-group-<%= index %>" style="display:none">
+                                        <button onclick="removeText('multiple',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button" class="btn btn-default">刪除</button>
+                                        <% sum = sum +1; %>
+                                        <% } %>
+                                        <div id="btn-group-<%= index %>" style="display:none" onfocusout="sectionFocusOut(<%= index %>)">
                                             <button onclick="removeText('single',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">刪除此題</button>
                                             <button onclick="insert('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增下一題</button>
                                             <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增單選</button>
                                             <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增多選</button>
                                             <button class="btn btn-default" id="btn-<%= sum %>">儲存變更</button>
                                         </div>
-                                        <% sum = sum +1; %>
                                     </div>
                                     <% } %>
-                                    <% } %>
+
                                     <% if(type[0] == 'multiple' ){ %>
                                     <%for(var i =0;i < Number(type[1]); i++){%>
                                     <div class="form-group" style="margin-top:10px;">
@@ -96,7 +99,9 @@
                                                 <textarea name = "D" rows = "1" style="display:none"> <%= doc.post.choice[ index ][i].D %> </textarea>
                                             </label>
                                         </div>
-                                        <div id="btn-group-<%= index %>" style="display:none">
+                                        <button onclick="removeText('multiple',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button" class="btn btn-default">刪除</button>
+                                        <% } %>
+                                        <div id="btn-group-<%= index %>" style="display:none" onfocusout="sectionFocusOut(<%= index %>)">
                                             <button onclick="removeall('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">刪除此題</button>
                                             <button onclick="insert('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增下一題</button>
                                             <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增單選</button>
@@ -105,7 +110,7 @@
                                         </div>
                                         <% sum = sum +1; %>
                                     </div>
-                                    <% } %>
+
                                     <% } %>
                                 </fieldset>
                             </form>
