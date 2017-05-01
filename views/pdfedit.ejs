@@ -11,42 +11,49 @@
                             <p class="text-danger">*必填</p> -->
                     </div>
                     <% doc.choice.forEach(function(type, index){ %>
-                    <div class="col-md-13 col-md-offset-0" id="container<%= index %>" style="padding:15px 45px 5px 45px" onmousedown="sectionFocus(<%= index %>)">
+                    <div class="col-md-13 col-md-offset-0" id="container<%= index %>" style="padding:25px 45px 5px 45px" onmousedown="sectionFocus(<%= index %>)">
                         <!-- <div class="container" id="container<%= index %>"> -->
                             <form action="/test/<%= doc.name %>" method="post">
                                 <fieldset>
-                                    <div id="title<%= index %>">
-                                        <strong>
-                                            <h4 onclick="edit(<%= index %>)"><%= doc.post.test[ index ] %></h4>
-                                        </strong>
-                                    </div>
-                                    <textarea id="title-edit<%= index %>" name="post<%= index %>" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;display:none" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
-                                    <!-- <br/> -->
+                                    <span><%= sum %>.</span>
+                                    <span>
+                                        <div id="title<%= index %>">
+                                            <strong>
+                                                <h4 onclick="edit(<%= index %>)"><%- doc.post.test[ index ] %></h4>
+                                            </strong>
+                                        </div>
+                                        <div class="form-group" style="margin-top:0px;">
+                                            <textarea id="title-edit<%= index %>" name="post<%= index %>" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;display:none" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
+                                        </div>
+                                    </span>
                                     <% if(type[0] == 'single' ){ %>
 
                                     <%for(var i =0;i < Number(type[1]); i++){%>
 
-                                    <div class="form-group" style="margin-top:10px;">
-                                      <%= sum %>
-                                        <span class="circle"></span>
+                                    <div class="form-group" style="margin-top:0px;padding-right:30px;">
 
                                         <% var option = doc.post.choice[index][i]; %>
                                         <% Object.keys(option).forEach(function(key) { %>
-                                            <div class="radio radio-primary">
-                                                <label>
-                                                <input type="radio" name="<%= sum %>" value="<%= key %>" id="<%= sum %><%= key %>">
-                                                <%= doc.post.choice[ index ][i][key] %>
-                                                <textarea name = "<%= key %>" class="form-control" rows="1" sectionFocus(<%= index %>)> <%= doc.post.choice[ index ][i][key] %> </textarea>
-                                                </label>
+                                            <div class="media" style="margin-top:5px;">
+                                                <div class="media-left media-middle" style="width:100%;padding:15px 20px 0px 5px;" >
+                                                    <div class="radio radio-primary" style="margin:0px 0px 0px 0px">
+                                                        <label style="width:100%;">
+                                                        <input type="radio" name="<%= sum %>" value="<%= key %>" id="<%= sum %><%= key %>">
+                                                        <!-- <%= doc.post.choice[ index ][i][key] %> -->
+                                                        <textarea name = "<%= key %>" class="form-control" rows="1" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.choice[ index ][i][key] %> </textarea>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="media-body media-middle">
+                                                    <button type="button" onclick="removeText('single',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" aria-hidden="true" class="close" style="font-size:30px;">×</button>
+                                                </div>
                                             </div>
                                         <% }) %>
-
-                                        <button onclick="removeText('single',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button" class="btn btn-default">刪除</button>
-                                        <button onclick="insertOption('<%= doc.name%>',<%= index%>,<%= i%>)" type="button" class="btn btn-default">新增選項</button>
                                         <% sum = sum +1; %>
                                         <% } %>
-                                        <div id="btn-group-<%= index %>" style="display:none">
-                                            <button onclick="removeText('single',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">刪除此題</button>
+                                        <div id="btn-group-<%= index %>" style="display:none;clear:both">
+                                            <button onclick="insertOption('<%= doc.name%>',<%= index%>,<%= i%>)" type="button" class="btn btn-default">新增選項</button>
+                                            <button onclick="removeall('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">刪除此題</button>
                                             <button onclick="insert('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增下一題</button>
                                             <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增單選</button>
                                             <button onclick="multiple(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增多選</button>
@@ -58,8 +65,6 @@
                                     <% if(type[0] == 'multiple' ){ %>
                                     <%for(var i =0;i < Number(type[1]); i++){%>
                                     <div class="form-group" style="margin-top:10px;">
-                                        <%= sum %>
-
                                         <% var option = doc.post.choice[index][i]; %>
                                         <% Object.keys(option).forEach(function(key) { %>
                                             <div class="checkbox">
@@ -70,11 +75,9 @@
                                                 </label>
                                             </div>
                                         <% }) %>
-
-                                        <button onclick="removeText('multiple',<%= index%>,<%= i%>,'<%= doc.name%>',<%= Number(type[1])-1 %>)" type="button" class="btn btn-default">刪除</button>
-                                        <button onclick="insertOption('<%= doc.name%>',<%= index%>,<%= i%>)" type="button" class="btn btn-default">新增選項</button>
                                         <% } %>
                                         <div id="btn-group-<%= index %>" style="display:none">
+                                            <button onclick="insertOption('<%= doc.name%>',<%= index%>,<%= i%>)" type="button" class="btn btn-default">新增選項</button>
                                             <button onclick="removeall('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">刪除此題</button>
                                             <button onclick="insert('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增下一題</button>
                                             <button onclick="single(<%= index%>,'<%= doc.name%>',<%= Number(type[1])+1 %>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增單選</button>
