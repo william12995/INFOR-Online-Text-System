@@ -1,16 +1,10 @@
-function single(index, name, number) {
+function single(index, name) {
 
-  var id = "#container" + index;
-  $(id).append('<div class="form-group" ><div class="radio radio-primary"><label>選項A<textarea name = "A" rows = "2" cols = "30"> "<%="+ doc.post[0].choice[ (sum-1) ].A +"%>" </textarea></label></div><div class="radio radio-primary"><label>選項B <textarea name = "B" rows = "2" cols = "30"> "<%="+ doc.post[0].choice[ (sum-1) ].B"%>"</textarea></label></div><div class="radio radio-primary"><label>選項C<textarea name = "C" rows = "2" cols = "30"> "<%=" doc.post[0].choice[ (sum-1) ].C "%>"</textarea></label></div><div class="radio radio-primary"><label>選項D<textarea name = "D" rows = "2" cols = "30"> "<%=" doc.post[0].choice[ (sum-1) ].D "%>"</textarea></label></div></div>');
-
-  $.material.init();
   var choice = 'single';
-  var number = Number(number);
 
   var data = {
     name: name,
     choice: choice,
-    number: number,
     index: index
   };
 
@@ -27,19 +21,10 @@ function single(index, name, number) {
   location.reload(true);
 }
 
-function removeText(type, index, sum, name, number) {
-
-  var choice;
-  if (type == 'single')
-    choice = 'single';
-  if (type == 'multiple')
-    choice = 'multiple';
-  var number = number;
+function removeText(index, sum, name) {
 
   var data = {
     name: name,
-    choice: choice,
-    number: number,
     index: index,
     sum: sum
   };
@@ -57,19 +42,13 @@ function removeText(type, index, sum, name, number) {
   location.reload(true);
 }
 
-function multiple(index, name, number) {
+function multiple(index, name) {
 
-  var id = "#container" + index;
-  $(id).append('<div class="form-group" ><div class="checkbox"><label id="check">選項A<textarea name = "A" rows = "2" cols = "30"> "<%="+ doc.post[0].choice[ (sum-1) ].A +"%>" </textarea></span></label></div><div class="checkbox"><label id="check">選項B <textarea name = "B" rows = "2" cols = "30"> "<%="+ doc.post[0].choice[ (sum-1)].B"%>"</textarea></span></label></div><div class="checkbox"><label id="check">選項C<textarea name = "C" rows = "2" cols = "30"> "<%=" doc.post[0].choice[ (sum-1) ].C "%>"</textarea></span></label></div><div class="checkbox"><label id="check">選項D<textarea name = "D" rows = "2" cols = "30"> "<%=" doc.post[0].choice[ (sum-1) ].D "%>"</textarea></span></label></div></div>');
-
-  $.material.init();
   var choice = 'multiple';
-  var number = number;
 
   var data = {
     name: name,
     choice: choice,
-    number: number,
     index: index
   };
 
@@ -134,6 +113,26 @@ function insertOption(name, index, sum) {
   $.ajax({
     type: 'POST',
     url: 'http://localhost:1209/insertOption',
+    data: data,
+    dataType: 'application/json',
+    success: function(data) {
+      console.log('success');
+      console.log(data);
+    }
+  });
+  location.reload(true);
+}
+
+function removeOneOption(name, index, sum) {
+  var data = {
+    name: name,
+    index: index,
+    sum: sum
+  };
+
+  $.ajax({
+    type: 'POST',
+    url: 'http://localhost:1209/removeOneOption',
     data: data,
     dataType: 'application/json',
     success: function(data) {
