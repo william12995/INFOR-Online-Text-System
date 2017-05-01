@@ -433,18 +433,21 @@ router.get('/history', function(req, res) {
 router.post('/test/:txtname', checkLogin);
 router.post('/test/:txtname', function(req, res) {
 
-  // console.log(req.body);
-  var postindex = Object.keys(req.body)[0];
+  console.log(req.body);
+  var bodylength = Object.keys(req.body).length;
+  var postindex = Object.keys(req.body)[(bodylength - 1)];
   var post = req.body[String(postindex)];
   // console.log(post);
   postindex = postindex.split('t')[1];
   // console.log(postindex);
-  var ansArray = {
-    A: req.body.A,
-    B: req.body.B,
-    C: req.body.C,
-    D: req.body.D
-  };
+  var ansArray = {};
+  Object.keys(req.body).forEach(function(key, index) {
+    if (index < (bodylength - 1)) {
+      ansArray[key] = req.body[key];
+    }
+
+  })
+
   // console.log(ansArray);
 
   Txt.testedit(req.params.txtname, postindex, post, ansArray, function(err, data) {
@@ -507,6 +510,20 @@ router.post('/testInsert', function(req, res) {
 
     req.flash('success', '修改成功!');
     res.redirect(url);
+  });
+});
+
+router.post('/insertOption', checkLogin);
+router.post('/insertOption', function(req, res) {
+  console.log("sum: " + req.body.sum);
+  Txt.insertOption(req.body.name, req.body.index, req.body.sum, function(err) {
+    if (err) {
+      req.flash('error', err);
+      return res.redirect('/');
+    }
+
+    req.flash('success', '新增成功');
+
   });
 });
 

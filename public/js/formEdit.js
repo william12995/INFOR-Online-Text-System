@@ -124,6 +124,26 @@ function insert(name, index) {
   location.reload(true);
 }
 
+function insertOption(name, index, sum) {
+  var data = {
+    name: name,
+    index: index,
+    sum: sum
+  };
+
+  $.ajax({
+    type: 'POST',
+    url: 'http://localhost:1209/insertOption',
+    data: data,
+    dataType: 'application/json',
+    success: function(data) {
+      console.log('success');
+      console.log(data);
+    }
+  });
+  location.reload(true);
+}
+
 function sectionFocus(id) {
   var containerId = '#container' + id.toString();
   var btnGrouptId = '#btn-group-' + id.toString();
