@@ -1,4 +1,4 @@
-
+var last = -1;
 function single(index, name) {
 
   var choice = 'single';
