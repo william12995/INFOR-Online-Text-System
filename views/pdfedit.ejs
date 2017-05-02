@@ -69,14 +69,12 @@
                                             <% } %>
                                         <% }) %>
 
-                                        <button onclick="removeText(<%= index%>,<%= i%>,'<%= doc.name%>')" type="button" class="btn btn-default">刪除</button>
-                                        <button onclick="insertOption('<%= doc.name%>',<%= index%>,<%= i%>)" type="button" class="btn btn-default">新增選項</button>
-                                        <button onclick="removeOneOption('<%= doc.name%>',<%= index%>,<%= i%>)" type="button" class="btn btn-default">刪除選項</button>
                                         <% sum = sum +1; %>
                                         <% } %>
 
                                         <div id="btn-group-<%= index %>" style="display:none" onfocusout="sectionFocusOut(<%= index %>)">
-
+                                            <button onclick="removeText(<%= index%>,<%= i%>,'<%= doc.name%>')" type="button" class="btn btn-default">刪除</button>
+                                            <button onclick="insertOption('<%= doc.name%>',<%= index%>,<%= i%>)" type="button" class="btn btn-default">新增選項</button>
                                             <button onclick="removeall('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">刪除此題</button>
                                             <button onclick="insert('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增下一題</button>
                                             <button onclick="single(<%= index%>,'<%= doc.name%>')" type="button" class="btn btn-default" id="btn-<%= sum %>">新增單選</button>
@@ -87,7 +85,7 @@
                                 </fieldset>
                             </form>
                         </div>
-                    <hr>
+                    <!-- <hr> -->
                     <% }) %>
                 </div>
             </div>
