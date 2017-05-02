@@ -336,26 +336,27 @@ TXT.testedit = function(filename, p, post, ans, callback) {
     var anskey = Object.keys(ans);
     console.log("ans: " + JSON.stringify(ans));
     console.log(anskey);
-
+    console.log("p: " + p);
+    console.log("data.post: " + data.post);
     data.post.test[p] = post ;
     if (data.choice[p].length > 1) {
       for (var i = 0; i < data.choice[p].length; i++) {
 
         Object.keys(data.post.choice[p][i]).forEach(function(key, index) {
           console.log(typeof (ans[anskey[index]]));
-          if (typeof (ans[anskey[index]]) !== 'string') {
+          if ((ans[anskey[index]]).length > 1) {
             console.log("ans value: " + ans[anskey[index]][i]);
             data.post.choice[p][i][key] = ans[anskey[index]][i];
           } else {
             console.log("ans single value: " + ans[anskey[index]]);
-            data.post.choice[p][i][key] = ans[anskey[index]];
+            data.post.choice[p][i][key] = ans[anskey[index]][0];
           }
 
         });
       }
     } else {
       Object.keys(data.post.choice[p][0]).forEach(function(key, index) {
-        data.post.choice[p][0][key] = ans[anskey[index]];
+        data.post.choice[p][0][key] = ans[anskey[index]][0];
       });
     }
     // console.log("p: " + p);
@@ -453,10 +454,10 @@ var EnglishAnswer = function(txtname, ansname, subject, postData) {
     var choice = [];
     var single = ["single"];
     var qus = {
-      A: "",
-      B: "",
-      C: "",
-      D: ""
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": ""
     }
     for (var i = 0; i < postData.test.length; i++) {
 
@@ -533,10 +534,10 @@ var ChineseAnswer = function(txtname, ansname, subject, postData) {
     var multiple = ["multiple"];
 
     var qus = {
-      A: "",
-      B: "",
-      C: "",
-      D: ""
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": ""
     }
 
     for (var i = 0; i < postData.test.length - 8; i++) {

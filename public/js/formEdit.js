@@ -171,6 +171,29 @@ function sectionFocusOut(id) {
   $(editId).hide();
 }
 
+function formData(index, name) {
+  var formdata = JSON.stringify($('#form' + String(index)).serializeArray());
+
+  var data = {
+    name: name,
+    content: formdata,
+    index: index
+  };
+
+  $.ajax({
+    type: 'POST',
+    url: 'http://localhost:1209/testsave',
+    data: data,
+    dataType: 'application/json',
+    success: function(data) {
+      console.log('success');
+      console.log(data);
+    }
+  });
+  location.reload(true);
+
+}
+
 function edit(id) {
   var titleId = '#title' + id.toString();
   var editId = '#title-edit' + id.toString();

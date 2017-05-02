@@ -430,27 +430,30 @@ router.get('/history', function(req, res) {
   });
 });
 
-router.post('/test/:txtname', checkLogin);
-router.post('/test/:txtname', function(req, res) {
+router.post('/testsave', checkLogin);
+router.post('/testsave', function(req, res) {
 
-  console.log(req.body);
-  var bodylength = Object.keys(req.body).length;
-  var postindex = Object.keys(req.body)[(bodylength - 1)];
-  var post = req.body[String(postindex)];
-  // console.log(post);
-  postindex = postindex.split('t')[1];
-  // console.log(postindex);
-  var ansArray = {};
-  Object.keys(req.body).forEach(function(key, index) {
-    if (index < (bodylength - 1)) {
-      ansArray[key] = req.body[key];
+  var newcontent = JSON.parse(req.body.content);
+  var optionarray = {};
+  var newpost;
+  newcontent.forEach(function(content, index) {
+    if (content.name !== 'post') {
+      if (optionarray.hasOwnProperty(content.name)) {
+        optionarray[content.name].push(content.value);
+      } else {
+        optionarray[content.name] = [content.value];
+      }
+    } else {
+      newpost = content.value;
     }
-
   })
+  console.log(optionarray);
+  var bodylength = Object.keys(optionarray).length;
+  var postindex = req.body.index;
 
-  // console.log(ansArray);
+  // console.log(postindex);
 
-  Txt.testedit(req.params.txtname, postindex, post, ansArray, function(err, data) {
+  Txt.testedit(req.body.name, postindex, newpost, optionarray, function(err, data) {
 
     if (err) {
       console.log(err);
