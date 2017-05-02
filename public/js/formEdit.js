@@ -1,4 +1,6 @@
 var last = -1;
+var lastOption = 0;
+
 function single(index, name) {
 
   var choice = 'single';
@@ -147,9 +149,11 @@ function removeOneOption(name, index, sum) {
 function sectionFocus(id) {
   var containerId = '#container' + id.toString();
   var btnGrouptId = '#btn-group-' + id.toString();
+  var dropdownId = '#dropdown' + id.toString();
   $(containerId).css('box-shadow', '0px 0px 20px 0px rgba(0, 0, 0, 0.2), 0 10px 30px 0 rgba(0, 0, 0, 0.19)');
   $(containerId).css('border-left', 'solid #009688');
   $(btnGrouptId).show();
+  $(dropdownId).show();
   if (last == -1) {
     last = id;
   } else if (last != id) {
@@ -164,11 +168,14 @@ function sectionFocusOut(id) {
   var editId = '#title-edit' + id.toString();
   var containerId = '#container' + id.toString();
   var btnGrouptId = '#btn-group-' + id.toString();
+  var dropdownId = '#dropdown' + id.toString();
   $(containerId).css('box-shadow', '0px 0px 0px 0px');
   $(containerId).css('border-left', '0px');
   $(btnGrouptId).hide();
+  $(dropdownId).hide();
   $(titleId).show();
   $(editId).hide();
+  editOptionOut(lastOption);
 }
 
 function formData(index, name) {
@@ -200,6 +207,32 @@ function edit(id) {
   $(titleId).hide();
   $(editId).show();
   $(editId).focus();
+  $.material.init();
+}
+
+function editOption(id) {
+    var optionId = '#option' + id.toString();
+    var editId = '#optionedit' + id.toString();
+    // console.log(optionId);
+    $(optionId).hide();
+    $(editId).show();
+    $(editId).focus();
+    if(lastOption){
+        if(lastOption != id){
+            editOptionOut(lastOption);
+            lastOption = id;
+        }
+    }else{
+        lastOption = id;
+    }
+}
+
+function editOptionOut(id) {
+    var optionId = '#option' + id.toString();
+    var editId = '#optionedit' + id.toString();
+    // console.log(optionId);
+    $(editId).hide();
+    $(optionId).show();
 }
 
 function h(e) {

@@ -12,24 +12,45 @@
                     </div>
 
                     <% doc.choice.forEach(function(type, index, array){ %>
-                    <div class="col-md-13 col-md-offset-0" id="container<%= index %>" style="padding:15px 45px 5px 45px">
+                    <div class="col-md-13 col-md-offset-0" id="container<%= index %>" style="padding:25px 45px 5px 45px"  onmousedown="sectionFocus(<%= index %>)">
 
                         <!-- <div class="container" id="container<%= index %>"> -->
                             <form action="/testsave" method="post" id="form<%= index %>">
                                 <fieldset>
-                                    <div id="title<%= index %>">
+                                    <div style="float:left;">
+                                        <h4><%= sum %></h4>
+                                    </div>
+                                    <div style="float:right;">
+                                        <div class="btn-group" id="dropdown<%= index %>" style="display:none">
+                                            <button class="btn btn-raised dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">題目類型</button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="">單選</a></li>
+                                                <li><a href="">多選</a></li>
+                                              </ul>
+                                            <!-- <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="#">Action</a>
+                                                <a class="dropdown-item" href="#">Another action</a>
+                                                <a class="dropdown-item" href="#">Something else here</a>
+                                                <div class="dropdown-divider"></div>
+                                                <a class="dropdown-item" href="#">Separated link</a>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <br><br>
+                                    <div id="title<%= index %>" style="clear:both;">
                                         <strong>
                                             <h4 onclick="edit(<%= index %>)"><%= doc.post.test[ index ] %></h4>
                                         </strong>
                                     </div>
-                                    <textarea id="title-edit<%= index %>" name="post" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;display:none" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
+                                    <div class="form-group" style="margin-top:10px;">
+                                        <textarea id="title-edit<%= index %>" name="post" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;display:none" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
+                                    </div>
+
                                     <!-- <br/> -->
 
                                     <%for(var i =0;i < type.length; i++){%>
 
                                     <div class="form-group" style="margin-top:10px;">
-                                      <%= sum %>
-                                        <span class="circle"></span>
 
                                         <% var option = doc.post.choice[index][i]; %>
                                         <% Object.keys(option).forEach(function(key) { %>
@@ -40,8 +61,8 @@
                                                     <div class="radio radio-primary" style="margin:0px 0px 0px 0px">
                                                         <label style="width:100%;">
                                                         <input type="radio" name="<%= sum %>" value="<%= key %>" id="<%= sum %><%= key %>">
-                                                        <!-- <%= doc.post.choice[ index ][i][key] %> -->
-                                                        <textarea name = "<%= key %>" class="form-control" rows="1" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.choice[ index ][i][key] %> </textarea>
+                                                        <textarea name = "<%= key %>" class="form-control" rows="1" style="display:none;margin-bottom:0px;" id="optionedit<%= sum %><%= key %>"> <%= doc.post.choice[ index ][i][key] %> </textarea>
+                                                        <h4 style="margin:0px" onclick="editOption(<%= sum %><%= key %>)" id="option<%= sum %><%= key %>"><%= doc.post.choice[ index ][i][key] %></h4>
                                                         </label>
                                                     </div>
                                                 </div>
@@ -65,6 +86,9 @@
                                                     </label>
                                                 </div>
                                             </div>
+                                            <div class="media-body media-middle">
+                                                <button type="button" onclick="removeOneOption('<%= doc.name%>',<%= index%>,<%= i%>)" aria-hidden="true" class="close" style="font-size:30px;">×</button>
+                                            </div>
                                             </div>
                                             <% } %>
                                         <% }) %>
@@ -72,7 +96,7 @@
                                         <% sum = sum +1; %>
                                         <% } %>
 
-                                        <div id="btn-group-<%= index %>" style="display:none" onfocusout="sectionFocusOut(<%= index %>)">
+                                        <div id="btn-group-<%= index %>" style="display:none;margin-top:15px;" onfocusout="sectionFocusOut(<%= index %>)">
                                             <button onclick="removeText(<%= index%>,<%= i%>,'<%= doc.name%>')" type="button" class="btn btn-default">刪除</button>
                                             <button onclick="insertOption('<%= doc.name%>',<%= index%>,<%= i%>)" type="button" class="btn btn-default">新增選項</button>
                                             <button onclick="removeall('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">刪除此題</button>
