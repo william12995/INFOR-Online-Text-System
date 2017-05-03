@@ -126,11 +126,12 @@ function insertOption(name, index, sum) {
   location.reload(true);
 }
 
-function removeOneOption(name, index, sum) {
+function removeOneOption(name, index, sum, optionindex) {
   var data = {
     name: name,
     index: index,
-    sum: sum
+    sum: sum,
+    optionindex: optionindex
   };
 
   $.ajax({
@@ -211,28 +212,28 @@ function edit(id) {
 }
 
 function editOption(id) {
-    var optionId = '#option' + id.toString();
-    var editId = '#optionedit' + id.toString();
-    // console.log(optionId);
-    $(optionId).hide();
-    $(editId).show();
-    $(editId).focus();
-    if(lastOption){
-        if(lastOption != id){
-            editOptionOut(lastOption);
-            lastOption = id;
-        }
-    }else{
-        lastOption = id;
+  var optionId = '#option' + id.toString();
+  var editId = '#optionedit' + id.toString();
+  // console.log(optionId);
+  $(optionId).hide();
+  $(editId).show();
+  $(editId).focus();
+  if (lastOption) {
+    if (lastOption != id) {
+      editOptionOut(lastOption);
+      lastOption = id;
     }
+  } else {
+    lastOption = id;
+  }
 }
 
 function editOptionOut(id) {
-    var optionId = '#option' + id.toString();
-    var editId = '#optionedit' + id.toString();
-    // console.log(optionId);
-    $(editId).hide();
-    $(optionId).show();
+  var optionId = '#option' + id.toString();
+  var editId = '#optionedit' + id.toString();
+  // console.log(optionId);
+  $(editId).hide();
+  $(optionId).show();
 }
 
 function h(e) {

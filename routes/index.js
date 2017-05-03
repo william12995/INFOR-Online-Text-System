@@ -532,7 +532,7 @@ router.post('/insertOption', function(req, res) {
 
 router.post('/removeOneOption', checkLogin);
 router.post('/removeOneOption', function(req, res) {
-  Txt.removeOneOption(req.body.name, req.body.index, req.body.sum, function(err) {
+  Txt.removeOneOption(req.body.name, req.body.index, req.body.sum, req.body.optionindex, function(err) {
     if (err) {
       req.flash('error', err);
       return res.redirect('/');

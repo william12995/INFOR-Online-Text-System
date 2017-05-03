@@ -624,10 +624,10 @@ var SocialAnswer = function(txtname, ansname, subject, postData) {
     var choice = [];
     var single = ["single"];
     var qus = {
-      A: "",
-      B: "",
-      C: "",
-      D: ""
+      "1": "",
+      "2": "",
+      "3": "",
+      "4": ""
     }
     for (var i = 0; i < postData.test.length; i++) {
       choice.push(single);
@@ -863,16 +863,25 @@ TXT.insertOption = function(filename, index, allsum, callback) {
   });
 }
 
-TXT.removeOneOption = function(filename, index, allsum, callback) {
+TXT.removeOneOption = function(filename, index, allsum, optionindex, callback) {
   txtModel.findOne({
     name: filename
   }, function(err, data) {
     var newoption = data.post.choice[index][allsum];
-    var optionindex = Object.keys(newoption);
-    var optionLegth = optionindex.length;
-    var key = optionindex[optionLegth - 1]
+    var optionarray = Object.keys(newoption);
+    var optionLegth = optionarray.length;
+    var optionwhere = optionarray.indexOf(String(Number(optionindex) + 1));
+    console.log(String(Number(optionindex) + 1));
+    console.log(optionwhere);
+    var key = optionarray[optionindex];
     delete newoption[key];
-    data.post.choice[index][allsum] = newoption;
+    optionarray.splice(optionwhere, 1);
+    console.log(optionarray);
+    var finaloption = {};
+    for (var i = 0; i < optionLegth - 1; i++) {
+      finaloption[String((i + 1))] = newoption[optionarray[i]];
+    }
+    data.post.choice[index][allsum] = finaloption;
 
     txtModel.update({
       "name": filename
