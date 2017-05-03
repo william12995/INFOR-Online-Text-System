@@ -235,10 +235,9 @@ function edit(id) {
 function editOption(id) {
   var optionId = '#option' + id.toString();
   var editId = '#optionedit' + id.toString();
-  // console.log(optionId);
+  console.log(editId);
   $(optionId).hide();
   $(editId).show();
-  $(editId).focus();
   if (lastOption) {
     if (lastOption != id) {
       editOptionOut(lastOption);
@@ -247,6 +246,7 @@ function editOption(id) {
   } else {
     lastOption = id;
   }
+  $(editId).focus();
 }
 
 function editOptionOut(id) {
@@ -260,8 +260,8 @@ function editOptionOut(id) {
 function h(e) {
   $(e).css({
     'height': 'auto',
-    'overflow-y': 'hidden'
-  }).height(e.scrollHeight - 15);
+    'overflow-y': 'hidden',
+}).height(e.scrollHeight - 20);
 }
 
 $('textarea').each(function() {
