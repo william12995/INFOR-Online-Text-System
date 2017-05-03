@@ -15,10 +15,10 @@
                         <!-- <div class="container" id="container<%= index %>"> -->
                         <form action="/testsave" method="post" id="form<%= index %>">
                             <fieldset style="margin-bottom:25px;">
+                                <%for(var i =0;i < type.length; i++){%>
                                 <div style="margin-bottom:15px;">
                                     <h4><%= sum %></h4>
                                 </div>
-                                <%for(var i =0;i < type.length; i++){%>
                                 <div style="float:right;">
                                     <div class="btn-group" id="dropdown<%= index %>" style="display:none">
                                         <button class="btn btn-raised dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">題目類型</button>
