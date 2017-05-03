@@ -543,6 +543,19 @@ router.post('/removeOneOption', function(req, res) {
   });
 });
 
+router.post('/convertOption', checkLogin);
+router.post('/convertOption', function(req, res) {
+  Txt.convertOption(req.body.name, req.body.index, req.body.sum, req.body.type, function(err) {
+    if (err) {
+      req.flash('error', err);
+      return res.redirect('/');
+    }
+
+    req.flash('success', '新增成功');
+
+  });
+});
+
 router.post('/testremove', checkLogin);
 router.post('/testremove', function(req, res) {
   Txt.testremove(req.body.name, req.body.index, function(err, data) {

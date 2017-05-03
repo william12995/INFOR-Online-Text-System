@@ -334,21 +334,21 @@ TXT.testedit = function(filename, p, post, ans, callback) {
     name: filename
   }, function(err, data) {
     var anskey = Object.keys(ans);
-    console.log("ans: " + JSON.stringify(ans));
-    console.log(anskey);
-    console.log("p: " + p);
-    console.log("data.post: " + data.post);
+    // console.log("ans: " + JSON.stringify(ans));
+    // console.log(anskey);
+    // console.log("p: " + p);
+    // console.log("data.post: " + data.post);
     data.post.test[p] = post ;
     if (data.choice[p].length > 1) {
       for (var i = 0; i < data.choice[p].length; i++) {
 
         Object.keys(data.post.choice[p][i]).forEach(function(key, index) {
-          console.log(typeof (ans[anskey[index]]));
+          //console.log(typeof (ans[anskey[index]]));
           if ((ans[anskey[index]]).length > 1) {
-            console.log("ans value: " + ans[anskey[index]][i]);
+            //console.log("ans value: " + ans[anskey[index]][i]);
             data.post.choice[p][i][key] = ans[anskey[index]][i];
           } else {
-            console.log("ans single value: " + ans[anskey[index]]);
+            //console.log("ans single value: " + ans[anskey[index]]);
             data.post.choice[p][i][key] = ans[anskey[index]][0];
           }
 
@@ -871,12 +871,12 @@ TXT.removeOneOption = function(filename, index, allsum, optionindex, callback) {
     var optionarray = Object.keys(newoption);
     var optionLegth = optionarray.length;
     var optionwhere = optionarray.indexOf(String(Number(optionindex) + 1));
-    console.log(String(Number(optionindex) + 1));
-    console.log(optionwhere);
+    // console.log(String(Number(optionindex) + 1));
+    // console.log(optionwhere);
     var key = optionarray[optionindex];
     delete newoption[key];
     optionarray.splice(optionwhere, 1);
-    console.log(optionarray);
+    // console.log(optionarray);
     var finaloption = {};
     for (var i = 0; i < optionLegth - 1; i++) {
       finaloption[String((i + 1))] = newoption[optionarray[i]];
@@ -891,6 +891,27 @@ TXT.removeOneOption = function(filename, index, allsum, optionindex, callback) {
           choice: data.post.choice,
           test: data.post.test
         }
+      }
+    }, function(err) {
+      if (err) {
+        return callback(err);
+      }
+      callback(null);
+    });
+
+  });
+}
+
+TXT.convertOption = function(filename, index, sum, type, callback) {
+  txtModel.findOne({
+    name: filename
+  }, function(err, data) {
+    data.choice[index][sum] = String(type);
+    txtModel.update({
+      "name": filename
+    }, {
+      $set: {
+        choice: data.choice
       }
     }, function(err) {
       if (err) {

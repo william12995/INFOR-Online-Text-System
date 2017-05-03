@@ -147,6 +147,27 @@ function removeOneOption(name, index, sum, optionindex) {
   location.reload(true);
 }
 
+function convert(type, name, index, sum) {
+  var data = {
+    type: type,
+    index: index,
+    sum: sum,
+    name: name
+  };
+
+  $.ajax({
+    type: 'POST',
+    url: 'http://localhost:1209/convertOption',
+    data: data,
+    dataType: 'application/json',
+    success: function(data) {
+      console.log('success');
+      console.log(data);
+    }
+  });
+  location.reload(true);
+}
+
 function sectionFocus(id) {
   var containerId = '#container' + id.toString();
   var btnGrouptId = '#btn-group-' + id.toString();

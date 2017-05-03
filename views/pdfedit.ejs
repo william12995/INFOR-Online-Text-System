@@ -18,22 +18,6 @@
                             <form action="/testsave" method="post" id="form<%= index %>">
                                 <fieldset>
 
-                                    <div style="float:right;">
-                                        <div class="btn-group" id="dropdown<%= index %>" style="display:none">
-                                            <button class="btn btn-raised dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">題目類型</button>
-                                            <ul class="dropdown-menu">
-                                                <li><a href="">單選</a></li>
-                                                <li><a href="">多選</a></li>
-                                              </ul>
-                                            <!-- <div class="dropdown-menu">
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <a class="dropdown-item" href="#">Something else here</a>
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="#">Separated link</a>
-                                            </div> -->
-                                        </div>
-                                    </div>
                                     <br><br>
                                     <div id="title<%= index %>" style="clear:both;">
                                         <strong>
@@ -57,6 +41,7 @@
                                         <% Object.keys(option).forEach(function(key,optionindex) { %>
 
                                             <% if(type[i] == 'single' ){ %>
+
                                                 <div class="media" style="margin-top:5px;">
                                                 <div class="media-left media-middle" style="width:100%;padding:15px 20px 0px 5px;" >
                                                     <div class="radio radio-primary" style="margin:0px 0px 0px 0px">
@@ -77,8 +62,8 @@
                                             <% } else if (type[i] == 'multiple' ){ %>
                                                 <div class="media" style="margin-top:5px;">
                                                     <div class="media-left media-middle" style="width:100%;padding:15px 20px 0px 5px;" >
-                                                <div class="checkbox">
-                                                    <label id="check">
+                                                <div class="checkbox" style="margin:0px 0px 0px 0px">
+                                                    <label  style="width:100%;">
                                                         <input type="checkbox" style="padding-right:5px">
                                                         <span id="check-item">
                                                             <!-- A<%= doc.post.choice[ index ][i][key] %> -->
@@ -92,7 +77,17 @@
                                             </div>
                                             </div>
                                             <% } %>
+
                                         <% }) %>
+                                        <div style="float:right;">
+                                            <div class="btn-group" id="dropdown<%= index %>">
+                                                <button class="btn btn-raised dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">題目類型</button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a onclick="convert('single','<%= doc.name%>',<%= index%>,<%= i%>)">單選</a></li>
+                                                    <li><a onclick="convert('multiple','<%= doc.name%>',<%= index%>,<%= i%>)">多選</a></li>
+                                                  </ul>
+                                            </div>
+                                        </div>
                                         <button onclick="removeText(<%= index%>,<%= i%>,'<%= doc.name%>')" type="button" class="btn btn-default">刪除</button>
                                         <button onclick="insertOption('<%= doc.name%>',<%= index%>,<%= i%>)" type="button" class="btn btn-default">新增選項</button>
                                         <% sum = sum +1; %>
