@@ -22,6 +22,10 @@ router.get('/welcome', function(req, res) {
   res.render('welcome');
 });
 
+router.get('/index', function(req, res) {
+    res.render('home');
+});
+
 router.get('/', checkLogin);
 router.get('/', function(req, res) {
   //console.log(req.session.user);
