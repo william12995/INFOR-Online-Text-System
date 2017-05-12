@@ -9,3 +9,4 @@ credentials.js
 error.log
 access.log
 **/files
+.git/
