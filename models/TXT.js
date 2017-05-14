@@ -328,7 +328,7 @@ TXT.edit = function(filename, p, post, ans, callback) {
   });
 };
 
-TXT.testedit = function(filename, p, post, ans, callback) {
+TXT.testedit = function(filename, p, post, ans, ans_array, callback) {
 
   txtModel.findOne({
     name: filename
@@ -364,6 +364,8 @@ TXT.testedit = function(filename, p, post, ans, callback) {
     var newpost = data.post.test;
     var newchoice = data.post.choice;
 
+    data.ans[p] = ans_array;
+
     txtModel.update({
       "name": filename
     }, {
@@ -371,7 +373,8 @@ TXT.testedit = function(filename, p, post, ans, callback) {
         post: {
           "test": newpost,
           "choice": newchoice
-        }
+        },
+        ans: data.ans
       }
     }, function(err) {
       if (err) {
@@ -675,16 +678,22 @@ TXT.choice = function(filename, index, choice, callback) {
     }
     data.post.choice[index].push(qus);
     var newAnschoice = data.post.choice;
+
+    var null_ans = [[""]];
+    data.ans[index].push(null_ans);
+
     txtModel.update({
       "name": filename
     }, {
       $set: {
         "choice": newchoice,
-        post: {
+        "post": {
           choice: newAnschoice,
           test: data.post.test
-        }
+        },
+        "ans": data.ans
       }
+
     }, function(err) {
       if (err) {
         return callback(err);
@@ -705,6 +714,9 @@ TXT.removechoice = function(filename, index, allsum, callback) {
     // console.log("allsum: " + allsum);
     data.post.choice[index].splice(allsum, 1)
     var newAnschoice = data.post.choice;
+
+    data.ans[index].splice(allsum, 1);
+
     txtModel.update({
       "name": filename
     }, {
@@ -713,7 +725,8 @@ TXT.removechoice = function(filename, index, allsum, callback) {
         post: {
           choice: newAnschoice,
           test: data.post.test
-        }
+        },
+        ans: data.ans
       }
     }, function(err) {
       if (err) {
@@ -735,11 +748,12 @@ TXT.newtest = function(filename, subject, callback) {
       '4': ""
     }]]
   };
+  var newans = [[[[""]]]];
   var choice = [["single"]]
   var content = {
     name: filename,
     post: postData,
-    ans: [],
+    ans: newans,
     subject: subject,
     choice: choice
   };
@@ -778,6 +792,10 @@ TXT.insert = function(filename, index, callback) {
 
     var insertTest = "點我編輯\n";
     data.post.test.splice(newindex, 0, insertTest);
+
+    var null_ans = [[""]];
+    data.ans.splice(newindex, 0, null_ans);
+
     txtModel.update({
       "name": filename
     }, {
@@ -786,7 +804,8 @@ TXT.insert = function(filename, index, callback) {
         post: {
           choice: newAnschoice,
           test: data.post.test
-        }
+        },
+        ans: data.ans
       }
     }, function(err) {
       if (err) {
@@ -813,6 +832,8 @@ TXT.testremove = function(filename, index, callback) {
     data.post.choice.splice(newindex, 1);
     var newAnschoice = data.post.choice;
     data.post.test.splice(newindex, 1);
+
+    data.ans.splice(newindex, 1);
     txtModel.update({
       "name": filename
     }, {
@@ -821,7 +842,8 @@ TXT.testremove = function(filename, index, callback) {
         post: {
           choice: newAnschoice,
           test: data.post.test
-        }
+        },
+        ans: data.ans
       }
     }, function(err) {
       if (err) {
@@ -876,12 +898,15 @@ TXT.removeOneOption = function(filename, index, allsum, optionindex, callback) {
     var key = optionarray[optionindex];
     delete newoption[key];
     optionarray.splice(optionwhere, 1);
-    // console.log(optionarray);
+    //console.log(optionarray);
     var finaloption = {};
     for (var i = 0; i < optionLegth - 1; i++) {
       finaloption[String((i + 1))] = newoption[optionarray[i]];
     }
     data.post.choice[index][allsum] = finaloption;
+
+    var answhere = data.ans[index][allsum].indexOf(String(Number(optionindex) + 1));
+    data.ans[index][allsum].splice(answhere, 1);
 
     txtModel.update({
       "name": filename
@@ -890,7 +915,8 @@ TXT.removeOneOption = function(filename, index, allsum, optionindex, callback) {
         post: {
           choice: data.post.choice,
           test: data.post.test
-        }
+        },
+        ans: data.ans
       }
     }, function(err) {
       if (err) {

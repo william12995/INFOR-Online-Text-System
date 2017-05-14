@@ -22,10 +22,6 @@ router.get('/welcome', function(req, res) {
   res.render('welcome');
 });
 
-router.get('/index', function(req, res) {
-    res.render('home');
-});
-
 router.get('/', checkLogin);
 router.get('/', function(req, res) {
   //console.log(req.session.user);
@@ -438,9 +434,12 @@ router.post('/testsave', checkLogin);
 router.post('/testsave', function(req, res) {
 
   var newcontent = JSON.parse(req.body.content);
+  var now_ans = JSON.parse(req.body.ans_array);
   var optionarray = {};
-  var newpost;
+  var newpost = '';
+  console.log(newcontent);
   newcontent.forEach(function(content, index) {
+    //console.log(content);
     if (content.name !== 'post') {
       if (optionarray.hasOwnProperty(content.name)) {
         optionarray[content.name].push(content.value);
@@ -451,13 +450,13 @@ router.post('/testsave', function(req, res) {
       newpost = content.value;
     }
   })
-  console.log(optionarray);
+  //console.log(optionarray);
   var bodylength = Object.keys(optionarray).length;
   var postindex = req.body.index;
 
   // console.log(postindex);
 
-  Txt.testedit(req.body.name, postindex, newpost, optionarray, function(err, data) {
+  Txt.testedit(req.body.name, postindex, newpost, optionarray, now_ans, function(err, data) {
 
     if (err) {
       console.log(err);
@@ -549,6 +548,7 @@ router.post('/removeOneOption', function(req, res) {
 
 router.post('/convertOption', checkLogin);
 router.post('/convertOption', function(req, res) {
+
   Txt.convertOption(req.body.name, req.body.index, req.body.sum, req.body.type, function(err) {
     if (err) {
       req.flash('error', err);

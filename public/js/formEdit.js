@@ -200,13 +200,29 @@ function sectionFocusOut(id) {
   editOptionOut(lastOption);
 }
 
-function formData(index, name) {
+function formData(sum, length, index, name) {
   var formdata = JSON.stringify($('#form' + String(index)).serializeArray());
-
+  var formname = '#form' + String(index);
+  var ans_array = [];
+  for (var i = length; i > 0; i--) {
+    var now = sum - i;
+    //console.log("now: " + now);
+    var selected = [];
+    $('input[id=' + now + ']:checked').each(function() {
+      //console.log($(this).val())
+      selected.push($(this).val());
+    });
+    ans_array.push(selected);
+  //console.log(selected);
+  //console.log($('input[name=' + now + ']:checked', '#form' + String(index)).val())
+  }
+  ans_array = JSON.stringify(ans_array);
+  //console.log(ans_array);
   var data = {
     name: name,
     content: formdata,
-    index: index
+    index: index,
+    ans_array: ans_array
   };
 
   $.ajax({
@@ -261,7 +277,7 @@ function h(e) {
   $(e).css({
     'height': 'auto',
     'overflow-y': 'hidden',
-}).height(e.scrollHeight - 20);
+  }).height(e.scrollHeight - 20);
 }
 
 $('textarea').each(function() {

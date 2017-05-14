@@ -6,46 +6,45 @@
                 <div class="well" style="padding-left:0px;padding-right:0px;padding-bottom:0px;">
                     <div class="col-md-13 col-md-offset-0" style="margin-top:20px;margin-bottom:20px;margin-left:40px;">
                         <h1><%= doc.name %></h1>
-                        <!-- <p>請完成以下題目</p>
-                            <h3><a title="編輯" href="/txt/<%= title %>" > 編輯 </a></h3>
-                            <p class="text-danger">*必填</p> -->
+
                     </div>
                     <% doc.choice.forEach(function(type, index, array){ %>
                     <div class="col-md-13 col-md-offset-0" id="container<%= index %>" style="padding:25px 45px 5px 45px"  onmousedown="sectionFocus(<%= index %>)">
-                        <!-- <div class="container" id="container<%= index %>"> -->
+                        <div style="margin-bottom:15px;">
+                            <h4><%= sum %></h4>
+                        </div>
+
+
                         <form action="/testsave" method="post" id="form<%= index %>">
                             <fieldset style="margin-bottom:25px;">
-                                <%for(var i =0;i < type.length; i++){%>
-                                <div style="margin-bottom:15px;">
-                                    <h4><%= sum %></h4>
-                                </div>
-                                <div style="float:right;">
-                                    <div class="btn-group" id="dropdown<%= index %>" style="display:none">
-                                        <button class="btn btn-raised dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">題目類型</button>
-                                        <ul class="dropdown-menu">
-                                            <li><a onclick="convert('single','<%= doc.name%>',<%= index%>,<%= i%>)">單選</a></li>
-                                            <li><a onclick="convert('multiple','<%= doc.name%>',<%= index%>,<%= i%>)">多選</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div id="title<%= index %>" style="clear:both;">
-                                    <strong>
-                                        <h4 onclick="edit(<%= index %>)"><%= doc.post.test[ index ] %></h4>
-                                    </strong>
-                                </div>
+                                <!-- form裡面的東西排版時，要小心別移到form外面，不然儲存時就會找不到name -->
+
                                 <div class="form-group" style="margin-top:10px;">
-                                    <textarea id="title-edit<%= index %>" name="post" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;display:none" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
+                                    <textarea id="title-edit<%= index %>" name="post" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
                                 </div>
+
+                                <hr><!-- hr放這是區別題組的大題目(上面那個textarea)和每個小題的小題目 -->
+                                <%for(var i =0;i < type.length; i++){%>
+                                    <!-- i代表每個題組裡的小題 -->
+
                                 <div class="form-group" style="margin-top:10px;">
                                     <% var option = doc.post.choice[index][i]; %>
                                     <% Object.keys(option).forEach(function(key,optionindex) { %>
+                                        <!-- optionindex代表題組裡的每一小題 -->
                                     <% if(type[i] == 'single' ){ %>
                                     <div class="media" style="margin-top:5px;">
                                         <div class="media-left media-middle" style="width:100%;padding:15px 20px 0px 5px;" >
                                             <div class="radio radio-primary" style="margin:0px 0px 0px 0px">
                                                 <label style="width:100%;">
-                                                    <input type="radio" name="<%= sum %>" value="<%= key %>" id="<%= sum %><%= key %>">
-                                                    <textarea name="<%= key %>" class="form-control" rows="1" style="margin-bottom:0px;display:none" id="optionedit<%= sum %><%= key %>" onClick="this.setSelectionRange(0, this.value.length)" style="padding-top:0px;"> <%= doc.post.choice[ index ][i][key] %> </textarea>
+                                                    <!-- 如果已經儲存過答案的選項會預設勾起來 -->
+                                                    <% var ans_flag = doc.ans[index][i].indexOf(key) %>
+                                                        <!-- 用indexOf()檢查，有的話ans_flag就是key的index，否則是-1 -->
+                                                        <% if( ans_flag > -1 ){ %>
+                                                            <input type="radio" name="radio" value="<%= key %>" id="<%= sum %>" checked="checked">
+                                                        <% }else{ %>
+                                                            <input type="radio" name="radio" value="<%= key %>" id="<%= sum %>" >
+                                                        <% } %>
+                                                    <textarea name="<%= key %>" class="form-control" rows="1" style="margin-bottom:0px;" id="optionedit<%= sum %><%= key %>" onClick="this.setSelectionRange(0, this.value.length)" style="padding-top:0px;"> <%= doc.post.choice[ index ][i][key] %> </textarea>
                                                     <h4 style="margin:0px" onclick="editOption(<%= sum %><%= key %>)" id="option<%= sum %><%= key %>"><%= doc.post.choice[ index ][i][key] %></h4>
                                                 </label>
                                             </div>
@@ -59,38 +58,62 @@
                                         <div class="media-left media-middle" style="width:100%;padding:15px 20px 0px 5px;" >
                                             <div class="checkbox" style="margin:0px 0px 0px 0px">
                                                 <label  style="width:100%;">
-                                                    <input type="checkbox" style="padding-right:5px">
+                                                    <!-- 如果已經儲存過答案的選項會預設勾起來 -->
+                                                    <% var ans_flag = doc.ans[index][i].indexOf(key) %>
+                                                        <!-- 用indexOf()檢查，有的話ans_flag就是key的index，否則是-1 -->
+                                                        <% if( ans_flag > -1 ){ %>
+                                                            <input type="checkbox" style="padding-right:5px" name="checkbox" value="<%= key %>" checked="checked" id="<%= sum %>">
+                                                        <% }else{ %>
+                                                            <input type="checkbox" style="padding-right:5px" name="checkbox" value="<%= key %>" id="<%= sum %>">
+                                                        <% } %>
+
                                                     <span id="check-item">
                                                         <!-- A<%= doc.post.choice[ index ][i][key] %> -->
                                                     </span>
-                                                    <textarea name = "<%= key %>" class="form-control" rows="1" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.choice[ index ][i][key] %> </textarea>
+                                                    <textarea name = "<%= optionindex %>" class="form-control" rows="1" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.choice[ index ][i][key] %> </textarea>
                                                 </label>
                                             </div>
                                         </div>
                                         <div class="media-body media-middle">
-                                            <button type="button" onclick="removeOneOption('<%= doc.name%>',<%= index%>,<%= i%>)" aria-hidden="true" class="close" style="font-size:30px;">×</button>
+                                            <button type="button" onclick="removeOneOption('<%= doc.name%>',<%= index%>,<%= i%>,<%= optionindex %>)" aria-hidden="true" class="close" style="font-size:30px;">×</button>
                                         </div>
                                     </div>
                                     <% } %>
                                     <% }) %>
-                                    <div id="btn-group-<%= index %>" style="display:none;margin-top:15px;">
+                                    <div style="float:right;">
+                                        <div class="btn-group" id="dropdown<%= index %>" >
+                                            <button class="btn btn-raised dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">題目類型</button>
+                                            <ul class="dropdown-menu">
+                                                <li><a onclick="convert('single','<%= doc.name%>',<%= index%>,<%= i%>)">單選</a></li>
+                                                <li><a onclick="convert('multiple','<%= doc.name%>',<%= index%>,<%= i%>)">多選</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                         <button onclick="removeText(<%= index%>,<%= i%>,'<%= doc.name%>')" type="button" class="btn btn-default">刪除</button>
                                         <button onclick="insertOption('<%= doc.name%>',<%= index%>,<%= i%>)" type="button" class="btn btn-default">新增選項</button>
-                                        <!-- </div> -->
+
+                                        <!-- 題目類型、刪除和新增選項是題組裡的每個小題都要有的 -->
                                         <% sum = sum +1; %>
                                         <% } %>
-                                        <!-- <div id="btn-group-<%= index %>" style="display:none;margin-top:15px;"> -->
+
+                                    <div id="btn-group-<%= index %>"style="display:none;margin-top:15px;">
                                         <button onclick="removeall('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">刪除此題</button>
                                         <button onclick="insert('<%= doc.name%>',<%= index%>)" type="button" class="btn btn-default" id="btn-<%= sum %>">新增下一題</button>
-                                        <button onclick="single(<%= index%>,'<%= doc.name%>')" type="button" class="btn btn-default" id="btn-<%= sum %>">新增單選</button>
-                                        <button onclick="multiple(<%= index%>,'<%= doc.name%>')" type="button" class="btn btn-default" id="btn-<%= sum %>">新增多選</button>
-                                        <button class="btn btn-default" id="btn-<%= sum %>" type="button" onclick="formData(<%= index %>,'<%= doc.name %>')">儲存變更</button>
+                                        <!-- 新增小題就是原本的新增單選 -->
+                                        <div class="btn-group" id="convert<%= index %>" >
+                                            <button class="btn btn-raised dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">新增小題</button>
+                                            <ul class="dropdown-menu">
+                                                <li><button onclick="single(<%= index%>,'<%= doc.name%>')" type="button" class="btn btn-default" id="btn-<%= sum %>">新增單選</button></li>
+                                                <li><button onclick="multiple(<%= index%>,'<%= doc.name%>')" type="button" class="btn btn-default" id="btn-<%= sum %>">新增多選</button></li>
+                                            </ul>
+                                        </div>
+                                        <button class="btn btn-default" id="btn-<%= sum %>" type="button" onclick="formData(<%=sum%>,<%= type.length %>,<%= index %>,'<%= doc.name %>')">儲存變更</button>
                                     </div>
                                 </div>
                             </fieldset>
                         </form>
                     </div>
-                    <!-- <hr> -->
+                    <hr>
                     <% }) %>
                 </div>
             </div>
