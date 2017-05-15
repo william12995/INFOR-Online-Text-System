@@ -20,7 +20,7 @@
                                 <!-- form裡面的東西排版時，要小心別移到form外面，不然儲存時就會找不到name -->
 
                                 <div class="form-group" style="margin-top:10px;">
-                                    <textarea id="title-edit<%= index %>" name="post" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea>
+                                    <strong><textarea id="title-edit<%= index %>" name="post" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea></strong>
                                 </div>
 
                                 <hr><!-- hr放這是區別題組的大題目(上面那個textarea)和每個小題的小題目 -->
@@ -29,20 +29,26 @@
 
                                 <div class="form-group" style="margin-top:10px;">
                                     <% var option = doc.post.choice[index][i]; %>
+                                    <div class="form-group" style="margin-top:10px;">
+                                        <textarea id="title-edit<%= index %>" name="TextInform" rows="1" class="form-control" style="overflow:hidden;width:60%;height:auto;" onfocus="sectionFocus(<%= index %>)"> <%= doc.TextInform[ index ][i] %> </textarea>
+                                        <% console.log("TextInform: "+doc.TextInform[index][i]) %>
+                                    </div>
                                     <% Object.keys(option).forEach(function(key,optionindex) { %>
                                         <!-- optionindex代表題組裡的每一小題 -->
+
                                     <% if(type[i] == 'single' ){ %>
                                     <div class="media" style="margin-top:5px;">
                                         <div class="media-left media-middle" style="width:100%;padding:15px 20px 0px 5px;" >
+
                                             <div class="radio radio-primary" style="margin:0px 0px 0px 0px">
                                                 <label style="width:100%;">
                                                     <!-- 如果已經儲存過答案的選項會預設勾起來 -->
                                                     <% var ans_flag = doc.ans[index][i].indexOf(key) %>
                                                         <!-- 用indexOf()檢查，有的話ans_flag就是key的index，否則是-1 -->
                                                         <% if( ans_flag > -1 ){ %>
-                                                            <input type="radio" name="radio" value="<%= key %>" id="<%= sum %>" checked="checked">
+                                                            <input type="radio" name="radio<%= key %>" value="<%= key %>" id="<%= sum %>" checked="checked">
                                                         <% }else{ %>
-                                                            <input type="radio" name="radio" value="<%= key %>" id="<%= sum %>" >
+                                                            <input type="radio" name="radio<%= key %>" value="<%= key %>" id="<%= sum %>" >
                                                         <% } %>
                                                     <textarea name="<%= key %>" class="form-control" rows="1" style="margin-bottom:0px;" id="optionedit<%= sum %><%= key %>" onClick="this.setSelectionRange(0, this.value.length)" style="padding-top:0px;"> <%= doc.post.choice[ index ][i][key] %> </textarea>
                                                     <h4 style="margin:0px" onclick="editOption(<%= sum %><%= key %>)" id="option<%= sum %><%= key %>"><%= doc.post.choice[ index ][i][key] %></h4>
@@ -56,21 +62,22 @@
                                     <% } else if (type[i] == 'multiple' ){ %>
                                     <div class="media" style="margin-top:5px;">
                                         <div class="media-left media-middle" style="width:100%;padding:15px 20px 0px 5px;" >
+
                                             <div class="checkbox" style="margin:0px 0px 0px 0px">
                                                 <label  style="width:100%;">
                                                     <!-- 如果已經儲存過答案的選項會預設勾起來 -->
                                                     <% var ans_flag = doc.ans[index][i].indexOf(key) %>
                                                         <!-- 用indexOf()檢查，有的話ans_flag就是key的index，否則是-1 -->
                                                         <% if( ans_flag > -1 ){ %>
-                                                            <input type="checkbox" style="padding-right:5px" name="checkbox" value="<%= key %>" checked="checked" id="<%= sum %>">
+                                                            <input type="checkbox" style="padding-right:5px" name="checkbox<%= key %>" value="<%= key %>" checked="checked" id="<%= sum %>">
                                                         <% }else{ %>
-                                                            <input type="checkbox" style="padding-right:5px" name="checkbox" value="<%= key %>" id="<%= sum %>">
+                                                            <input type="checkbox" style="padding-right:5px" name="checkbox<%= key %>" value="<%= key %>" id="<%= sum %>">
                                                         <% } %>
 
                                                     <span id="check-item">
                                                         <!-- A<%= doc.post.choice[ index ][i][key] %> -->
                                                     </span>
-                                                    <textarea name = "<%= optionindex %>" class="form-control" rows="1" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.choice[ index ][i][key] %> </textarea>
+                                                    <textarea name = "<%= key %>" class="form-control" rows="1" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.choice[ index ][i][key] %> </textarea>
                                                 </label>
                                             </div>
                                         </div>

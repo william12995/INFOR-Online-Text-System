@@ -12,7 +12,8 @@ var txtSchema = new mongoose.Schema({
   post: Object,
   ans: Array,
   subject: String,
-  choice: Array
+  choice: Array,
+  TextInform: Array
 }, {
   collection: 'txt'
 });
@@ -328,7 +329,7 @@ TXT.edit = function(filename, p, post, ans, callback) {
   });
 };
 
-TXT.testedit = function(filename, p, post, ans, ans_array, callback) {
+TXT.testedit = function(filename, p, post, ans, ans_array, TextInform, callback) {
 
   txtModel.findOne({
     name: filename
@@ -365,7 +366,7 @@ TXT.testedit = function(filename, p, post, ans, ans_array, callback) {
     var newchoice = data.post.choice;
 
     data.ans[p] = ans_array;
-
+    data.TextInform[p] = TextInform;
     txtModel.update({
       "name": filename
     }, {
@@ -374,7 +375,8 @@ TXT.testedit = function(filename, p, post, ans, ans_array, callback) {
           "test": newpost,
           "choice": newchoice
         },
-        ans: data.ans
+        ans: data.ans,
+        TextInform: data.TextInform
       }
     }, function(err) {
       if (err) {
@@ -682,6 +684,8 @@ TXT.choice = function(filename, index, choice, callback) {
     var null_ans = [[""]];
     data.ans[index].push(null_ans);
 
+    var null_textinform = "小標題";
+    data.TextInform[index].push(null_textinform);
     txtModel.update({
       "name": filename
     }, {
@@ -691,7 +695,8 @@ TXT.choice = function(filename, index, choice, callback) {
           choice: newAnschoice,
           test: data.post.test
         },
-        "ans": data.ans
+        "ans": data.ans,
+        "TextInform": data.TextInform
       }
 
     }, function(err) {
@@ -716,17 +721,18 @@ TXT.removechoice = function(filename, index, allsum, callback) {
     var newAnschoice = data.post.choice;
 
     data.ans[index].splice(allsum, 1);
-
+    data.TextInform[index].splice(allsum, 1);
     txtModel.update({
       "name": filename
     }, {
       $set: {
         "choice": newchoice,
-        post: {
+        "post": {
           choice: newAnschoice,
           test: data.post.test
         },
-        ans: data.ans
+        "ans": data.ans,
+        "TextInform": data.TextInform
       }
     }, function(err) {
       if (err) {
@@ -740,7 +746,7 @@ TXT.removechoice = function(filename, index, allsum, callback) {
 
 TXT.newtest = function(filename, subject, callback) {
   var postData = {
-    test: ["點我編輯\n"],
+    test: ["大標題\n"],
     choice: [[{
       '1': "",
       '2': "",
@@ -750,12 +756,14 @@ TXT.newtest = function(filename, subject, callback) {
   };
   var newans = [[[[""]]]];
   var choice = [["single"]]
+  var newTextInform = [[["小標題"]]];
   var content = {
     name: filename,
     post: postData,
     ans: newans,
     subject: subject,
-    choice: choice
+    choice: choice,
+    TextInform: newTextInform
   };
 
   var newTxt = new txtModel(content);
@@ -790,12 +798,14 @@ TXT.insert = function(filename, index, callback) {
     data.post.choice.splice(newindex, 0, postchoice);
     var newAnschoice = data.post.choice;
 
-    var insertTest = "點我編輯\n";
+    var insertTest = "大標題\n";
     data.post.test.splice(newindex, 0, insertTest);
 
     var null_ans = [[""]];
     data.ans.splice(newindex, 0, null_ans);
 
+    var null_textinform = ["小標題"];
+    data.TextInform.splice(newindex, 0, null_textinform);
     txtModel.update({
       "name": filename
     }, {
@@ -805,7 +815,8 @@ TXT.insert = function(filename, index, callback) {
           choice: newAnschoice,
           test: data.post.test
         },
-        ans: data.ans
+        ans: data.ans,
+        TextInform: data.TextInform
       }
     }, function(err) {
       if (err) {

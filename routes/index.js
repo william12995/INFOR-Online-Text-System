@@ -436,27 +436,36 @@ router.post('/testsave', function(req, res) {
   var newcontent = JSON.parse(req.body.content);
   var now_ans = JSON.parse(req.body.ans_array);
   var optionarray = {};
+  var TextInform = [];
   var newpost = '';
-  console.log(newcontent);
+  //console.log(newcontent);
   newcontent.forEach(function(content, index) {
     //console.log(content);
-    if (content.name !== 'post') {
+    // console.log(content.name + ":" + (content.name !== 'post' && content.name !== 'radio' && content.name !== 'TextInform'));
+
+    if (content.name !== 'post' && content.name !== 'radio' && content.name !== 'TextInform') {
       if (optionarray.hasOwnProperty(content.name)) {
         optionarray[content.name].push(content.value);
       } else {
         optionarray[content.name] = [content.value];
       }
     } else {
-      newpost = content.value;
+      if (content.name !== 'TextInform' && content.name !== 'radio') {
+        newpost = content.value;
+      } else if (content.name !== 'radio') {
+        TextInform.push(content.value);
+      }
     }
   })
   //console.log(optionarray);
+  // console.log(newpost);
+  //console.log(TextInform);
   var bodylength = Object.keys(optionarray).length;
   var postindex = req.body.index;
 
   // console.log(postindex);
 
-  Txt.testedit(req.body.name, postindex, newpost, optionarray, now_ans, function(err, data) {
+  Txt.testedit(req.body.name, postindex, newpost, optionarray, now_ans, TextInform, function(err, data) {
 
     if (err) {
       console.log(err);
