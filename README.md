@@ -1,5 +1,5 @@
-# INFOR-Online-Test-System
-INFOR 線上學業測驗系統
+# INFOR-Moodle
+INFOR 木豆
 
 ## Usage
 install modules required

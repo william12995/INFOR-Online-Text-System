@@ -1,0 +1,78 @@
+<%- include header %>
+<section id="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2" style="margin-top:20px;">
+                <div class="well" style="padding-left:0px;padding-right:0px;padding-bottom:0px;">
+                    <div class="col-md-13 col-md-offset-0" style="margin-top:20px;margin-bottom:20px;margin-left:40px;">
+                        <h1><%= title %>/錯誤題目: </h1>
+                    </div>
+                    <div id="flot-placeholder1" style="width:450px;height:300px;margin:0 auto"></div>
+
+                    <div class="col-md-13 col-md-offset-0" id="container" style="padding:25px 45px 5px 45px"  >
+                                <!-- form裡面的東西排版時，要小心別移到form外面，不然儲存時就會找不到name -->
+                                <% big_array.forEach(function(big_index, index){ %>
+                                    <form  method="post" id="form">
+                                        <fieldset style="margin-bottom:25px;">
+
+                                    <!-- 這是大標題的textarea ，為了明顯加了strong -->
+                                    <% if( isok.indexOf(big_index) == -1){ %>
+                                        <div class="form-group" style="margin-top:10px;">
+                                        <strong><h4 style="margin:0px" > <%= doc.post.test[ big_index-1 ] %> </h4></strong>
+                                        </div>
+                                        <%isok.push(big_index);%>
+                                    <% } %>
+                                <hr>
+
+                                <% var i = small_array[index]; %>
+                                    <!-- i代表每個題組裡的小題 -->
+
+                                <div class="form-group" style="margin-top:10px;">
+                                    <% var option = doc.post.choice[big_index-1][i]; %>
+                                    <!-- sum代表題數 現在放的有點擠，看要怎麼排版比較好看 -->
+
+                                    <div class="form-group" style="margin-top:10px;">
+                                        <h4 style="margin:0px" ><%= doc.TextInform[ big_index-1 ][i] %></h4>
+                                    </div>
+                                    <% Object.keys(option).forEach(function(key,optionindex) { %>
+                                        <!-- optionindex代表題組裡的每一小題 -->
+
+                                    <div class="media" style="margin-top:5px;">
+                                        <div class="media-left media-middle" style="width:100%;padding:15px 20px 0px 5px;" >
+                                            <div class="radio radio-primary" style="margin:0px 0px 0px 0px">
+                                                <label style="width:100%;">
+
+                                                    <% if( small_array[index]== i && (error_index[index].indexOf(key) > -1) ){ %>
+                                                    <h4 style="margin:0px ;color: red"  ><%= doc.post.choice[ big_index-1 ][i][key] %></h4>
+
+                                                    <% }else if( small_array[index]== i && correct_index[index][0].length > 0 && (correct_index[index].indexOf(key) > -1)){ %>
+                                                        <h4 style="margin:0px ;color: green"  ><%= doc.post.choice[ big_index-1 ][i][key] %></h4>
+                                                    <% }else{ %>
+                                                        <h4 style="margin:0px;"  ><%= doc.post.choice[ big_index-1 ][i][key] %></h4>
+                                                        <% } %>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <% }) %>
+
+                                </div>
+                            </fieldset>
+                        </form>
+                                <% }) %>
+
+                    </div>
+                    <hr>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include footer %>
+<script type="text/javascript">
+pie(<%= ans_allnumber - error_ans.length %>,<%= error_ans.length %>)
+</script>

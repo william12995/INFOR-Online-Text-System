@@ -168,6 +168,7 @@ function convert(type, name, index, sum) {
   location.reload(true);
 }
 
+
 function sectionFocus(id) {
   var containerId = '#container' + id.toString();
   var btnGrouptId = '#btn-group-' + id.toString();
@@ -285,3 +286,42 @@ $('textarea').each(function() {
 }).on('focus', function() {
   h(this);
 });
+
+//******* PIE CHART
+function pie(correct_number, error_number) {
+
+
+  var dataSet = [
+    {
+      label: "答對",
+      data: correct_number,
+      color: "#00A36A"
+    },
+    {
+      label: "錯誤",
+      data: error_number,
+      color: "#DE000F"
+    },
+  ];
+
+
+
+  var options2 = {
+    series: {
+      pie: {
+        show: true,
+        innerRadius: 0.5,
+        label: {
+          show: true
+        }
+      }
+    }
+  };
+
+  $(document).ready(function() {
+
+    $.plot($("#flot-placeholder1"), dataSet, options2);
+  });
+
+
+}

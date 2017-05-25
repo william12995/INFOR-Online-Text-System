@@ -10,3 +10,7 @@ error.log
 access.log
 **/files
 .git/
+bower_components
+public/js/bundle.js
+public/js/vendor.js
+babel_cache

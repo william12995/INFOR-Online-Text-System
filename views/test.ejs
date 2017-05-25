@@ -9,13 +9,18 @@
 										  <tr>
 										    <th>#</th>
 										    <th>Title</th>
+											<th>出題者</th>
 										  </tr>
 										</thead>
 										<tbody>
 											<% docs.forEach(function(doc, index){  %>
 											<tr class="success">
-												<td><%= index+1 %></td>
-												<td> <a href="/test/<%= doc.name %>"> <%= doc.name %> </a></td>
+												<td><span class="btn"><%= index+1 %></span></td>
+												<td> <a href="/Ansform/<%= doc.name %>" class="btn btn-primary"> <%= doc.name %> </a></td>
+
+												<td><a href="/user/<%= doc.username %>" class="btn btn-primary"> <%= doc.username %> </a></td>
+
+												<td><a href="/rank/<%= doc.name %>" class="btn btn-raised btn-primary btn-xs"> 排行榜 </a></td>
 											</tr>
 										</tbody>
 										<% }) %>

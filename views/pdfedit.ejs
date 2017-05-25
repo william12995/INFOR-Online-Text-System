@@ -20,6 +20,7 @@
                                 <!-- form裡面的東西排版時，要小心別移到form外面，不然儲存時就會找不到name -->
 
                                 <div class="form-group" style="margin-top:10px;">
+                                    <!-- 這是大標題的textarea ，為了明顯加了strong -->
                                     <strong><textarea id="title-edit<%= index %>" name="post" rows="1" class="form-control" style="overflow:hidden;width:80%;height:auto;" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.test[ index ] %> </textarea></strong>
                                 </div>
 
@@ -30,8 +31,8 @@
                                 <div class="form-group" style="margin-top:10px;">
                                     <% var option = doc.post.choice[index][i]; %>
                                     <div class="form-group" style="margin-top:10px;">
+                                        <!-- 這是小標題的textarea -->
                                         <textarea id="title-edit<%= index %>" name="TextInform" rows="1" class="form-control" style="overflow:hidden;width:60%;height:auto;" onfocus="sectionFocus(<%= index %>)"> <%= doc.TextInform[ index ][i] %> </textarea>
-                                        <% console.log("TextInform: "+doc.TextInform[index][i]) %>
                                     </div>
                                     <% Object.keys(option).forEach(function(key,optionindex) { %>
                                         <!-- optionindex代表題組裡的每一小題 -->
@@ -46,11 +47,11 @@
                                                     <% var ans_flag = doc.ans[index][i].indexOf(key) %>
                                                         <!-- 用indexOf()檢查，有的話ans_flag就是key的index，否則是-1 -->
                                                         <% if( ans_flag > -1 ){ %>
-                                                            <input type="radio" name="radio<%= key %>" value="<%= key %>" id="<%= sum %>" checked="checked">
+                                                            <input type="radio" name="radio<%= i %>" value="<%= key %>" id="<%= sum %>" checked="checked" required>
                                                         <% }else{ %>
-                                                            <input type="radio" name="radio<%= key %>" value="<%= key %>" id="<%= sum %>" >
+                                                            <input type="radio" name="radio<%= i %>" value="<%= key %>" id="<%= sum %>" required >
                                                         <% } %>
-                                                    <textarea name="<%= key %>" class="form-control" rows="1" style="margin-bottom:0px;" id="optionedit<%= sum %><%= key %>" onClick="this.setSelectionRange(0, this.value.length)" style="padding-top:0px;"> <%= doc.post.choice[ index ][i][key] %> </textarea>
+                                                    <textarea name="<%= key %>" class="form-control" rows="1" style="margin-bottom:0px;" id="optionedit<%= sum %><%= key %>" onClick="this.setSelectionRange(0, this.value.length)" style="padding-top:0px;" required> <%= doc.post.choice[ index ][i][key] %> </textarea>
                                                     <h4 style="margin:0px" onclick="editOption(<%= sum %><%= key %>)" id="option<%= sum %><%= key %>"><%= doc.post.choice[ index ][i][key] %></h4>
                                                 </label>
                                             </div>
@@ -69,15 +70,15 @@
                                                     <% var ans_flag = doc.ans[index][i].indexOf(key) %>
                                                         <!-- 用indexOf()檢查，有的話ans_flag就是key的index，否則是-1 -->
                                                         <% if( ans_flag > -1 ){ %>
-                                                            <input type="checkbox" style="padding-right:5px" name="checkbox<%= key %>" value="<%= key %>" checked="checked" id="<%= sum %>">
+                                                            <input type="checkbox" style="padding-right:5px" name="checkbox<%= i %>" value="<%= key %>" checked="checked" id="<%= sum %>" required>
                                                         <% }else{ %>
-                                                            <input type="checkbox" style="padding-right:5px" name="checkbox<%= key %>" value="<%= key %>" id="<%= sum %>">
+                                                            <input type="checkbox" style="padding-right:5px" name="checkbox<%= i %>" value="<%= key %>" id="<%= sum %>" required>
                                                         <% } %>
 
                                                     <span id="check-item">
                                                         <!-- A<%= doc.post.choice[ index ][i][key] %> -->
                                                     </span>
-                                                    <textarea name = "<%= key %>" class="form-control" rows="1" onfocus="sectionFocus(<%= index %>)"> <%= doc.post.choice[ index ][i][key] %> </textarea>
+                                                    <textarea name = "<%= key %>" class="form-control" rows="1" onfocus="sectionFocus(<%= index %>)" required> <%= doc.post.choice[ index ][i][key] %> </textarea>
                                                 </label>
                                             </div>
                                         </div>
@@ -123,6 +124,7 @@
                     <hr>
                     <% }) %>
                 </div>
+                <a class="btn btn-raised btn-default" href="/Ansform/<%= doc.name %>">匯出考卷</a>
             </div>
         </div>
     </div>
